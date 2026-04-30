@@ -1,7 +1,9 @@
-import Link from "next/link";
-import { Plus, Receipt, ShoppingBag, TrendingUp, Wallet } from "lucide-react";
+import { Suspense } from "react";
+import { Receipt, ShoppingBag, TrendingUp, Wallet } from "lucide-react";
 
+import { NewSaleTrigger } from "@/components/admin/new-sale-trigger";
 import StatsCard from "@/components/admin/stats-card";
+import { getAdminProducts } from "@/lib/admin-catalog";
 import { getSales, getSalesSummary } from "@/lib/admin-sales";
 import { isDatabaseConfigured } from "@/lib/env";
 import { formatCurrencyFromCents } from "@/lib/utils";
@@ -31,7 +33,21 @@ function formatDate(date: Date) {
 
 export default async function AdminVentasPage() {
   const databaseReady = isDatabaseConfigured();
-  const [sales, summary] = await Promise.all([getSales(50), getSalesSummary()]);
+  const [sales, summary, products] = await Promise.all([
+    getSales(50),
+    getSalesSummary(),
+    getAdminProducts(),
+  ]);
+
+  const productOptions = products
+    .filter((p) => p.status === "PUBLISHED")
+    .map((p) => ({
+      id: p.id,
+      name: p.name,
+      priceCents: p.priceCents,
+      stock: p.stock,
+      sku: p.sku ?? null,
+    }));
 
   return (
     <div className="space-y-6">
@@ -45,13 +61,9 @@ export default async function AdminVentasPage() {
           </p>
         </div>
 
-        <Link
-          className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
-          href="/admin/ventas/nueva"
-        >
-          <Plus className="size-4" />
-          Nueva venta
-        </Link>
+        <Suspense fallback={null}>
+          <NewSaleTrigger products={productOptions} />
+        </Suspense>
       </div>
 
       {!databaseReady ? (

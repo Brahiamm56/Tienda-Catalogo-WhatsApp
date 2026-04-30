@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { useGsapContext, gsap } from "@/lib/gsap";
 import type { CatalogBanner } from "@/lib/catalog";
 
 type BannerCarouselProps = {
@@ -15,6 +16,41 @@ export function BannerCarousel({ banners }: BannerCarouselProps) {
   const scrollerRef = useRef<HTMLDivElement | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const total = banners.length;
+
+  // Initial entrance + container ref scope
+  const containerRef = useGsapContext<HTMLElement>(() => {
+    gsap.from("[data-anim='banner-shell']", {
+      y: 24,
+      opacity: 0,
+      duration: 0.7,
+      ease: "power3.out",
+    });
+  }, []);
+
+  // Animate the active slide content on change
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const root = containerRef.current;
+    if (!root) return;
+    const slide = root.querySelector(
+      `[data-banner-index='${activeIndex}']`,
+    ) as HTMLElement | null;
+    if (!slide) return;
+    const targets = slide.querySelectorAll<HTMLElement>("[data-anim='banner-item']");
+    gsap.fromTo(
+      targets,
+      { y: 24, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.7,
+        ease: "power3.out",
+        stagger: 0.08,
+        overwrite: "auto",
+      },
+    );
+  }, [activeIndex, containerRef]);
 
   const scrollToIndex = useCallback(
     (index: number) => {
@@ -44,17 +80,24 @@ export function BannerCarousel({ banners }: BannerCarouselProps) {
   if (total === 0) return null;
 
   return (
-    <section className="px-4 pt-4 sm:px-6 lg:px-10 lg:pt-6">
-      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-2xl shadow-[0_8px_40px_rgba(20,17,15,0.10)] sm:rounded-3xl">
+    <section
+      ref={containerRef as React.RefObject<HTMLElement>}
+      className="px-4 pt-4 sm:px-6 lg:px-10 lg:pt-6"
+    >
+      <div
+        data-anim="banner-shell"
+        className="relative mx-auto max-w-7xl overflow-hidden rounded-2xl shadow-[0_8px_40px_rgba(20,17,15,0.10)] sm:rounded-3xl"
+      >
         {/* Carousel scroller */}
         <div
           className="hide-scrollbar flex w-full snap-x snap-mandatory overflow-x-auto scroll-smooth"
           onScroll={handleScroll}
           ref={scrollerRef}
         >
-          {banners.map((banner) => (
+          {banners.map((banner, idx) => (
             <div
               className="relative w-full shrink-0 snap-start overflow-hidden"
+              data-banner-index={idx}
               key={banner.id}
             >
               {/* Image container — controlled height so image is fully visible */}
@@ -75,16 +118,17 @@ export function BannerCarousel({ banners }: BannerCarouselProps) {
 
               {/* Content overlay */}
               <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-2.5 p-5 sm:gap-3 sm:p-8 md:max-w-[55%] md:p-10 lg:p-12">
-                <h2 className="font-[family-name:var(--font-display)] text-xl font-bold leading-[1.08] tracking-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] sm:text-3xl md:text-4xl lg:text-5xl">
+                <h2 data-anim="banner-item" className="font-[family-name:var(--font-display)] text-xl font-bold leading-[1.08] tracking-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] sm:text-3xl md:text-4xl lg:text-5xl">
                   {banner.title}
                 </h2>
                 {banner.subtitle ? (
-                  <p className="max-w-lg text-xs leading-5 text-white/90 drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)] sm:text-sm sm:leading-6 md:text-base">
+                  <p data-anim="banner-item" className="max-w-lg text-xs leading-5 text-white/90 drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)] sm:text-sm sm:leading-6 md:text-base">
                     {banner.subtitle}
                   </p>
                 ) : null}
                 {banner.ctaLabel && banner.ctaHref ? (
                   <Link
+                    data-anim="banner-item"
                     className="group mt-1 inline-flex w-fit items-center gap-2 rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_4px_20px_rgba(211,93,71,0.4)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[var(--accent-strong)] hover:shadow-[0_8px_30px_rgba(211,93,71,0.5)] sm:px-6 sm:py-3 sm:text-base"
                     href={banner.ctaHref}
                   >

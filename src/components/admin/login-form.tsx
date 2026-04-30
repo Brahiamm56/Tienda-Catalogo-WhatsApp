@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 
@@ -13,6 +13,8 @@ import { loginSchema, type LoginInput } from "@/schemas/auth";
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/admin";
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -31,7 +33,7 @@ export function LoginForm() {
       const result = await signIn("credentials", {
         ...values,
         redirect: false,
-        callbackUrl: "/admin",
+        callbackUrl,
       });
 
       if (!result?.ok) {
@@ -39,7 +41,7 @@ export function LoginForm() {
         return;
       }
 
-      router.push(result.url ?? "/admin");
+      router.push(result.url ?? callbackUrl);
       router.refresh();
     });
   });

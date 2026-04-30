@@ -4,6 +4,7 @@ import { useState, useMemo, useRef, useEffect } from "react";
 import { Search, SlidersHorizontal, X, Package, ChevronDown } from "lucide-react";
 
 import { ProductCard } from "@/components/shop/product-card";
+import { useGsapContext, gsap } from "@/lib/gsap";
 import { useWishlistStore } from "@/store/wishlist";
 import type { CatalogProduct, CatalogCategory } from "@/lib/catalog";
 
@@ -249,11 +250,7 @@ export function CatalogView({ categories, products, initialQuery = "", showFavor
             ))}
           </div>
         ) : filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:gap-5">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          <ProductGrid products={filteredProducts} />
         ) : (
           <div className="flex min-h-[300px] flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-[var(--border)] bg-white/50">
             <div className="flex size-16 items-center justify-center rounded-full bg-[var(--foreground)]/5">
@@ -286,6 +283,36 @@ export function CatalogView({ categories, products, initialQuery = "", showFavor
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function ProductGrid({ products }: { products: CatalogProduct[] }) {
+  const signature = products.map((p) => p.id).join(",");
+  const gridRef = useGsapContext<HTMLDivElement>(() => {
+    gsap.fromTo(
+      "[data-anim='product-grid'] > article",
+      { y: 24, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.45,
+        ease: "power3.out",
+        stagger: { each: 0.04, from: "start" },
+        overwrite: "auto",
+      },
+    );
+  }, [signature]);
+
+  return (
+    <div
+      ref={gridRef}
+      data-anim="product-grid"
+      className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:gap-5"
+    >
+      {products.map((product) => (
+        <ProductCard key={product.id} product={product} />
+      ))}
     </div>
   );
 }

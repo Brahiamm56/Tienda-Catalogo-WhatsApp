@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 const quickActions = [
   {
-    href: "/admin/ventas/nueva",
+    href: "/admin/ventas?new=1",
     label: "Nueva venta",
     icon: ShoppingBag,
     iconClass: "bg-slate-100 text-slate-700",

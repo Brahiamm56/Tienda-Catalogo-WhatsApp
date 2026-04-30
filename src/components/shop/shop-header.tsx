@@ -6,10 +6,10 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   Heart,
   House,
+  LogIn,
   Menu,
   MessageCircleMore,
   Search,
-  Settings,
   ShoppingBag,
   ShoppingCart,
   Tag,
@@ -149,7 +149,6 @@ export function ShopHeader({ storeName, whatsappHref, whatsappNumber, logoUrl, f
   const navLinks = [
     { href: "/", icon: House, label: "Inicio" },
     { href: "/productos", icon: Tag, label: "Productos" },
-    { href: "/admin", icon: Settings, label: "Panel admin" },
   ];
 
   return (
@@ -348,7 +347,7 @@ export function ShopHeader({ storeName, whatsappHref, whatsappNumber, logoUrl, f
           </ul>
 
           {/* WhatsApp link inside drawer */}
-          <div className="mt-4 border-t border-[var(--border)] pt-4">
+          <div className="mt-4 space-y-1 border-t border-[var(--border)] pt-4">
             <a
               className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-[#1b9c53] transition hover:bg-[#25D366]/10"
               href={whatsappHref}
@@ -359,6 +358,14 @@ export function ShopHeader({ storeName, whatsappHref, whatsappNumber, logoUrl, f
               <MessageCircleMore className="size-5" />
               Contactar por WhatsApp
             </a>
+            <Link
+              className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-[var(--muted-foreground)] transition hover:bg-[var(--background)] hover:text-[var(--foreground)]"
+              href="/login"
+              onClick={() => setMenuOpen(false)}
+            >
+              <LogIn className="size-5" />
+              Iniciar sesión
+            </Link>
           </div>
         </nav>
 

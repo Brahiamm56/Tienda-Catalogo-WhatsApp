@@ -143,7 +143,7 @@ export default async function AdminOverviewPage() {
                 <p className="text-sm">Aún no hay ventas registradas</p>
                 <Link
                   className="mt-3 text-xs font-semibold text-emerald-600 hover:text-emerald-700"
-                  href="/admin/ventas/nueva"
+                  href="/admin/ventas?new=1"
                 >
                   + Registrar la primera
                 </Link>

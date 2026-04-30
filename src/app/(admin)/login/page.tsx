@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 import { LoginForm } from "@/components/admin/login-form";
 import { Badge } from "@/components/ui/badge";
@@ -34,7 +35,9 @@ export default async function LoginPage() {
             Usa el usuario inicial para revisar el admin y luego reemplaza los datos demo por el catalogo del cliente.
           </p>
           <div className="mt-8">
-            <LoginForm />
+            <Suspense fallback={null}>
+              <LoginForm />
+            </Suspense>
           </div>
         </div>
       </section>

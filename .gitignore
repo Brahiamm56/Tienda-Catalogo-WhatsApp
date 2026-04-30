@@ -39,3 +39,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# agent / skill scratch dirs (not part of the app)
+/.agents
+/.aider-desk
+/.claude
+/skills-lock.json
+
+# hyperframes scaffolding (videos go in public/)
+/hyperframes
+
+# memory tool (local notes)
+/memories

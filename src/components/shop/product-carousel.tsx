@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
 import { useRef, useState, useEffect, useCallback } from "react";
 
 import { AddToCartButton } from "@/components/shop/add-to-cart-button";
+import { useGsapContext, gsap, ScrollTrigger } from "@/lib/gsap";
 import type { CatalogProduct } from "@/lib/catalog";
 import { formatCurrencyFromCents } from "@/lib/utils";
 import { useCartStore } from "@/store/cart";
@@ -22,6 +23,40 @@ export function ProductCarousel({ badge, href, products, title }: ProductCarouse
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const sectionRef = useGsapContext<HTMLElement>((self) => {
+    const root = self as unknown as { selector?: (s: string) => Element[] };
+    void root;
+    // Header reveal
+    gsap.from("[data-anim='carousel-head'] > *", {
+      y: 18,
+      opacity: 0,
+      duration: 0.6,
+      ease: "power3.out",
+      stagger: 0.08,
+      scrollTrigger: {
+        trigger: "[data-anim='carousel-head']",
+        start: "top 90%",
+        once: true,
+      },
+    });
+    // Cards stagger
+    gsap.from("[data-anim='carousel-track'] > article", {
+      y: 32,
+      opacity: 0,
+      duration: 0.55,
+      ease: "power3.out",
+      stagger: 0.07,
+      scrollTrigger: {
+        trigger: "[data-anim='carousel-track']",
+        start: "top 88%",
+        once: true,
+      },
+    });
+    return () => {
+      ScrollTrigger.getAll().forEach((st) => st.kill());
+    };
+  }, [products.length]);
 
   if (products.length === 0) return null;
 
@@ -63,8 +98,11 @@ export function ProductCarousel({ badge, href, products, title }: ProductCarouse
   const totalDots = Math.max(1, products.length - 1);
 
   return (
-    <section className="mx-auto w-full max-w-7xl space-y-4 px-4 sm:px-6 lg:px-10">
-      <div className="flex items-end justify-between gap-3">
+    <section
+      ref={sectionRef}
+      className="mx-auto w-full max-w-7xl space-y-4 px-4 sm:px-6 lg:px-10"
+    >
+      <div data-anim="carousel-head" className="flex items-end justify-between gap-3">
         <div className="space-y-0.5">
           {badge ? (
             <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--muted-foreground)]">{badge}</p>
@@ -106,6 +144,7 @@ export function ProductCarousel({ badge, href, products, title }: ProductCarouse
       </div>
 
       <div
+        data-anim="carousel-track"
         className="carousel-scroll flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth pb-4 sm:gap-4"
         ref={scrollerRef}
       >

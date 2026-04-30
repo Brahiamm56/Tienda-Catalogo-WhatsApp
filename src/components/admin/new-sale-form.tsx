@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useMemo, useState } from "react";
+import { useActionState, useEffect, useMemo, useRef, useState } from "react";
 import { Minus, Plus, Trash2, Search, X } from "lucide-react";
 
 import { FormSubmitButton } from "@/components/admin/form-submit-button";
@@ -28,9 +28,11 @@ type SaleLine = {
 type NewSaleFormProps = {
   action: (state: AdminFormState, formData: FormData) => Promise<AdminFormState>;
   products: ProductOption[];
+  onSuccess?: (state: AdminFormState) => void;
+  compact?: boolean;
 };
 
-export function NewSaleForm({ action, products }: NewSaleFormProps) {
+export function NewSaleForm({ action, products, onSuccess, compact = false }: NewSaleFormProps) {
   const [state, formAction] = useActionState(action, initialAdminFormState);
   const [items, setItems] = useState<SaleLine[]>([]);
   const [selectedProductId, setSelectedProductId] = useState("");
@@ -47,6 +49,30 @@ export function NewSaleForm({ action, products }: NewSaleFormProps) {
   const [paidCashInput, setPaidCashInput] = useState("");
   const [paidTransferInput, setPaidTransferInput] = useState("");
   const [amountReceivedInput, setAmountReceivedInput] = useState("");
+
+  // Reset + notify on success
+  const lastHandledKey = useRef<number | undefined>(undefined);
+  useEffect(() => {
+    if (
+      state.status === "success" &&
+      state.submissionKey &&
+      state.submissionKey !== lastHandledKey.current
+    ) {
+      lastHandledKey.current = state.submissionKey;
+      setItems([]);
+      setSelectedProductId("");
+      setProductSearch("");
+      setIsProductDropdownOpen(false);
+      setManualName("");
+      setManualPrice("");
+      setManualQuantity("1");
+      setPaymentMethod("CASH");
+      setPaidCashInput("");
+      setPaidTransferInput("");
+      setAmountReceivedInput("");
+      onSuccess?.(state);
+    }
+  }, [state, onSuccess]);
 
   const productMap = useMemo(() => {
     const map = new Map<string, ProductOption>();
@@ -135,7 +161,14 @@ export function NewSaleForm({ action, products }: NewSaleFormProps) {
   const finalChangeToGive = paymentMethod === "CASH" ? changeCents : mixedChangeCents;
 
   return (
-    <form action={formAction} className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+    <form
+      action={formAction}
+      className={
+        compact
+          ? "flex flex-col gap-5"
+          : "grid grid-cols-1 gap-6 lg:grid-cols-3"
+      }
+    >
       {/* Hidden serialized items and payments */}
       <input type="hidden" name="items" value={JSON.stringify(items)} />
       <input type="hidden" name="paymentMethod" value={paymentMethod} />
@@ -143,7 +176,7 @@ export function NewSaleForm({ action, products }: NewSaleFormProps) {
       <input type="hidden" name="paidWithTransfer" value={transferPaidCents} />
       <input type="hidden" name="amountReceived" value={receivedRaw} />
 
-      <div className="space-y-6 lg:col-span-2">
+      <div className={compact ? "space-y-5" : "space-y-6 lg:col-span-2"}>
         {/* Producto picker */}
         <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <h3 className="mb-3 font-[family-name:var(--font-display)] text-base font-semibold text-slate-800">
@@ -467,7 +500,7 @@ export function NewSaleForm({ action, products }: NewSaleFormProps) {
       </div>
 
       {/* Resumen + acciones */}
-      <aside className="lg:sticky lg:top-6 lg:h-fit">
+      <aside className={compact ? "" : "lg:sticky lg:top-6 lg:h-fit"}>
         <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <h3 className="font-[family-name:var(--font-display)] text-base font-semibold text-slate-800">Resumen</h3>
 

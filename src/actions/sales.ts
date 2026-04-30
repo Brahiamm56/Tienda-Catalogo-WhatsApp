@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import type { AdminFormState } from "@/actions/admin-state";
 import { requireAdminSession } from "@/lib/admin";
@@ -132,9 +131,12 @@ export async function createSaleAction(_: AdminFormState, formData: FormData): P
   revalidatePath("/admin/ventas");
   revalidatePath("/admin/productos");
 
-  if (saleId) redirect("/admin/ventas");
-
-  return { status: "success", message: "Venta registrada.", submissionKey: Date.now() };
+  return {
+    status: "success",
+    message: "Venta registrada.",
+    submissionKey: Date.now(),
+    data: saleId ? { saleId } : undefined,
+  };
 }
 
 export async function updateSaleStatusAction(saleId: string, nextStatus: "PENDING" | "COMPLETED" | "CANCELLED") {

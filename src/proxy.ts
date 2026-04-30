@@ -1,33 +1,42 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { withAuth } from "next-auth/middleware";
+import { getToken } from "next-auth/jwt";
 
 const ADMIN_ROLES = new Set(["owner", "admin"]);
 
-export default withAuth(
-  function middleware(req: NextRequest & { nextauth: { token: { role?: string } | null } }) {
-    const { token } = req.nextauth;
-    const role = typeof token?.role === "string" ? token.role : undefined;
+// Next.js 16: this file (proxy.ts) replaces the legacy middleware.ts and runs
+// in the Node.js runtime. We protect every /admin* route here as a defense
+// layer. The admin layout also re-checks the session via requireAdminSession()
+// so authorization is enforced even if a request bypasses the proxy.
+export default async function proxy(request: NextRequest) {
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET ?? process.env.AUTH_SECRET,
+  });
 
-    if (!role || !ADMIN_ROLES.has(role)) {
-      const url = req.nextUrl.clone();
-      url.pathname = "/";
-      url.search = "";
-      return NextResponse.redirect(url);
-    }
+  const role = typeof token?.role === "string" ? token.role : undefined;
 
-    return NextResponse.next();
-  },
-  {
-    pages: {
-      signIn: "/login",
-    },
-    callbacks: {
-      authorized: ({ token }) => Boolean(token),
-    },
-  },
-);
+  // Not signed in → bounce to /login with a callbackUrl so we return here
+  // after a successful sign-in.
+  if (!token) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    url.search = `?callbackUrl=${encodeURIComponent(request.nextUrl.pathname + request.nextUrl.search)}`;
+    return NextResponse.redirect(url);
+  }
+
+  // Signed in but not admin → send back to the public store.
+  if (!role || !ADMIN_ROLES.has(role)) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/";
+    url.search = "";
+    return NextResponse.redirect(url);
+  }
+
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: ["/admin", "/admin/:path*"],
 };
+
