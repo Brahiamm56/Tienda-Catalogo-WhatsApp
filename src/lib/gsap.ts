@@ -4,11 +4,12 @@ import { useEffect, useLayoutEffect, useRef, type RefObject } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-let registered = false;
-function ensureRegistered() {
-  if (registered || typeof window === "undefined") return;
+if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
-  registered = true;
+}
+
+function ensureRegistered() {
+  // Already registered globally on module load
 }
 
 /**

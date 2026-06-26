@@ -2,7 +2,18 @@
 
 import { Clock, ExternalLink, MapPin } from "lucide-react";
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import type { BusinessHour } from "@/schemas/settings";
+
+const InteractiveMap = dynamic(
+  () => import("./interactive-map"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-[220px] sm:h-[260px] bg-zinc-900 animate-pulse rounded-2xl border border-[var(--border)]" />
+    ),
+  }
+);
 
 type StoreFooterProps = {
   storeName: string;
@@ -158,17 +169,8 @@ export function StoreFooter({
               <p className="mb-3 text-sm text-[var(--foreground)]">{locationAddress}</p>
             ) : null}
 
-            {hasLocation && mapEmbedUrl ? (
-              <div className="overflow-hidden rounded-2xl border border-[var(--border)] shadow-sm">
-                <iframe
-                  allowFullScreen
-                  className="h-[220px] w-full sm:h-[260px]"
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  src={mapEmbedUrl}
-                  title="Ubicación de la tienda"
-                />
-              </div>
+            {hasLocation ? (
+              <InteractiveMap latitude={locationLat!} longitude={locationLng!} theme="dark" />
             ) : null}
 
             {googleMapsUrl ? (

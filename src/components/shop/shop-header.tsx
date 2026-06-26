@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
+  ChevronDown,
   House,
   LogIn,
   Menu,
@@ -17,8 +18,8 @@ import { useEffect, useRef, useState } from "react";
 
 import { CartDrawer } from "@/components/shop/cart-drawer";
 import { useCartStore } from "@/store/cart";
-import { searchProducts } from "@/actions/shop";
-import type { CatalogProduct } from "@/lib/catalog";
+import { getShopCategories, searchProducts } from "@/actions/shop";
+import type { CatalogProduct, CatalogCategory } from "@/lib/catalog";
 import { formatCurrencyFromCents } from "@/lib/utils";
 
 type ShopHeaderProps = {
@@ -42,6 +43,21 @@ export function ShopHeader({ storeName, whatsappHref, whatsappNumber, logoUrl, f
   const [searchResults, setSearchResults] = useState<CatalogProduct[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [cartBump, setCartBump] = useState(false);
+  const [categories, setCategories] = useState<CatalogCategory[]>([]);
+  const [categoriesExpanded, setCategoriesExpanded] = useState(false);
+
+  // Load categories for the hamburger menu
+  useEffect(() => {
+    async function loadCategories() {
+      try {
+        const cats = await getShopCategories();
+        setCategories(cats.filter((c) => c.name && c.name.trim() !== ""));
+      } catch (err) {
+        console.error("Error loading categories in header:", err);
+      }
+    }
+    loadCategories();
+  }, []);
   const lastItemCount = useRef(itemCount);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -152,21 +168,8 @@ export function ShopHeader({ storeName, whatsappHref, whatsappNumber, logoUrl, f
             </Link>
           </div>
 
-          {/* Right side: cart count + search + hamburger */}
+          {/* Right side: search + hamburger */}
           <div className="flex items-center gap-0.5">
-            {itemCount > 0 && (
-              <button
-                aria-label="Ver carrito"
-                className="relative flex size-9 items-center justify-center rounded-full text-[var(--foreground)] transition hover:text-[var(--accent)] sm:size-10"
-                onClick={openCart}
-                type="button"
-              >
-                <ShoppingBag className="size-5" />
-                <span className={`absolute -right-0.5 -top-0.5 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-[var(--accent)] px-1 text-[9px] font-bold text-[var(--accent-ink)] ${cartBump ? "animate-badge-bounce" : ""}`}>
-                  {itemCount}
-                </span>
-              </button>
-            )}
             <button
               aria-label="Buscar"
               className="relative flex size-9 items-center justify-center rounded-full text-[var(--foreground)] transition hover:text-[var(--accent)] sm:size-10"
@@ -323,6 +326,67 @@ export function ShopHeader({ storeName, whatsappHref, whatsappNumber, logoUrl, f
             {navLinks.map((link) => {
               const isActive = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
               const LinkIcon = link.icon;
+
+              if (link.href === "/productos") {
+                return (
+                  <li key={link.href} className="flex flex-col">
+                    <div className="flex items-center justify-between rounded-lg hover:bg-[var(--surface)] transition">
+                      <Link
+                        className={`flex-1 flex items-center gap-3 px-4 py-3 text-sm font-medium ${
+                          isActive
+                            ? "text-[var(--accent)]"
+                            : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+                        }`}
+                        href={link.href}
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        <LinkIcon className="size-4.5" />
+                        {link.label}
+                      </Link>
+                      <button
+                        className="p-3 text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-transform duration-200"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          setCategoriesExpanded(!categoriesExpanded);
+                        }}
+                        style={{
+                          transform: categoriesExpanded ? "rotate(180deg)" : "rotate(0deg)"
+                        }}
+                        type="button"
+                      >
+                        <ChevronDown className="size-4" />
+                      </button>
+                    </div>
+                    {/* Submenu for categories */}
+                    {categoriesExpanded && (
+                      <ul className="mt-1 ml-9 pl-3 border-l border-[var(--border)] space-y-1.5">
+                        <li>
+                          <Link
+                            href="/productos"
+                            className="block py-1.5 text-xs text-[var(--muted-foreground)] hover:text-[var(--accent)] transition"
+                            onClick={() => setMenuOpen(false)}
+                          >
+                            Ver todos
+                          </Link>
+                        </li>
+                        {categories.map((cat) => (
+                          <li key={cat.id}>
+                            <Link
+                              href={`/productos?categoria=${cat.slug}`}
+                              className="block py-1.5 text-xs text-[var(--muted-foreground)] hover:text-[var(--accent)] transition"
+                              onClick={() => setMenuOpen(false)}
+                            >
+                              {cat.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+                );
+              }
+
               return (
                 <li key={link.href}>
                   <Link
@@ -365,26 +429,22 @@ export function ShopHeader({ storeName, whatsappHref, whatsappNumber, logoUrl, f
           </div>
         </nav>
 
-        {/* Drawer footer */}
-        <div className="border-t border-[var(--border)] px-5 py-4">
-          <button
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-[var(--accent)]/25 bg-[var(--accent)]/10 px-4 py-3 text-sm font-medium text-[var(--accent)] transition hover:bg-[var(--accent)]/15 hover:border-[var(--accent)]/40"
-            onClick={() => {
-              openCart();
-              setMenuOpen(false);
-            }}
-            type="button"
-          >
-            <ShoppingBag className="size-4" />
-            Ver carrito
-            {itemCount > 0 ? (
-              <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-[var(--accent)] px-1.5 text-[10px] font-bold text-[var(--accent-ink)]">
-                {itemCount}
-              </span>
-            ) : null}
-          </button>
-        </div>
       </aside>
+
+      {/* Floating cart button below the hamburger menu button */}
+      <button
+        aria-label="Ver carrito"
+        className="fixed right-4 top-[72px] z-20 flex size-10 items-center justify-center rounded-full border border-[var(--border)] bg-black/90 text-[var(--foreground)] shadow-lg backdrop-blur-md transition-all hover:scale-105 active:scale-95 sm:right-6 sm:top-[80px]"
+        onClick={openCart}
+        type="button"
+      >
+        <ShoppingBag className="size-4.5 text-[var(--accent)]" />
+        {itemCount > 0 && (
+          <span className={`absolute -right-1 -top-1 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-[var(--accent)] px-1.5 text-[9px] font-bold text-[var(--accent-ink)] ${cartBump ? "animate-badge-bounce" : ""}`}>
+            {itemCount}
+          </span>
+        )}
+      </button>
 
       {/* Cart Drawer */}
       <CartDrawer freeShippingThresholdCents={freeShippingThresholdCents} onClose={closeCart} open={cartOpen} whatsappNumber={whatsappNumber} />

@@ -63,3 +63,8 @@ export async function searchProducts(query: string) {
     )
     .slice(0, MAX_RESULTS);
 }
+
+export async function getShopCategories() {
+  const { getCategories } = await import("@/lib/catalog");
+  return getCategories();
+}

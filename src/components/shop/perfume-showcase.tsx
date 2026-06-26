@@ -430,10 +430,10 @@ export function PerfumeShowcase({
               <Link
                 href={hrefs[i] ?? "/productos"}
                 onClick={(e) => e.stopPropagation()}
-                className="relative z-10 mt-2.5 flex items-center gap-1.5 rounded-full border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-3.5 py-1.5 text-[10px] font-medium uppercase tracking-[0.14em] text-[var(--accent)] backdrop-blur-sm transition-all duration-300 hover:border-[var(--accent)]/55 hover:bg-[var(--accent)]/18 hover:-translate-y-0.5 hover:shadow-[0_4px_20px_rgba(201,169,110,0.25)]"
+                className="relative z-10 mt-2.5 inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)] transition-all duration-300 hover:text-[var(--accent-strong)]"
               >
                 Ver
-                <ArrowRight className="size-2.5" />
+                <ArrowRight className="size-2.5 transition-transform group-hover:translate-x-0.5" />
               </Link>
             )}
 
