@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react";
 
 import { ProductCard } from "@/components/shop/product-card";
 import { ProductCarousel } from "@/components/shop/product-carousel";
+import { StackCarousel } from "@/components/shop/stack-carousel";
 import type { CatalogProduct, CatalogCategory } from "@/lib/catalog";
 
 type CategoryFilterProps = {
@@ -92,13 +93,12 @@ export function CategoryFilter({ categories, allProducts, featured, recent }: Ca
             />
           ) : null}
 
-          {/* Recién agregados — only show if different from featured */}
+          {/* Perfumes Destacados — only show if different from featured */}
           {recent.length > 0 && recent.some((r) => !featured.find((f) => f.id === r.id)) ? (
-            <ProductCarousel
+            <StackCarousel
               badge="Acabados de llegar"
-              href="/productos"
               products={recent.filter((r) => !featured.find((f) => f.id === r.id)).slice(0, 8)}
-              title="Recién agregados"
+              title="Perfumes Destacados"
             />
           ) : null}
 

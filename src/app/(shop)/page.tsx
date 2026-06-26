@@ -101,13 +101,12 @@ export default async function Home() {
               />
             ) : null}
 
-            {/* Recién agregados */}
+            {/* Perfumes Destacados */}
             {recent.length > 0 ? (
-              <ProductCarousel
+              <StackCarousel
                 badge="Acabados de llegar"
-                href="/productos"
                 products={recent}
-                title="Recién agregados"
+                title="Perfumes Destacados"
               />
             ) : null}
 
@@ -132,16 +131,7 @@ export default async function Home() {
           </>
         )}
 
-        {/* Scroll-driven stack carousel */}
-        {allProducts.length > 0 ? (
-          <div className="border-t border-[var(--border)] pt-10 sm:pt-14">
-            <StackCarousel
-              badge="Desliza para explorar"
-              products={allProducts}
-              title="Galería interactiva"
-            />
-          </div>
-        ) : null}
+
         </div>
       </main>
 
