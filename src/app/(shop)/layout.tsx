@@ -2,6 +2,8 @@ import type { CSSProperties } from "react";
 
 import { getStoreSettings } from "@/lib/catalog";
 import { storeSettingsSchema } from "@/schemas/settings";
+import { ToastContainer } from "@/components/shop/toast-container";
+import { ScrollToTop } from "@/components/shop/scroll-to-top";
 
 export const dynamic = "force-dynamic";
 
@@ -96,6 +98,8 @@ export default async function ShopLayout({
         }}
       />
       {children}
+      <ToastContainer />
+      <ScrollToTop />
     </div>
   );
 }

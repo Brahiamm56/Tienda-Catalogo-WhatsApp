@@ -49,7 +49,7 @@ export function CategoryFilter({ categories, allProducts, featured, recent }: Ca
           <div className="hide-scrollbar mx-0 flex gap-2 overflow-x-auto sm:mx-0 sm:px-0">
             {/* "Todas" chip */}
             <button
-              className={`shrink-0 rounded-full border px-4 py-2 text-xs font-medium shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md sm:text-sm ${
+              className={`shrink-0 rounded-full border px-4 py-2 text-xs font-medium shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-95 sm:text-sm ${
                 activeCategory === null
                   ? "border-[var(--accent)]/40 bg-[var(--accent)]/10 text-[var(--accent)]"
                   : "border-[var(--border)] bg-transparent text-[var(--muted-foreground)] hover:border-[var(--accent)]/30 hover:text-[var(--foreground)]"
@@ -62,7 +62,7 @@ export function CategoryFilter({ categories, allProducts, featured, recent }: Ca
             </button>
             {categories.filter((c) => c.name && c.name.trim() !== "").map((category) => (
               <button
-                className={`shrink-0 rounded-full border px-4 py-2 text-xs font-medium shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md sm:text-sm ${
+                className={`shrink-0 rounded-full border px-4 py-2 text-xs font-medium shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-95 sm:text-sm ${
                   activeCategory === category.slug
                     ? "border-[var(--accent)]/40 bg-[var(--accent)]/10 text-[var(--accent)]"
                     : "border-[var(--border)] bg-transparent text-[var(--muted-foreground)] hover:border-[var(--accent)]/30 hover:text-[var(--foreground)]"

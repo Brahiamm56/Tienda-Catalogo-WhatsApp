@@ -4,6 +4,7 @@ import path from "path";
 import { ProductCard } from "@/components/shop/product-card";
 import { ProductCarousel } from "@/components/shop/product-carousel";
 import { StackCarousel } from "@/components/shop/stack-carousel";
+import { StickyHomeCTA } from "@/components/shop/sticky-home-cta";
 import { PerfumeShowcase } from "@/components/shop/perfume-showcase";
 import { ShopHeader } from "@/components/shop/shop-header";
 import { WhatsappFloatingButton } from "@/components/shop/whatsapp-button";
@@ -71,6 +72,9 @@ export default async function Home() {
         {/* 3D Perfume hero showcase */}
         {/* Auto-loaded from public/perfumes/ — edit metadata.json to set names & brands */}
         <PerfumeShowcase {...getPerfumeShowcaseData()} />
+
+        {/* Smooth gradient transition from black hero to ambient background */}
+        <div className="pointer-events-none h-24 bg-gradient-to-b from-black via-[#050505] to-transparent sm:h-32" />
 
         {/* Gold divider */}
         <div className="gold-scan-line mx-auto w-full max-w-3xl" />
@@ -143,6 +147,9 @@ export default async function Home() {
 
       {/* Floating WhatsApp button */}
       <WhatsappFloatingButton whatsappHref={whatsappHref} />
+
+      {/* Sticky mobile CTA */}
+      <StickyHomeCTA />
 
       {/* Store footer with hours + map */}
       <StoreFooter

@@ -304,7 +304,7 @@ export function PerfumeShowcase({
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-[92svh] w-full flex-col overflow-hidden bg-black pb-10 sm:pb-14"
+      className="relative flex min-h-[75svh] w-full flex-col overflow-hidden bg-black pb-10 sm:min-h-[92svh] sm:pb-14"
       aria-label="Colección de fragancias"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleSectionMouseLeave}

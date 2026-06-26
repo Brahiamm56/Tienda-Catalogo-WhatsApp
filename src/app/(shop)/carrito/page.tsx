@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { ChevronRight, Home } from "lucide-react";
+
 import { ShopHeader } from "@/components/shop/shop-header";
 import { WhatsappFloatingButton } from "@/components/shop/whatsapp-button";
 import { StoreFooter } from "@/components/shop/store-footer";
@@ -21,6 +24,16 @@ export default async function CartPage() {
       />
 
       <main className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 pb-28 pt-6 sm:px-6 sm:pb-12 lg:px-10">
+        {/* Breadcrumbs */}
+        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-[var(--muted-foreground)]">
+          <Link href="/" className="flex items-center gap-1 transition hover:text-[var(--foreground)]">
+            <Home className="size-3.5" />
+            Inicio
+          </Link>
+          <ChevronRight className="size-3.5" />
+          <span className="font-medium text-[var(--foreground)]">Carrito</span>
+        </nav>
+
         <div className="space-y-2">
           <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[var(--muted-foreground)]">
             Tu pedido

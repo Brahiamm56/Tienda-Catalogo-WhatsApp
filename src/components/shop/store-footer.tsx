@@ -1,6 +1,7 @@
 "use client";
 
 import { Clock, ExternalLink, MapPin } from "lucide-react";
+import { useEffect, useState } from "react";
 import type { BusinessHour } from "@/schemas/settings";
 
 type StoreFooterProps = {
@@ -37,6 +38,17 @@ export function StoreFooter({
   socialInstagram,
 }: StoreFooterProps) {
   const hours = businessHours && businessHours.length > 0 ? businessHours : DEFAULT_HOURS;
+  const [currentDayIndex, setCurrentDayIndex] = useState(-1);
+
+  useEffect(() => {
+    const dayMap: Record<string, number> = {
+      Domingo: 0, Lunes: 1, Martes: 2, Miércoles: 3,
+      Jueves: 4, Viernes: 5, Sábado: 6,
+    };
+    const today = new Date().getDay();
+    const todayIndex = hours.findIndex((h) => dayMap[h.day] === today);
+    setCurrentDayIndex(todayIndex);
+  }, [hours]);
   const hasLocation = locationLat !== undefined && locationLng !== undefined;
   const googleMapsUrl = hasLocation
     ? `https://www.google.com/maps?q=${locationLat},${locationLng}`
@@ -102,12 +114,25 @@ export function StoreFooter({
               </h4>
             </div>
             <div className="space-y-0">
-              {hours.map((h) => (
+              {hours.map((h, i) => (
                 <div
-                  className="flex items-center justify-between border-b border-[var(--border)] py-2 text-sm last:border-0"
+                  className={`flex items-center justify-between border-b py-2 text-sm last:border-0 ${
+                    i === currentDayIndex
+                      ? "rounded-lg border-[var(--accent)]/30 bg-[var(--accent)]/8 px-2 -mx-2"
+                      : "border-[var(--border)]"
+                  }`}
                   key={h.day}
                 >
-                  <span className="font-medium text-[var(--foreground)]">{h.day}</span>
+                  <span
+                    className={`font-medium ${
+                      i === currentDayIndex ? "text-[var(--accent)]" : "text-[var(--foreground)]"
+                    }`}
+                  >
+                    {h.day}
+                    {i === currentDayIndex && (
+                      <span className="ml-1.5 text-[8px] uppercase tracking-wider text-[var(--accent)]">Hoy</span>
+                    )}
+                  </span>
                   <span className="text-[var(--muted-foreground)]">
                     {h.closed || (!h.open && !h.close) ? (
                       <span className="text-xs italic">Cerrado</span>

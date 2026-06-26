@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ShoppingBag } from "lucide-react";
 
 import { useCartStore } from "@/store/cart";
+import { useToastStore } from "@/store/toast";
 import { formatCurrencyFromCents } from "@/lib/utils";
 import type { CatalogProduct } from "@/lib/catalog";
 
@@ -16,6 +17,7 @@ export function StickyAddToCart({ product }: StickyAddToCartProps) {
   const [isVisible, setIsVisible] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
   const openCart = useCartStore((state) => state.openCart);
+  const addToast = useToastStore((state) => state.addToast);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,7 +61,11 @@ export function StickyAddToCart({ product }: StickyAddToCartProps) {
           className="flex h-9 shrink-0 items-center justify-center gap-1.5 whitespace-nowrap border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-4 text-xs font-medium text-[var(--accent)] transition hover:bg-[var(--accent)]/18 hover:border-[var(--accent)]/50"
           onClick={() => {
             addItem(product);
-            openCart();
+            addToast({
+              message: `${product.name} añadido`,
+              actionLabel: "Ver carrito",
+              onAction: openCart,
+            });
           }}
           style={{ borderRadius: "var(--btn-radius, 9999px)" }}
           type="button"

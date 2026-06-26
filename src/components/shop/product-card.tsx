@@ -71,6 +71,14 @@ export function ProductCard({ product }: { product: CatalogProduct }) {
             {product.category.name}
           </span>
         </div>
+
+        {/* Hover overlay — "Ver detalle" */}
+        <div className="pointer-events-none absolute inset-0 z-10 flex items-end justify-center bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <span className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-[var(--accent)] backdrop-blur-sm">
+            Ver detalle
+            <span aria-hidden="true">→</span>
+          </span>
+        </div>
       </Link>
 
       {/* Info row */}

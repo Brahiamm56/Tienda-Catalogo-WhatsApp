@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { type CatalogProduct } from "@/lib/catalog";
 import { cn } from "@/lib/utils";
 import { useCartStore } from "@/store/cart";
+import { useToastStore } from "@/store/toast";
 
 type AddToCartButtonProps = {
   product: Pick<CatalogProduct, "id" | "slug" | "name" | "image" | "priceCents">;
@@ -16,6 +17,16 @@ type AddToCartButtonProps = {
 export function AddToCartButton({ product, className, label }: AddToCartButtonProps) {
   const addItem = useCartStore((state) => state.addItem);
   const openCart = useCartStore((state) => state.openCart);
+  const addToast = useToastStore((state) => state.addToast);
+
+  const handleAdd = () => {
+    addItem(product);
+    addToast({
+      message: `${product.name} añadido`,
+      actionLabel: "Ver carrito",
+      onAction: openCart,
+    });
+  };
 
   if (label) {
     return (
@@ -27,8 +38,7 @@ export function AddToCartButton({ product, className, label }: AddToCartButtonPr
         )}
         onClick={(e) => {
           e.preventDefault();
-          addItem(product);
-          openCart();
+          handleAdd();
         }}
         style={{ borderRadius: "var(--btn-radius, 9999px)" }}
         type="button"
@@ -48,8 +58,7 @@ export function AddToCartButton({ product, className, label }: AddToCartButtonPr
       )}
       onClick={(e) => {
         e.preventDefault();
-        addItem(product);
-        openCart();
+        handleAdd();
       }}
       style={{ borderRadius: "var(--btn-radius, 9999px)" }}
       type="button"

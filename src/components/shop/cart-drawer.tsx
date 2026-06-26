@@ -29,6 +29,25 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
   const [deliveryMethod, setDeliveryMethod] = useState<"envio" | "retiro">("retiro");
   const [notes, setNotes] = useState("");
 
+  // Persist checkout form data to localStorage
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("checkout-form");
+      if (saved) {
+        const data = JSON.parse(saved);
+        if (data.customerName) setCustomerName(data.customerName);
+        if (data.deliveryMethod) setDeliveryMethod(data.deliveryMethod);
+        if (data.notes) setNotes(data.notes);
+      }
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("checkout-form", JSON.stringify({ customerName, deliveryMethod, notes }));
+    } catch {}
+  }, [customerName, deliveryMethod, notes]);
+
   const total = items.reduce((sum, item) => sum + item.priceCents * item.quantity, 0);
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
   const checkoutUrl =
@@ -126,6 +145,13 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
               <p className="mt-2 max-w-xs text-sm leading-6 text-[var(--muted-foreground)]">
                 Agrega productos desde el catálogo para generar el pedido por WhatsApp.
               </p>
+              <Link
+                className="mt-5 inline-flex items-center gap-2 rounded-full border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-5 py-2.5 text-sm font-medium text-[var(--accent)] transition hover:bg-[var(--accent)]/18 hover:border-[var(--accent)]/50"
+                href="/productos"
+                onClick={onClose}
+              >
+                Ver catálogo
+              </Link>
             </div>
           ) : showCheckoutForm ? (
             <div className="flex flex-col px-5 py-6 space-y-5 animate-[fadeInUp_0.2s_ease-out]">

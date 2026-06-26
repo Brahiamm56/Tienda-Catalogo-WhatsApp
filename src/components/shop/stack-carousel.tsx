@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,10 +17,82 @@ type StackCarouselProps = {
 };
 
 export function StackCarousel({ badge, products, title }: StackCarouselProps) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  const handleScroll = () => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    const cards = Array.from(carousel.children) as HTMLElement[];
+    if (cards.length === 0) return;
+
+    // Get the carousel's horizontal center relative to its viewport
+    const carouselCenter = carousel.scrollLeft + carousel.clientWidth / 2;
+
+    let closestIndex = 0;
+    let minDistance = Infinity;
+
+    cards.forEach((card, index) => {
+      // Get the card's horizontal center relative to the track
+      const cardCenter = card.offsetLeft + card.clientWidth / 2;
+      const distance = Math.abs(carouselCenter - cardCenter);
+
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestIndex = index;
+      }
+    });
+
+    if (closestIndex !== activeIndex) {
+      setActiveIndex(closestIndex);
+    }
+  };
+
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    // Run once on mount to establish initial active card
+    handleScroll();
+
+    carousel.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
+
+    return () => {
+      carousel.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
+  }, [activeIndex]);
+
+  const scrollToCard = (index: number) => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+    const card = carousel.children[index] as HTMLElement;
+    if (!card) return;
+
+    // Calculate position to center the card
+    const targetScrollLeft = card.offsetLeft - (carousel.clientWidth - card.clientWidth) / 2;
+
+    carousel.scrollTo({
+      left: targetScrollLeft,
+      behavior: "smooth",
+    });
+  };
+
+  const handleCardClick = (e: React.MouseEvent, index: number) => {
+    if (index !== activeIndex) {
+      e.preventDefault();
+      e.stopPropagation();
+      scrollToCard(index);
+    }
+  };
+
   if (products.length === 0) return null;
 
   return (
-    <section className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-16 lg:px-10">
+    <section className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-16 lg:px-10 overflow-hidden">
+      <p className="mb-1 text-[10px] font-medium text-[var(--muted-foreground)]">Deslizá para explorar</p>
       {/* Header */}
       <div className="flex flex-col gap-1.5 pb-2">
         {badge ? (
@@ -30,21 +105,54 @@ export function StackCarousel({ badge, products, title }: StackCarouselProps) {
         </h2>
       </div>
 
-      {/* Scroll-driven carousel track */}
+      {/* Interactive carousel track */}
       <div className="carousel-wrapper">
         {/* Edge fade masks */}
         <div className="pointer-events-none absolute inset-y-0 left-0 z-20 w-12 bg-gradient-to-r from-[var(--background)] to-transparent sm:w-20" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-20 w-12 bg-gradient-to-l from-[var(--background)] to-transparent sm:w-20" />
 
-        <div className="carousel">
-          {products.map((product, i) => (
-            <div
-              key={product.id}
-              className="slide"
-              style={{ "--index": i } as CSSProperties}
-            >
-              <StackCard product={product} />
-            </div>
+        <div 
+          ref={carouselRef}
+          className="carousel"
+        >
+          {products.map((product, i) => {
+            let stateClass = "is-far";
+            if (i === activeIndex) {
+              stateClass = "is-active";
+            } else if (i === activeIndex - 1) {
+              stateClass = "is-prev";
+            } else if (i === activeIndex + 1) {
+              stateClass = "is-next";
+            }
+
+            return (
+              <div
+                key={product.id}
+                className={`slide ${stateClass}`}
+                style={{ "--index": i } as CSSProperties}
+              >
+                <FlipbookCard 
+                  product={product} 
+                  onCardClick={(e) => handleCardClick(e, i)}
+                />
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Carousel indicators */}
+        <div className="mt-6 flex justify-center gap-1.5">
+          {products.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => scrollToCard(i)}
+              className={`h-1.5 transition-all duration-300 rounded-full ${
+                i === activeIndex 
+                  ? "w-6 bg-[var(--accent)]" 
+                  : "w-1.5 bg-white/20 hover:bg-white/40"
+              }`}
+              aria-label={`Ir al perfume ${i + 1}`}
+            />
           ))}
         </div>
       </div>
@@ -52,13 +160,19 @@ export function StackCarousel({ badge, products, title }: StackCarouselProps) {
   );
 }
 
-function StackCard({ product }: { product: CatalogProduct }) {
+function FlipbookCard({ 
+  product, 
+  onCardClick 
+}: { 
+  product: CatalogProduct; 
+  onCardClick: (e: React.MouseEvent) => void;
+}) {
   const outOfStock = product.stock === 0;
   const lowStock = product.stock > 0 && product.stock <= 3;
 
   return (
     <article
-      className="card group relative flex w-[var(--card-width)] flex-col overflow-hidden border"
+      className="card group relative flex flex-col overflow-hidden border"
       style={{
         backgroundColor: "var(--card-bg)",
         borderColor: "var(--card-border)",
@@ -68,17 +182,18 @@ function StackCard({ product }: { product: CatalogProduct }) {
       <Link
         className="relative block aspect-[3/4] w-full overflow-hidden bg-[#0d0d0f]"
         href={`/productos/${product.slug}`}
+        onClick={onCardClick}
       >
         <Image
           alt={product.name}
           className="object-contain p-2 transition duration-700 group-hover:scale-[1.08]"
           fill
-          sizes="(max-width: 640px) 48vw, 192px"
+          sizes="(max-width: 640px) 44vw, 240px"
           src={product.image}
         />
 
         {/* Bottom gradient */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/70 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 
         {/* Status badges */}
         <div className="absolute left-2 top-2 z-10 flex flex-col items-start gap-1">
@@ -100,33 +215,38 @@ function StackCard({ product }: { product: CatalogProduct }) {
         </div>
 
         {/* Wishlist */}
-        <div className="absolute right-2 top-2 z-10">
+        <div 
+          className="absolute right-2 top-2 z-10" 
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+          }}
+        >
           <WishlistButton product={product} />
         </div>
 
-        {/* Category */}
-        <div className="absolute inset-x-0 bottom-2 z-10 px-2">
+        {/* Bottom info overlay — integrated into the card face */}
+        <div className="absolute inset-x-0 bottom-0 z-10 p-2.5">
           <span className="text-[8px] font-medium uppercase tracking-[0.14em] text-white/50">
             {product.category.name}
           </span>
+          <p className="mt-0.5 line-clamp-1 font-[family-name:var(--font-display)] text-xs font-medium italic tracking-wide text-white">
+            {product.name}
+          </p>
+          <div 
+            className="mt-1.5 flex items-center justify-between gap-1.5" 
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+            }}
+          >
+            <p className="text-xs font-medium text-[var(--accent)]">
+              {formatCurrencyFromCents(product.priceCents)}
+            </p>
+            <AddToCartButton product={product} />
+          </div>
         </div>
       </Link>
-
-      {/* Info */}
-      <div className="flex flex-1 flex-col gap-1 p-2.5">
-        <Link
-          className="line-clamp-1 font-[family-name:var(--font-display)] text-xs font-medium italic tracking-wide text-[var(--foreground)]"
-          href={`/productos/${product.slug}`}
-        >
-          {product.name}
-        </Link>
-        <div className="mt-auto flex items-center justify-between gap-1.5 pt-1.5">
-          <p className="text-xs font-medium text-[var(--accent)]">
-            {formatCurrencyFromCents(product.priceCents)}
-          </p>
-          <AddToCartButton product={product} />
-        </div>
-      </div>
     </article>
   );
 }

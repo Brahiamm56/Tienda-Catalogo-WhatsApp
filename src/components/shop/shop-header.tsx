@@ -258,7 +258,15 @@ export function ShopHeader({ storeName, whatsappHref, whatsappNumber, logoUrl, f
                     </button>
                   </div>
                 ) : (
-                  <div className="py-4 text-center text-sm text-[var(--muted-foreground)]">No se encontraron productos.</div>
+                  <div className="flex flex-col items-center gap-3 py-8 text-center">
+                    <div className="flex size-12 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)]">
+                      <Search className="size-5 text-[var(--muted-foreground)]" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-[var(--foreground)]">No se encontraron productos</p>
+                      <p className="mt-0.5 text-xs text-[var(--muted-foreground)]">Probá con otro término de búsqueda</p>
+                    </div>
+                  </div>
                 )}
               </div>
             )}
