@@ -5,7 +5,7 @@ import { useActionState, useEffect, useRef, useState, useTransition } from "reac
 import type { AdminFormState } from "@/actions/admin-state";
 import { initialAdminFormState } from "@/actions/admin-state";
 import { createCategoryQuickAction } from "@/actions/admin";
-import { CloudinaryUploadField } from "@/components/admin/cloudinary-upload-field";
+import { MultiImageUploadField } from "@/components/admin/multi-image-upload-field";
 import { FormSubmitButton } from "@/components/admin/form-submit-button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
@@ -313,30 +313,22 @@ export function ProductForm({
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Imagen principal</label>
-          <CloudinaryUploadField
+          <label className="text-sm font-medium">
+            Imágenes del producto
+          </label>
+          <p className="text-xs text-[var(--muted-foreground)]">
+            La primera imagen es la principal. Arrastra para reordenar.
+          </p>
+          <MultiImageUploadField
             key={imageFieldKey}
             cloudinaryEnabled={cloudinaryEnabled}
-            defaultPublicId={product?.imagePublicId}
-            defaultValue={product?.image}
+            defaultImages={product?.images?.map((img) => ({ url: img.url, publicId: img.publicId, alt: img.alt }))}
           />
           {getFieldError(state, "imageUrl") ? (
             <p className="text-sm text-[var(--accent-strong)]">{getFieldError(state, "imageUrl")}</p>
           ) : null}
-        </div>
-
-        <div className="space-y-2">
-          <label className="text-sm font-medium" htmlFor={product ? `${product.id}-image-alt` : "create-product-image-alt"}>
-            Texto alternativo de imagen
-          </label>
-          <Input
-            defaultValue={product?.imageAlt ?? product?.name ?? ""}
-            id={product ? `${product.id}-image-alt` : "create-product-image-alt"}
-            name="imageAlt"
-            placeholder="Camisa Atelier sobre fondo claro"
-          />
-          {getFieldError(state, "imageAlt") ? (
-            <p className="text-sm text-[var(--accent-strong)]">{getFieldError(state, "imageAlt")}</p>
+          {getFieldError(state, "images") ? (
+            <p className="text-sm text-[var(--accent-strong)]">{getFieldError(state, "images")}</p>
           ) : null}
         </div>
 

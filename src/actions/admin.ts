@@ -119,13 +119,40 @@ function getProductPayload(formData: FormData) {
   const name = getString(formData, "name");
   const slugFromForm = getString(formData, "slug");
 
+  // Parse multiple images from JSON hidden field
+  const imagesJson = getString(formData, "imagesJson");
+  let images: { url: string; publicId: string; alt: string }[] = [];
+  if (imagesJson) {
+    try {
+      const parsed = JSON.parse(imagesJson) as { url: string; publicId?: string; alt?: string }[];
+      images = parsed
+        .filter((img) => img && typeof img.url === "string" && img.url)
+        .map((img) => ({
+          url: img.url,
+          publicId: img.publicId ?? "",
+          alt: img.alt ?? "",
+        }));
+    } catch {}
+  }
+
+  // Backward compat: if no images array but single imageUrl, use that
+  const singleImageUrl = getString(formData, "imageUrl");
+  if (images.length === 0 && singleImageUrl) {
+    images = [{
+      url: singleImageUrl,
+      publicId: getString(formData, "imagePublicId"),
+      alt: getString(formData, "imageAlt"),
+    }];
+  }
+
   return {
     categoryId: getString(formData, "categoryId"),
     description: getString(formData, "description"),
     featured: formData.get("featured") === "on",
-    imageAlt: getString(formData, "imageAlt"),
-    imagePublicId: getString(formData, "imagePublicId"),
-    imageUrl: getString(formData, "imageUrl"),
+    imageAlt: images[0]?.alt ?? "",
+    imagePublicId: images[0]?.publicId ?? "",
+    imageUrl: images[0]?.url ?? "",
+    images,
     name,
     priceCents: Number.isFinite(price) ? Math.round(price * 100) : Number.NaN,
     sku: getString(formData, "sku"),
@@ -135,63 +162,53 @@ function getProductPayload(formData: FormData) {
   };
 }
 
-async function syncProductImage(args: {
-  imageAlt: string;
-  imagePublicId: string;
-  imageUrl: string;
+async function syncProductImages(args: {
+  images: { url: string; publicId: string; alt: string }[];
   productId: string;
 }) {
-  const existingImage = await prisma.productImage.findFirst({
+  const existingImages = await prisma.productImage.findMany({
     where: { productId: args.productId },
     orderBy: { sortOrder: "asc" },
   });
 
-  if (!args.imageUrl) {
-    if (existingImage) {
-      await prisma.productImage.delete({
-        where: { id: existingImage.id },
-      });
-
-      if (existingImage.publicId && isCloudinaryConfigured()) {
-        await cloudinary.uploader.destroy(existingImage.publicId).catch(() => null);
+  // Delete images that are no longer in the new list
+  const newUrls = new Set(args.images.map((img) => img.url));
+  for (const existing of existingImages) {
+    if (!newUrls.has(existing.url)) {
+      await prisma.productImage.delete({ where: { id: existing.id } });
+      if (existing.publicId && isCloudinaryConfigured()) {
+        await cloudinary.uploader.destroy(existing.publicId).catch(() => null);
       }
     }
-
-    return;
   }
 
-  if (existingImage) {
-    const previousPublicId = existingImage.publicId;
+  // Upsert images in order
+  for (let i = 0; i < args.images.length; i++) {
+    const newImg = args.images[i];
+    const existing = existingImages.find((e) => e.url === newImg.url);
 
-    await prisma.productImage.update({
-      where: { id: existingImage.id },
-      data: {
-        alt: args.imageAlt || null,
-        publicId: args.imagePublicId || null,
-        url: args.imageUrl,
-      },
-    });
-
-    if (
-      previousPublicId &&
-      previousPublicId !== args.imagePublicId &&
-      isCloudinaryConfigured()
-    ) {
-      await cloudinary.uploader.destroy(previousPublicId).catch(() => null);
+    if (existing) {
+      // Update existing image (sortOrder + alt)
+      await prisma.productImage.update({
+        where: { id: existing.id },
+        data: {
+          alt: newImg.alt || null,
+          sortOrder: i + 1,
+        },
+      });
+    } else {
+      // Create new image
+      await prisma.productImage.create({
+        data: {
+          alt: newImg.alt || null,
+          productId: args.productId,
+          publicId: newImg.publicId || null,
+          sortOrder: i + 1,
+          url: newImg.url,
+        },
+      });
     }
-
-    return;
   }
-
-  await prisma.productImage.create({
-    data: {
-      alt: args.imageAlt || null,
-      productId: args.productId,
-      publicId: args.imagePublicId || null,
-      sortOrder: 1,
-      url: args.imageUrl,
-    },
-  });
 }
 
 export async function createProductAction(_: AdminFormState, formData: FormData) {
@@ -227,10 +244,12 @@ export async function createProductAction(_: AdminFormState, formData: FormData)
       },
     });
 
-    await syncProductImage({
-      imageAlt: parsed.data.imageAlt || parsed.data.name,
-      imagePublicId: parsed.data.imagePublicId || "",
-      imageUrl: parsed.data.imageUrl || "",
+    await syncProductImages({
+      images: parsed.data.images?.length
+        ? parsed.data.images.map((img) => ({ url: img.url, publicId: img.publicId ?? "", alt: img.alt ?? "" }))
+        : (parsed.data.imageUrl
+          ? [{ url: parsed.data.imageUrl, publicId: parsed.data.imagePublicId ?? "", alt: parsed.data.imageAlt || parsed.data.name }]
+          : []),
       productId: product.id,
     });
 
@@ -281,10 +300,12 @@ export async function updateProductAction(_: AdminFormState, formData: FormData)
       },
     });
 
-    await syncProductImage({
-      imageAlt: parsed.data.imageAlt || parsed.data.name,
-      imagePublicId: parsed.data.imagePublicId || "",
-      imageUrl: parsed.data.imageUrl || "",
+    await syncProductImages({
+      images: parsed.data.images?.length
+        ? parsed.data.images.map((img) => ({ url: img.url, publicId: img.publicId ?? "", alt: img.alt ?? "" }))
+        : (parsed.data.imageUrl
+          ? [{ url: parsed.data.imageUrl, publicId: parsed.data.imagePublicId ?? "", alt: parsed.data.imageAlt || parsed.data.name }]
+          : []),
       productId,
     });
 

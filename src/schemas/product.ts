@@ -24,6 +24,11 @@ export const productSchema = z.object({
   imageUrl: httpsImageUrl.optional().or(z.literal("")),
   imageAlt: z.string().trim().max(120).optional().or(z.literal("")),
   imagePublicId: z.string().trim().max(255).optional().or(z.literal("")),
+  images: z.array(z.object({
+    url: httpsImageUrl,
+    publicId: z.string().trim().max(255).optional().or(z.literal("")),
+    alt: z.string().trim().max(120).optional().or(z.literal("")),
+  })).optional(),
   sku: z.string().trim().max(64).optional().or(z.literal("")),
   status: productStatusSchema.default("PUBLISHED"),
 });

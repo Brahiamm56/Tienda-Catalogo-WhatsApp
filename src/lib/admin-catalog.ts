@@ -4,10 +4,11 @@ import { prisma } from "@/lib/prisma";
 
 export type AdminProductStatus = "DRAFT" | "PUBLISHED" | "ARCHIVED";
 
-export type AdminProduct = CatalogProduct & {
+export type AdminProduct = Omit<CatalogProduct, "images"> & {
   categoryId: string;
   imageAlt: string;
   imagePublicId: string | null;
+  images: { url: string; alt: string | null; publicId: string | null }[];
   sku: string | null;
   status: AdminProductStatus;
   createdAt: Date;
@@ -18,11 +19,13 @@ export type AdminCategory = CatalogCategory;
 
 function mapFallbackProduct(product: CatalogProduct): AdminProduct {
   const now = new Date();
+  const { images: _productImages, ...rest } = product;
   return {
-    ...product,
+    ...rest,
     categoryId: product.category.slug,
     imageAlt: product.name,
     imagePublicId: null,
+    images: product.image ? [{ url: product.image, alt: product.name, publicId: null }] : [],
     sku: null,
     status: "PUBLISHED",
     createdAt: now,
@@ -56,7 +59,6 @@ export async function getAdminProducts() {
           orderBy: {
             sortOrder: "asc",
           },
-          take: 1,
         },
       },
       orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }],
@@ -79,6 +81,7 @@ export async function getAdminProducts() {
           image: product.images[0]?.url ?? fallback[0]?.image ?? "",
           imageAlt: product.images[0]?.alt ?? product.name,
           imagePublicId: product.images[0]?.publicId ?? null,
+          images: product.images.map((img) => ({ url: img.url, alt: img.alt, publicId: img.publicId })),
           sku: product.sku,
           status: product.status,
           createdAt: product.createdAt,
