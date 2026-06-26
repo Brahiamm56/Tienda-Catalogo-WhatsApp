@@ -1,18 +1,21 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Instrument_Sans } from "next/font/google";
+import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 
 import { cn } from "@/lib/utils";
 
 import "./globals.css";
 
-const displayFont = Space_Grotesk({
+const displayFont = Cormorant_Garamond({
   variable: "--font-display",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
 });
 
-const bodyFont = Instrument_Sans({
+const bodyFont = DM_Sans({
   variable: "--font-sans",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
 });
 
 export const metadata: Metadata = {

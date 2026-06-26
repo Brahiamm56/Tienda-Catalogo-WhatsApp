@@ -67,11 +67,11 @@ export default async function AdminOverviewPage() {
     <div className="space-y-6">
       {/* Encabezado simple */}
       <header className="space-y-1">
-        <p className="text-xs font-medium uppercase tracking-[0.18em] text-black">Sistemas en línea</p>
-        <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold tracking-tight text-black">
+        <p className="text-xs font-medium uppercase tracking-[0.18em] text-[var(--foreground)]">Sistemas en línea</p>
+        <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold tracking-tight text-[var(--foreground)]">
           Resumen general
         </h2>
-        <p className="text-sm text-black">
+        <p className="text-sm text-[var(--foreground)]">
           Métricas operativas en tiempo real de tu tienda y rendimiento de ventas.
         </p>
       </header>
@@ -106,9 +106,9 @@ export default async function AdminOverviewPage() {
 
       {/* Main Charts & Data */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:col-span-2">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] p-5 shadow-sm lg:col-span-2">
           <div className="mb-1 flex items-center justify-between">
-            <h3 className="font-[family-name:var(--font-display)] text-lg font-semibold text-slate-800">
+            <h3 className="font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--foreground)]">
               Ventas · Últimos 7 días
             </h3>
             <Link
@@ -123,9 +123,9 @@ export default async function AdminOverviewPage() {
           <SalesChart data={chartData} />
         </div>
 
-        <div className="flex flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="flex flex-col rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] p-5 shadow-sm">
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="font-[family-name:var(--font-display)] text-lg font-semibold text-slate-800">
+            <h3 className="font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--foreground)]">
               Ventas recientes
             </h3>
             <Link
@@ -158,14 +158,14 @@ export default async function AdminOverviewPage() {
                     <Receipt className="h-4 w-4 text-emerald-700" />
                   </div>
                   <div className="flex-1 overflow-hidden">
-                    <p className="truncate text-sm font-semibold text-slate-700">
+                    <p className="truncate text-sm font-semibold text-[var(--foreground)]">
                       {sale.customerName ?? "Mostrador"}
                     </p>
                     <p className="truncate text-xs text-slate-400">
                       {sale.itemCount} item{sale.itemCount === 1 ? "" : "s"} · {timeAgo(sale.createdAt)}
                     </p>
                   </div>
-                  <p className="text-sm font-bold text-slate-800">
+                  <p className="text-sm font-bold text-[var(--foreground)]">
                     {formatCurrencyFromCents(sale.totalCents)}
                   </p>
                 </div>
@@ -176,9 +176,9 @@ export default async function AdminOverviewPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] p-5 shadow-sm">
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="font-[family-name:var(--font-display)] text-lg font-semibold text-slate-800">
+            <h3 className="font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--foreground)]">
               Productos recientes
             </h3>
             <Link
@@ -221,14 +221,14 @@ export default async function AdminOverviewPage() {
                     </div>
 
                     <div className="flex-1 overflow-hidden">
-                      <p className="truncate text-sm font-semibold text-slate-700">{product.name}</p>
+                      <p className="truncate text-sm font-semibold text-[var(--foreground)]">{product.name}</p>
                       <p className="truncate text-xs text-slate-400">
                         {created ? timeAgo(created) : "—"}
                       </p>
                     </div>
 
                     <div className="text-right">
-                      <p className="text-sm font-bold text-slate-800">
+                      <p className="text-sm font-bold text-[var(--foreground)]">
                         {formatCurrencyFromCents(product.priceCents)}
                       </p>
                       <p className={`text-[10px] font-bold uppercase ${statusColor}`}>
@@ -242,7 +242,7 @@ export default async function AdminOverviewPage() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] p-5 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-rose-500">
             Atención inmediata
           </p>
@@ -264,8 +264,8 @@ export default async function AdminOverviewPage() {
                     <TriangleAlert className="size-4" />
                   </span>
                   <div className="flex-1">
-                    <p className="font-medium text-slate-800">{product.name}</p>
-                    <p className="mt-0.5 text-xs text-slate-500">/{product.slug}</p>
+                    <p className="font-medium text-[var(--foreground)]">{product.name}</p>
+                    <p className="mt-0.5 text-xs text-[var(--muted-foreground)]">/{product.slug}</p>
                     <p className="mt-1 text-sm font-semibold text-amber-700">
                       {product.stock} unidades disponibles
                     </p>
@@ -277,7 +277,7 @@ export default async function AdminOverviewPage() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] p-5 shadow-sm">
         <p className="text-xs font-semibold uppercase tracking-[0.25em] text-violet-500">Categorías</p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {categories.length === 0 ? (
@@ -288,9 +288,9 @@ export default async function AdminOverviewPage() {
                 key={category.slug}
                 className="rounded-xl border border-slate-100 bg-gradient-to-br from-slate-50 to-white p-4 transition hover:border-violet-200 hover:shadow-sm"
               >
-                <p className="font-medium text-slate-800">{category.name}</p>
+                <p className="font-medium text-[var(--foreground)]">{category.name}</p>
                 {category.description ? (
-                  <p className="mt-1 text-xs leading-5 text-slate-500">{category.description}</p>
+                  <p className="mt-1 text-xs leading-5 text-[var(--muted-foreground)]">{category.description}</p>
                 ) : null}
                 <p className="mt-2 text-sm font-medium text-violet-600">
                   {category.productCount} productos

@@ -43,7 +43,7 @@ export function CategoryFilter({ categories, allProducts, featured, recent }: Ca
       {/* Category chips */}
       <section className="px-4 sm:px-6 lg:px-10">
         <div className="mx-auto flex max-w-7xl flex-col gap-4">
-          <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold tracking-tight sm:text-2xl text-[var(--foreground)]">
+          <h2 className="font-[family-name:var(--font-display)] text-xl font-light italic tracking-wide text-[var(--foreground)] sm:text-2xl md:text-3xl">
             Explorar por categoría
           </h2>
           <div className="hide-scrollbar mx-0 flex gap-2 overflow-x-auto sm:mx-0 sm:px-0">
@@ -51,8 +51,8 @@ export function CategoryFilter({ categories, allProducts, featured, recent }: Ca
             <button
               className={`shrink-0 rounded-full border px-4 py-2 text-xs font-medium shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md sm:text-sm ${
                 activeCategory === null
-                  ? "border-black bg-black text-white"
-                  : "border-[var(--border)] bg-white text-[var(--foreground)] hover:border-black/30 hover:text-black"
+                  ? "border-[var(--accent)]/40 bg-[var(--accent)]/10 text-[var(--accent)]"
+                  : "border-[var(--border)] bg-transparent text-[var(--muted-foreground)] hover:border-[var(--accent)]/30 hover:text-[var(--foreground)]"
               }`}
               onClick={() => setActiveCategory(null)}
               type="button"
@@ -64,8 +64,8 @@ export function CategoryFilter({ categories, allProducts, featured, recent }: Ca
               <button
                 className={`shrink-0 rounded-full border px-4 py-2 text-xs font-medium shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md sm:text-sm ${
                   activeCategory === category.slug
-                    ? "border-black bg-black text-white"
-                    : "border-[var(--border)] bg-white text-[var(--foreground)] hover:border-black/30 hover:text-black"
+                    ? "border-[var(--accent)]/40 bg-[var(--accent)]/10 text-[var(--accent)]"
+                    : "border-[var(--border)] bg-transparent text-[var(--muted-foreground)] hover:border-[var(--accent)]/30 hover:text-[var(--foreground)]"
                 }`}
                 key={category.id}
                 onClick={() => setActiveCategory(category.slug)}
@@ -128,7 +128,7 @@ export function CategoryFilter({ categories, allProducts, featured, recent }: Ca
             {hasMoreProducts ? (
               <div className="flex justify-center pt-2">
                 <Link
-                  className="group inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-white px-6 py-3 text-sm font-semibold text-[var(--foreground)] shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                  className="group inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-transparent px-6 py-3 text-sm font-medium text-[var(--muted-foreground)] transition hover:border-[var(--accent)]/30 hover:text-[var(--accent)]"
                   href="/productos"
                 >
                   Ver los {allProducts.length} productos
@@ -162,7 +162,7 @@ export function CategoryFilter({ categories, allProducts, featured, recent }: Ca
               ))}
             </div>
           ) : (
-            <div className="flex min-h-[200px] flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-[var(--border)] bg-white/40">
+            <div className="flex min-h-[200px] flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-[var(--border)] bg-transparent">
               <p className="text-sm text-[var(--muted-foreground)]">
                 No hay productos en esta categoría.
               </p>

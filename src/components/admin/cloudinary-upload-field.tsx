@@ -138,8 +138,8 @@ export function CloudinaryUploadField({
         /* Preview with replace/remove */
         <div className={
           previewVariant === "square"
-            ? "relative mx-auto w-full max-w-[260px] overflow-hidden rounded-xl border border-[var(--border)] bg-gray-50"
-            : "relative overflow-hidden rounded-xl border border-[var(--border)] bg-gray-50"
+            ? "relative mx-auto w-full max-w-[260px] overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface)]"
+            : "relative overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface)]"
         }>
           {/* eslint-disable-next-line @next/next/no-img-element -- Admin preview may point to arbitrary external URLs entered manually. */}
           <img
@@ -153,7 +153,7 @@ export function CloudinaryUploadField({
           />
           <div className="absolute right-2 top-2 flex gap-1.5">
             <button
-              className="flex items-center gap-1.5 rounded-lg bg-white/90 px-3 py-1.5 text-xs font-medium shadow-sm hover:bg-white"
+              className="flex items-center gap-1.5 rounded-lg bg-[var(--surface-strong)] px-3 py-1.5 text-xs font-medium shadow-sm hover:bg-[var(--surface-strong)]"
               onClick={() => fileInputRef.current?.click()}
               type="button"
             >
@@ -161,7 +161,7 @@ export function CloudinaryUploadField({
               Cambiar
             </button>
             <button
-              className="rounded-lg bg-white/90 p-1.5 shadow-sm hover:bg-white"
+              className="rounded-lg bg-[var(--surface-strong)] p-1.5 shadow-sm hover:bg-[var(--surface-strong)]"
               onClick={() => { setImageUrl(""); setPublicId(""); setUploadError(null); }}
               type="button"
             >
@@ -172,12 +172,12 @@ export function CloudinaryUploadField({
       ) : (
         /* Upload zone */
         <button
-          className="flex w-full flex-col items-center gap-3 rounded-xl border-2 border-dashed border-[var(--border)] bg-gray-50 px-4 py-8 text-center transition-colors hover:border-[var(--accent)]/50 hover:bg-[var(--accent)]/5 disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex w-full flex-col items-center gap-3 rounded-xl border-2 border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-8 text-center transition-colors hover:border-[var(--accent)]/50 hover:bg-[var(--accent)]/5 disabled:cursor-not-allowed disabled:opacity-50"
           disabled={!cloudinaryEnabled || isUploading}
           onClick={() => fileInputRef.current?.click()}
           type="button"
         >
-          <div className="flex size-10 items-center justify-center rounded-full bg-white shadow-sm">
+          <div className="flex size-10 items-center justify-center rounded-full bg-[var(--surface-strong)] shadow-sm">
             <Upload className="size-5 text-[var(--muted-foreground)]" />
           </div>
           <div>

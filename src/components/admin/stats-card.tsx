@@ -38,14 +38,14 @@ export default function StatsCard({
   return (
     <div
       className={cn(
-        "group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md",
+        "group relative overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] p-5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md",
         className,
       )}
     >
       <div className="flex items-start justify-between">
         <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">{title}</p>
-          <h3 className="font-[family-name:var(--font-display)] text-2xl font-bold text-slate-900">
+          <p className="text-xs font-semibold uppercase tracking-wider text-[var(--muted-foreground)]">{title}</p>
+          <h3 className="font-[family-name:var(--font-display)] text-2xl font-bold text-[var(--foreground)]">
             {value}
           </h3>
 

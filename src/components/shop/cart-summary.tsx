@@ -79,7 +79,7 @@ export function CartSummary() {
 
               {/* Quantity controls + delete */}
               <div className="mt-auto flex items-center gap-3 pt-1">
-                <div className="flex items-center rounded-full border border-[var(--border)] bg-white">
+                <div className="flex items-center rounded-full border border-[var(--border)] bg-transparent">
                   <button
                     aria-label="Disminuir cantidad"
                     className="flex size-8 items-center justify-center rounded-full text-[var(--muted-foreground)] transition hover:bg-[var(--background)] hover:text-[var(--foreground)]"

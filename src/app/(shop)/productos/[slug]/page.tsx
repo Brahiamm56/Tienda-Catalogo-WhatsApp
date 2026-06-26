@@ -146,7 +146,7 @@ export default async function ProductDetailPage({
                 <Badge>{product.category.name}</Badge>
                 {inStock ? <Badge>Stock {product.stock}</Badge> : <Badge>Agotado</Badge>}
                 {product.featured ? (
-                  <span className="inline-flex items-center gap-1 rounded-full border border-[var(--border)] bg-white/70 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
+                  <span className="inline-flex items-center gap-1 rounded-full border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
                     <Sparkles className="size-3" />
                     Destacado
                   </span>

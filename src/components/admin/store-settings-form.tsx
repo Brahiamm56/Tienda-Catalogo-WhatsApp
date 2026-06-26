@@ -179,7 +179,7 @@ export function StoreSettingsForm({
             </p>
           ) : null}
 
-          <div className="mt-3 flex flex-wrap items-center gap-3 rounded-2xl border border-[var(--border)] bg-white/70 p-4">
+          <div className="mt-3 flex flex-wrap items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
             <span className="text-xs uppercase tracking-[0.22em] text-[var(--muted-foreground)]">
               Vista previa
             </span>
@@ -211,7 +211,7 @@ export function StoreSettingsForm({
           <div className="space-y-2">
             {businessHours.map((hour, index) => (
               <div
-                className="flex items-center gap-2 rounded-xl border border-[var(--border)] bg-white/70 px-3 py-2"
+                className="flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2"
                 key={hour.day}
               >
                 <span className="w-24 text-sm font-medium shrink-0">{hour.day}</span>
@@ -227,7 +227,7 @@ export function StoreSettingsForm({
                 {!hour.closed ? (
                   <>
                     <input
-                      className="h-8 w-20 rounded-lg border border-[var(--border)] bg-white px-2 text-sm outline-none focus:border-[var(--accent)]"
+                      className="h-8 w-20 rounded-lg border border-[var(--border)] bg-[var(--surface-strong)] px-2 text-sm outline-none focus:border-[var(--accent)]"
                       onChange={(e) => updateHour(index, "open", e.target.value)}
                       placeholder="09:00"
                       type="time"
@@ -235,7 +235,7 @@ export function StoreSettingsForm({
                     />
                     <span className="text-xs text-[var(--muted-foreground)]">a</span>
                     <input
-                      className="h-8 w-20 rounded-lg border border-[var(--border)] bg-white px-2 text-sm outline-none focus:border-[var(--accent)]"
+                      className="h-8 w-20 rounded-lg border border-[var(--border)] bg-[var(--surface-strong)] px-2 text-sm outline-none focus:border-[var(--accent)]"
                       onChange={(e) => updateHour(index, "close", e.target.value)}
                       placeholder="18:00"
                       type="time"
@@ -337,7 +337,7 @@ function ColorField({ id, name, label, hint, value, onChange }: ColorFieldProps)
       <label className="text-sm font-medium" htmlFor={id}>
         {label}
       </label>
-      <div className="flex items-center gap-2 rounded-xl border border-[var(--border)] bg-white px-3 py-2">
+      <div className="flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] px-3 py-2">
         <input
           aria-label={`${label} (selector)`}
           className="size-8 cursor-pointer rounded-md border border-[var(--border)] bg-transparent"

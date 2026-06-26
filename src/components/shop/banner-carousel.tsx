@@ -129,7 +129,7 @@ export function BannerCarousel({ banners }: BannerCarouselProps) {
                 {banner.ctaLabel && banner.ctaHref ? (
                   <Link
                     data-anim="banner-item"
-                    className="group mt-1 inline-flex w-fit items-center gap-2 rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_4px_20px_rgba(211,93,71,0.4)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[var(--accent-strong)] hover:shadow-[0_8px_30px_rgba(211,93,71,0.5)] sm:px-6 sm:py-3 sm:text-base"
+                    className="group mt-1 inline-flex w-fit items-center gap-2 rounded-full border border-[var(--accent)]/40 bg-[var(--accent)]/15 px-5 py-2.5 text-sm font-medium text-[var(--accent)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-[var(--accent)]/25 hover:border-[var(--accent)]/60 sm:px-6 sm:py-3"
                     href={banner.ctaHref}
                   >
                     {banner.ctaLabel}
@@ -146,7 +146,7 @@ export function BannerCarousel({ banners }: BannerCarouselProps) {
           <>
             <button
               aria-label="Anterior"
-              className="absolute left-3 top-1/2 hidden size-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[var(--foreground)] shadow-md backdrop-blur-sm transition hover:bg-white hover:scale-105 md:flex"
+              className="absolute left-3 top-1/2 hidden size-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/50 text-white backdrop-blur-sm transition hover:border-[var(--accent)]/40 hover:bg-black/70 hover:text-[var(--accent)] md:flex"
               onClick={() => scrollToIndex(activeIndex - 1)}
               type="button"
             >
@@ -154,7 +154,7 @@ export function BannerCarousel({ banners }: BannerCarouselProps) {
             </button>
             <button
               aria-label="Siguiente"
-              className="absolute right-3 top-1/2 hidden size-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[var(--foreground)] shadow-md backdrop-blur-sm transition hover:bg-white hover:scale-105 md:flex"
+              className="absolute right-3 top-1/2 hidden size-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/50 text-white backdrop-blur-sm transition hover:border-[var(--accent)]/40 hover:bg-black/70 hover:text-[var(--accent)] md:flex"
               onClick={() => scrollToIndex(activeIndex + 1)}
               type="button"
             >
@@ -167,8 +167,8 @@ export function BannerCarousel({ banners }: BannerCarouselProps) {
                 <button
                   aria-label={`Ir a banner ${idx + 1}`}
                   className={`rounded-full transition-all duration-300 ${idx === activeIndex
-                      ? "h-2 w-7 bg-white shadow-[0_0_8px_rgba(255,255,255,0.5)]"
-                      : "h-2 w-2 bg-white/50 hover:bg-white/70"
+                      ? "h-1 w-6 bg-[var(--accent)] shadow-[0_0_8px_rgba(201,169,110,0.5)]"
+                      : "h-1 w-1 bg-white/30 hover:bg-white/50"
                     }`}
                   key={banner.id}
                   onClick={() => scrollToIndex(idx)}

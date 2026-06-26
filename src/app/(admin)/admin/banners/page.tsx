@@ -20,13 +20,13 @@ export default async function AdminBannersPage() {
       </div>
 
       {!databaseReady ? (
-        <section className="rounded-2xl border border-[var(--border)] bg-white px-5 py-4 text-sm">
+        <section className="rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] px-5 py-4 text-sm">
           Conecta Neon para administrar los banners.
         </section>
       ) : null}
 
       <div className="space-y-6">
-        <section className="rounded-2xl border border-[var(--border)] bg-white p-5">
+        <section className="rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] p-5">
           <h3 className="text-sm font-semibold">Crear banner</h3>
           <p className="mt-1 text-xs text-[var(--muted-foreground)]">
             Aparecerá en el carrusel principal de la tienda.
@@ -43,7 +43,7 @@ export default async function AdminBannersPage() {
           </div>
         </section>
 
-        <section className="rounded-2xl border border-[var(--border)] bg-white p-5">
+        <section className="rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] p-5">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-semibold">Banners actuales</h3>
             <span className="text-xs text-[var(--muted-foreground)]">{banners.length} registros</span>
@@ -74,7 +74,7 @@ export default async function AdminBannersPage() {
                   </div>
                 </summary>
 
-                <div className="space-y-4 border-t border-[var(--border)] bg-white p-4">
+                <div className="space-y-4 border-t border-[var(--border)] bg-[var(--surface-strong)] p-4">
                   <BannerForm
                     action={updateBannerAction}
                     banner={banner}

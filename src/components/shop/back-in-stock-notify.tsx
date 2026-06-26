@@ -43,7 +43,7 @@ export function BackInStockNotify({ productName }: BackInStockNotifyProps) {
 
   return (
     <form
-      className="rounded-2xl border border-[var(--border)] bg-white p-4 space-y-2.5"
+      className="rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] p-4 space-y-2.5"
       onSubmit={handleSubmit}
     >
       <div className="flex items-start gap-2.5">

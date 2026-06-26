@@ -75,7 +75,7 @@ export function StoreHero({ settings }: { settings: StoreSettings }) {
             </div>
           </article>
 
-          <article data-anim="hero-card" className="rounded-[2rem] border border-[var(--border)] bg-white/80 p-6">
+          <article data-anim="hero-card" className="rounded-[2rem] border border-[var(--border)] bg-[var(--surface-strong)] p-6">
             <div className="flex items-center gap-3 text-sm text-[var(--muted-foreground)]">
               <MessageCircleMore className="size-4 text-[var(--accent)]" />
               Checkout sin pasarela: el pedido sale directo al WhatsApp del negocio.

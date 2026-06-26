@@ -2,14 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef, useState, useEffect, useCallback } from "react";
 
 import { AddToCartButton } from "@/components/shop/add-to-cart-button";
 import { useGsapContext, gsap, ScrollTrigger } from "@/lib/gsap";
 import type { CatalogProduct } from "@/lib/catalog";
 import { formatCurrencyFromCents } from "@/lib/utils";
-import { useCartStore } from "@/store/cart";
 
 type ProductCarouselProps = {
   badge?: string;
@@ -105,24 +104,24 @@ export function ProductCarousel({ badge, href, products, title }: ProductCarouse
       <div data-anim="carousel-head" className="flex items-end justify-between gap-3">
         <div className="space-y-0.5">
           {badge ? (
-            <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--muted-foreground)]">{badge}</p>
+            <p className="text-[9px] uppercase tracking-[0.28em] text-[var(--accent)] animate-gold-shimmer">{badge}</p>
           ) : null}
-          <h2 className="font-[family-name:var(--font-display)] text-lg font-semibold tracking-tight sm:text-xl md:text-2xl">
+          <h2 className="font-[family-name:var(--font-display)] text-xl font-light italic tracking-wide text-[var(--foreground)] sm:text-2xl md:text-3xl">
             {title}
           </h2>
         </div>
 
         <div className="flex items-center gap-2">
           {href ? (
-            <Link className="text-sm font-medium text-[var(--accent)] hover:underline" href={href}>
-              Ver más →
+            <Link className="text-xs font-medium uppercase tracking-[0.14em] text-[var(--muted-foreground)] transition hover:text-[var(--accent)]" href={href}>
+              Ver más
             </Link>
           ) : null}
           <div className="hidden gap-1 sm:flex">
             <button
               aria-label="Desplazar a la izquierda"
-              className={`flex size-9 items-center justify-center rounded-full border border-[var(--border)] bg-white text-[var(--foreground)] transition hover:bg-[var(--background)] ${
-                !canScrollLeft ? "opacity-30 pointer-events-none" : ""
+              className={`flex size-8 items-center justify-center rounded-full border border-[var(--border)] text-[var(--muted-foreground)] transition hover:border-[var(--accent)]/30 hover:text-[var(--accent)] ${
+                !canScrollLeft ? "pointer-events-none opacity-20" : ""
               }`}
               onClick={() => scroll("left")}
               type="button"
@@ -131,8 +130,8 @@ export function ProductCarousel({ badge, href, products, title }: ProductCarouse
             </button>
             <button
               aria-label="Desplazar a la derecha"
-              className={`flex size-9 items-center justify-center rounded-full border border-[var(--border)] bg-white text-[var(--foreground)] transition hover:bg-[var(--background)] ${
-                !canScrollRight ? "opacity-30 pointer-events-none" : ""
+              className={`flex size-8 items-center justify-center rounded-full border border-[var(--border)] text-[var(--muted-foreground)] transition hover:border-[var(--accent)]/30 hover:text-[var(--accent)] ${
+                !canScrollRight ? "pointer-events-none opacity-20" : ""
               }`}
               onClick={() => scroll("right")}
               type="button"
@@ -159,10 +158,10 @@ export function ProductCarousel({ badge, href, products, title }: ProductCarouse
           {Array.from({ length: totalDots }).map((_, i) => (
             <span
               key={i}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
+              className={`h-px rounded-full transition-all duration-300 ${
                 i === activeIndex
-                  ? "w-5 bg-[var(--foreground)]"
-                  : "w-1.5 bg-[var(--foreground)]/20"
+                  ? "w-6 bg-[var(--accent)]"
+                  : "w-1.5 bg-[var(--border)]"
               }`}
             />
           ))}
@@ -173,41 +172,40 @@ export function ProductCarousel({ badge, href, products, title }: ProductCarouse
 }
 
 function CarouselCard({ product }: { product: CatalogProduct }) {
-  const addItem = useCartStore((state) => state.addItem);
-  const openCart = useCartStore((state) => state.openCart);
-
   return (
     <article
-      className="group flex w-[44vw] max-w-[220px] shrink-0 snap-start flex-col overflow-hidden border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md sm:w-[calc(50%-8px)] sm:max-w-none md:w-[calc(33.333%-11px)] lg:w-[calc(25%-12px)]"
+      className="group flex w-[44vw] max-w-[200px] shrink-0 snap-start flex-col overflow-hidden border transition-all duration-300 hover:-translate-y-1 sm:w-[calc(50%-8px)] sm:max-w-none md:w-[calc(33.333%-11px)] lg:w-[calc(25%-12px)]"
       style={{
-        backgroundColor: "var(--card-bg, #fff)",
-        borderColor: "var(--card-border, #e8e2da)",
-        borderRadius: "var(--card-radius, 1rem)",
+        backgroundColor: "var(--card-bg)",
+        borderColor: "var(--card-border)",
+        borderRadius: "var(--card-radius, 0.75rem)",
       }}
     >
-      <Link className="relative block aspect-[3/4] w-full overflow-hidden bg-[var(--background)]" href={`/productos/${product.slug}`}>
+      <Link className="relative block aspect-[3/4] w-full overflow-hidden bg-[#0d0d0f]" href={`/productos/${product.slug}`}>
         <Image
           alt={product.name}
-          className="object-cover transition duration-500 group-hover:scale-105"
+          className="object-cover transition duration-700 group-hover:scale-[1.06]"
           fill
           sizes="(max-width: 640px) 44vw, (max-width: 768px) 210px, 260px"
           src={product.image}
         />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent" />
         {product.featured ? (
-          <span className="absolute left-2 top-2 rounded-md bg-[var(--accent)] px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-white sm:text-[10px]">
+          <span className="absolute left-2 top-2 rounded-sm bg-[var(--accent)] px-1.5 py-0.5 text-[8px] font-semibold uppercase tracking-[0.12em] text-[var(--accent-ink)]">
             Destacado
           </span>
         ) : null}
       </Link>
 
-      <div className="flex flex-1 flex-col gap-1.5 p-3 sm:gap-2 sm:p-3.5">
-        <Link className="line-clamp-1 text-xs font-semibold hover:underline sm:text-sm" href={`/productos/${product.slug}`}>
+      <div className="flex flex-1 flex-col gap-1 p-3 sm:p-3.5">
+        <Link
+          className="line-clamp-1 font-[family-name:var(--font-display)] text-xs font-medium italic tracking-wide text-[var(--foreground)] sm:text-sm"
+          href={`/productos/${product.slug}`}
+        >
           {product.name}
         </Link>
-        <p className="line-clamp-1 text-[10px] text-[var(--muted-foreground)] sm:text-[11px]">{product.category.name}</p>
-
         <div className="mt-auto flex items-center justify-between gap-1.5 pt-1.5">
-          <p className="text-xs font-bold sm:text-sm">{formatCurrencyFromCents(product.priceCents)}</p>
+          <p className="text-xs font-medium text-[var(--accent)] sm:text-sm">{formatCurrencyFromCents(product.priceCents)}</p>
           <AddToCartButton product={product} />
         </div>
       </div>

@@ -85,7 +85,7 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
       {/* Drawer panel */}
       <aside
         aria-label="Carrito de compras"
-        className={`fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col bg-white shadow-[-8px_0_30px_rgba(0,0,0,0.12)] transition-transform duration-300 ease-out ${
+        className={`fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col border-l border-[var(--border)] bg-[#0c0c0e] shadow-[-8px_0_60px_rgba(0,0,0,0.8)] transition-transform duration-300 ease-out ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
         role="dialog"
@@ -94,7 +94,7 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
         <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4">
           <div className="flex items-center gap-2.5">
             <ShoppingBag className="size-5 text-[var(--foreground)]" />
-            <h2 className="font-[family-name:var(--font-display)] text-lg font-semibold">
+            <h2 className="font-[family-name:var(--font-display)] text-lg font-light italic tracking-wide">
               Carrito
             </h2>
             {itemCount > 0 ? (
@@ -117,10 +117,10 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
         <div className="flex-1 overflow-y-auto">
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
-              <div className="flex size-16 items-center justify-center rounded-full bg-[var(--background)]">
+              <div className="flex size-16 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)]">
                 <ShoppingBag className="size-7 text-[var(--muted-foreground)]" />
               </div>
-              <p className="mt-4 font-[family-name:var(--font-display)] text-xl font-semibold">
+              <p className="mt-4 font-[family-name:var(--font-display)] text-xl font-light italic">
                 Tu carrito está vacío
               </p>
               <p className="mt-2 max-w-xs text-sm leading-6 text-[var(--muted-foreground)]">
@@ -136,7 +136,7 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
                   type="text" 
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
-                  className="w-full h-11 rounded-xl border border-[var(--border)] bg-[var(--background)] px-3 text-sm outline-none transition focus:border-[var(--accent)] focus:shadow-[0_0_0_3px_rgba(211,93,71,0.08)]" 
+                  className="w-full h-11 rounded-lg border border-[var(--border)] bg-[var(--surface-strong)] px-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--muted-foreground)] transition focus:border-[var(--accent)]/50" 
                   placeholder="Ej: María López" 
                   required 
                 />
@@ -148,14 +148,14 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
                   <button
                     type="button"
                     onClick={() => setDeliveryMethod("retiro")}
-                    className={`flex h-11 items-center justify-center rounded-xl border text-sm font-medium transition ${deliveryMethod === "retiro" ? "border-[var(--foreground)] bg-[var(--foreground)] text-white" : "border-[var(--border)] bg-white text-[var(--muted-foreground)] hover:border-[var(--foreground)]/30"}`}
+                    className={`flex h-11 items-center justify-center rounded-lg border text-sm font-medium transition ${deliveryMethod === "retiro" ? "border-[var(--accent)]/40 bg-[var(--accent)]/10 text-[var(--accent)]" : "border-[var(--border)] bg-transparent text-[var(--muted-foreground)] hover:border-[var(--accent)]/20 hover:text-[var(--foreground)]"}`}
                   >
                     Retiro en local
                   </button>
                   <button
                     type="button"
                     onClick={() => setDeliveryMethod("envio")}
-                    className={`flex h-11 items-center justify-center rounded-xl border text-sm font-medium transition ${deliveryMethod === "envio" ? "border-[var(--foreground)] bg-[var(--foreground)] text-white" : "border-[var(--border)] bg-white text-[var(--muted-foreground)] hover:border-[var(--foreground)]/30"}`}
+                    className={`flex h-11 items-center justify-center rounded-lg border text-sm font-medium transition ${deliveryMethod === "envio" ? "border-[var(--accent)]/40 bg-[var(--accent)]/10 text-[var(--accent)]" : "border-[var(--border)] bg-transparent text-[var(--muted-foreground)] hover:border-[var(--accent)]/20 hover:text-[var(--foreground)]"}`}
                   >
                     Envío a domicilio
                   </button>
@@ -168,7 +168,7 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
                   id="notes" 
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
-                  className="w-full rounded-xl border border-[var(--border)] bg-[var(--background)] p-3 text-sm outline-none transition focus:border-[var(--accent)] focus:shadow-[0_0_0_3px_rgba(211,93,71,0.08)] min-h-[80px] resize-none" 
+                  className="w-full rounded-lg border border-[var(--border)] bg-[var(--surface-strong)] p-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--muted-foreground)] transition focus:border-[var(--accent)]/50 min-h-[80px] resize-none" 
                   placeholder="Ej: Dirección de envío, horario preferido, talle específico..." 
                 />
               </div>
@@ -179,7 +179,7 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
                 <div className="cart-item-enter flex gap-3.5 px-5 py-4" key={item.id}>
                   <Link
                     href={`/productos/${item.slug}`}
-                    className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-[var(--background)]"
+                    className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-[#0d0d0f]"
                     onClick={onClose}
                   >
                     <Image
@@ -192,14 +192,14 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
                   </Link>
                   <div className="flex flex-1 flex-col gap-1">
                     <p className="text-sm font-medium leading-tight">{item.name}</p>
-                    <p className="text-sm font-semibold text-[var(--foreground)]">
+                    <p className="text-sm font-medium text-[var(--accent)]">
                       {formatCurrencyFromCents(item.priceCents)}
                     </p>
                     <div className="mt-auto flex items-center gap-2">
                       <div className="flex items-center rounded-full border border-[var(--border)]">
                         <button
                           aria-label="Disminuir cantidad"
-                          className="flex size-7 items-center justify-center rounded-full text-[var(--muted-foreground)] transition hover:bg-[var(--background)]"
+                          className="flex size-7 items-center justify-center rounded-full text-[var(--muted-foreground)] transition hover:text-[var(--foreground)]"
                           onClick={() => decrementItem(item.id)}
                           type="button"
                         >
@@ -210,7 +210,7 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
                         </span>
                         <button
                           aria-label="Aumentar cantidad"
-                          className="flex size-7 items-center justify-center rounded-full text-[var(--muted-foreground)] transition hover:bg-[var(--background)]"
+                          className="flex size-7 items-center justify-center rounded-full text-[var(--muted-foreground)] transition hover:text-[var(--foreground)]"
                           onClick={() => addItem(item)}
                           type="button"
                         >
@@ -219,7 +219,7 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
                       </div>
                       <button
                         aria-label={`Quitar ${item.name}`}
-                        className="ml-auto flex size-7 items-center justify-center rounded-full text-[var(--muted-foreground)] transition hover:bg-red-50 hover:text-red-500"
+                        className="ml-auto flex size-7 items-center justify-center rounded-full text-[var(--muted-foreground)] transition hover:text-red-400"
                         onClick={() => removeItem(item.id)}
                         type="button"
                       >
@@ -264,7 +264,7 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
             ) : null}
             <div className="flex items-center justify-between">
               <span className="text-sm text-[var(--muted-foreground)]">Total</span>
-              <span className="font-[family-name:var(--font-display)] text-xl font-semibold">
+              <span className="font-[family-name:var(--font-display)] text-xl font-light italic text-[var(--accent)]">
                 {formatCurrencyFromCents(total)}
               </span>
             </div>

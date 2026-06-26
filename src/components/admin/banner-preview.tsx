@@ -46,7 +46,7 @@ export function BannerPreview({ title, subtitle, ctaLabel, ctaHref, imageUrl }: 
             <p className="max-w-xl text-xs text-white/90 sm:text-sm">{subtitle}</p>
           ) : null}
           {ctaLabel ? (
-            <span className="inline-flex w-fit items-center gap-2 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-black sm:px-4 sm:py-2 sm:text-sm">
+            <span className="inline-flex w-fit items-center gap-2 rounded-full bg-[var(--surface-strong)] px-3 py-1.5 text-xs font-semibold text-[var(--foreground)] sm:px-4 sm:py-2 sm:text-sm">
               {ctaLabel}
             </span>
           ) : null}

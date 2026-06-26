@@ -20,7 +20,7 @@ export function ProductsTable({ products }: { products: CatalogProduct[] }) {
             className="grid grid-cols-1 gap-4 px-6 py-4 md:grid-cols-[1.6fr_0.8fr_0.6fr_0.7fr] md:items-center"
           >
             <div className="flex items-center gap-4">
-              <div className="relative h-14 w-14 overflow-hidden rounded-2xl bg-white/80">
+              <div className="relative h-14 w-14 overflow-hidden rounded-2xl bg-[var(--surface)]">
                 <Image alt={product.name} className="object-cover" fill sizes="56px" src={product.image} />
               </div>
               <div>

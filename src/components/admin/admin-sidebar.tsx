@@ -35,7 +35,7 @@ export function AdminSidebar({ userLabel, logoUrl, storeName }: AdminSidebarProp
   const pathname = usePathname();
 
   return (
-    <aside className="group/sidebar sticky top-0 flex h-screen w-[72px] shrink-0 flex-col overflow-visible border-r border-[var(--border)] bg-white transition-[width] duration-300 ease-in-out hover:w-[240px]">
+    <aside className="group/sidebar sticky top-0 flex h-screen w-[72px] shrink-0 flex-col overflow-visible border-r border-[var(--border)] bg-[var(--surface-strong)] transition-[width] duration-300 ease-in-out hover:w-[240px]">
       {/* Logo */}
       <div className="flex items-center gap-3 px-4 py-5">
         {logoUrl ? (
@@ -78,8 +78,8 @@ export function AdminSidebar({ userLabel, logoUrl, storeName }: AdminSidebarProp
               className={cn(
                 "flex items-center gap-3 rounded-xl px-2.5 py-2.5 text-sm transition-colors duration-150",
                 isActive
-                  ? "bg-slate-100/80 font-semibold text-slate-900 border border-slate-200/50 shadow-sm"
-                  : "font-medium text-[var(--muted-foreground)] hover:bg-slate-50 hover:text-[var(--foreground)]",
+                  ? "bg-[var(--surface-strong)]/80 font-semibold text-[var(--foreground)] border border-[var(--border)]/50 shadow-sm"
+                  : "font-medium text-[var(--muted-foreground)] hover:bg-[var(--surface)] hover:text-[var(--foreground)]",
               )}
               href={link.href}
               title={link.label}

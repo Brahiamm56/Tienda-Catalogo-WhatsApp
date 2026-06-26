@@ -41,7 +41,7 @@ export function QuickView({ product }: QuickViewProps) {
     <>
       <button
         aria-label={`Vista rápida de ${product.name}`}
-        className="btn-press flex size-9 items-center justify-center rounded-full bg-white/95 text-[var(--foreground)] shadow-sm backdrop-blur-sm transition hover:bg-white hover:text-[var(--accent)]"
+        className="btn-press flex size-9 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm transition hover:bg-black/80 hover:text-[var(--accent)]"
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -60,12 +60,12 @@ export function QuickView({ product }: QuickViewProps) {
           role="dialog"
         >
           <div
-            className="relative w-full max-w-3xl overflow-hidden rounded-t-[2rem] bg-white shadow-2xl animate-modal-in sm:rounded-[2rem]"
+            className="relative w-full max-w-3xl overflow-hidden rounded-t-2xl border border-[var(--border)] bg-[#0c0c0e] shadow-2xl animate-modal-in sm:rounded-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               aria-label="Cerrar vista rápida"
-              className="absolute right-3 top-3 z-10 flex size-9 items-center justify-center rounded-full bg-white/90 text-[var(--foreground)] shadow-md backdrop-blur transition hover:bg-white"
+              className="absolute right-3 top-3 z-10 flex size-9 items-center justify-center rounded-full border border-[var(--border)] bg-[#0c0c0e] text-[var(--muted-foreground)] transition hover:text-[var(--foreground)]"
               onClick={() => setOpen(false)}
               type="button"
             >
@@ -122,7 +122,7 @@ export function QuickView({ product }: QuickViewProps) {
                 <div className="mt-6 flex flex-col gap-2.5">
                   <AddToCartButton className="w-full" label="Añadir al carrito" product={product} />
                   <Link
-                    className="btn-press flex w-full items-center justify-center gap-1.5 rounded-full border border-[var(--border)] bg-white px-4 py-2.5 text-sm font-semibold text-[var(--foreground)] transition hover:border-[var(--accent)]/40 hover:text-[var(--accent)]"
+                    className="btn-press flex w-full items-center justify-center gap-1.5 rounded-full border border-[var(--border)] bg-transparent px-4 py-2.5 text-sm font-medium text-[var(--muted-foreground)] transition hover:border-[var(--accent)]/40 hover:text-[var(--accent)]"
                     href={`/productos/${product.slug}`}
                     onClick={() => setOpen(false)}
                   >

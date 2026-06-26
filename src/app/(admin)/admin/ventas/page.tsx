@@ -19,7 +19,7 @@ const STATUS_LABEL: Record<string, string> = {
 const STATUS_STYLE: Record<string, string> = {
   PENDING: "bg-amber-50 text-amber-700 border-amber-200",
   COMPLETED: "bg-emerald-50 text-emerald-700 border-emerald-200",
-  CANCELLED: "bg-slate-100 text-slate-500 border-slate-200",
+  CANCELLED: "bg-[var(--surface-strong)] text-[var(--muted-foreground)] border-[var(--border)]",
 };
 
 function formatDate(date: Date) {
@@ -53,10 +53,10 @@ export default async function AdminVentasPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h2 className="mb-1 font-[family-name:var(--font-display)] text-2xl font-bold text-slate-800">
+          <h2 className="mb-1 font-[family-name:var(--font-display)] text-2xl font-bold text-[var(--foreground)]">
             Ventas
           </h2>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-[var(--muted-foreground)]">
             Historial completo de ventas registradas y resumen del período.
           </p>
         </div>
@@ -95,9 +95,9 @@ export default async function AdminVentasPage() {
         />
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] shadow-sm">
         <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
-          <h3 className="font-[family-name:var(--font-display)] text-lg font-semibold text-slate-800">
+          <h3 className="font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--foreground)]">
             Historial
           </h3>
           <span className="text-xs text-slate-400">{sales.length} registro{sales.length === 1 ? "" : "s"}</span>
@@ -106,7 +106,7 @@ export default async function AdminVentasPage() {
         {sales.length === 0 ? (
           <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
             <Receipt className="mb-3 size-10 text-slate-300" />
-            <p className="text-sm font-medium text-slate-600">Aún no hay ventas registradas.</p>
+            <p className="text-sm font-medium text-[var(--muted-foreground)]">Aún no hay ventas registradas.</p>
             <p className="mt-1 text-xs text-slate-400">
               Pulsa <span className="font-semibold">Nueva venta</span> para registrar la primera.
             </p>
@@ -114,7 +114,7 @@ export default async function AdminVentasPage() {
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-slate-100 text-sm">
-              <thead className="bg-slate-50/60 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+              <thead className="bg-[var(--surface)]/60 text-left text-[11px] font-semibold uppercase tracking-wider text-[var(--muted-foreground)]">
                 <tr>
                   <th className="px-5 py-3">Fecha</th>
                   <th className="px-5 py-3">Cliente</th>
@@ -126,16 +126,16 @@ export default async function AdminVentasPage() {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {sales.map((sale) => (
-                  <tr key={sale.id} className="hover:bg-slate-50/60">
-                    <td className="whitespace-nowrap px-5 py-3 text-slate-600">{formatDate(sale.createdAt)}</td>
+                  <tr key={sale.id} className="hover:bg-[var(--surface)]/60">
+                    <td className="whitespace-nowrap px-5 py-3 text-[var(--muted-foreground)]">{formatDate(sale.createdAt)}</td>
                     <td className="px-5 py-3">
-                      <p className="font-medium text-slate-800">{sale.customerName ?? "Mostrador"}</p>
+                      <p className="font-medium text-[var(--foreground)]">{sale.customerName ?? "Mostrador"}</p>
                       {sale.customerPhone ? (
                         <p className="text-xs text-slate-400">{sale.customerPhone}</p>
                       ) : null}
                     </td>
-                    <td className="px-5 py-3 text-slate-600">{sale.itemCount}</td>
-                    <td className="px-5 py-3 text-slate-600">{sale.deliveryMethod ?? "—"}</td>
+                    <td className="px-5 py-3 text-[var(--muted-foreground)]">{sale.itemCount}</td>
+                    <td className="px-5 py-3 text-[var(--muted-foreground)]">{sale.deliveryMethod ?? "—"}</td>
                     <td className="px-5 py-3">
                       <span
                         className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${
@@ -145,7 +145,7 @@ export default async function AdminVentasPage() {
                         {STATUS_LABEL[sale.status] ?? sale.status}
                       </span>
                     </td>
-                    <td className="px-5 py-3 text-right font-semibold text-slate-800">
+                    <td className="px-5 py-3 text-right font-semibold text-[var(--foreground)]">
                       {formatCurrencyFromCents(sale.totalCents)}
                     </td>
                   </tr>

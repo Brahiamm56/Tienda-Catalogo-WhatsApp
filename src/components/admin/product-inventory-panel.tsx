@@ -106,7 +106,7 @@ export function ProductInventoryPanel({
     <section className="space-y-5">
       {/* Stats cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="flex items-center gap-4 rounded-2xl border border-[var(--border)] bg-white px-6 py-5 shadow-sm">
+        <div className="flex items-center gap-4 rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] px-6 py-5 shadow-sm">
           <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
             <Package className="size-6" />
           </div>
@@ -116,7 +116,7 @@ export function ProductInventoryPanel({
           </div>
         </div>
 
-        <div className="flex items-center gap-4 rounded-2xl border border-[var(--border)] bg-white px-6 py-5 shadow-sm">
+        <div className="flex items-center gap-4 rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] px-6 py-5 shadow-sm">
           <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-green-50 text-green-600">
             <TrendingUp className="size-6" />
           </div>
@@ -126,7 +126,7 @@ export function ProductInventoryPanel({
           </div>
         </div>
 
-        <div className="flex items-center gap-4 rounded-2xl border border-[var(--border)] bg-white px-6 py-5 shadow-sm">
+        <div className="flex items-center gap-4 rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] px-6 py-5 shadow-sm">
           <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-orange-50 text-orange-500">
             <AlertTriangle className="size-6" />
           </div>
@@ -138,7 +138,7 @@ export function ProductInventoryPanel({
       </div>
 
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-[var(--border)] bg-white px-5 py-4 shadow-sm">
+      <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] px-5 py-4 shadow-sm">
         <Input
           className="min-w-[200px] flex-1"
           onChange={(e) => setSearch(e.target.value)}
@@ -174,11 +174,11 @@ export function ProductInventoryPanel({
       </div>
 
       {/* Table */}
-      <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-white shadow-sm">
+      <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[var(--border)] bg-gray-50/80">
+              <tr className="border-b border-[var(--border)] bg-[var(--surface)]/80">
                 <th className="px-5 py-3.5 text-left font-medium text-[var(--muted-foreground)]">Producto</th>
                 <th className="px-4 py-3.5 text-left font-medium text-[var(--muted-foreground)]">Código</th>
                 <th className="px-4 py-3.5 text-left font-medium text-[var(--muted-foreground)]">Categoría</th>
@@ -201,11 +201,11 @@ export function ProductInventoryPanel({
                 const isCritical = product.stock === 0;
                 const isLow = product.stock > 0 && product.stock <= lowStockThreshold;
                 return (
-                  <tr key={product.id} className="group transition-colors hover:bg-gray-50/60">
+                  <tr key={product.id} className="group transition-colors hover:bg-[var(--surface)]/60">
                     {/* Producto */}
                     <td className="px-5 py-3.5">
                       <div className="flex items-center gap-3">
-                        <div className="relative size-10 shrink-0 overflow-hidden rounded-xl bg-gray-100">
+                        <div className="relative size-10 shrink-0 overflow-hidden rounded-xl bg-[var(--surface-strong)]">
                           <Image
                             alt={product.imageAlt || product.name}
                             className="object-cover"
@@ -215,7 +215,7 @@ export function ProductInventoryPanel({
                           />
                         </div>
                         <div className="min-w-0">
-                          <p className="max-w-[200px] truncate font-medium text-gray-900">{product.name}</p>
+                          <p className="max-w-[200px] truncate font-medium text-[var(--foreground)]">{product.name}</p>
                           <p className="truncate text-xs text-[var(--muted-foreground)]">/{product.slug}</p>
                         </div>
                       </div>
@@ -230,7 +230,7 @@ export function ProductInventoryPanel({
                     <td className="px-4 py-3.5 text-[var(--muted-foreground)]">{product.category.name}</td>
 
                     {/* Precio */}
-                    <td className="px-4 py-3.5 text-right font-medium tabular-nums text-gray-800">
+                    <td className="px-4 py-3.5 text-right font-medium tabular-nums text-[var(--foreground)]">
                       {formatCurrencyFromCents(product.priceCents)}
                     </td>
 
@@ -239,7 +239,7 @@ export function ProductInventoryPanel({
                       <div className="flex flex-col items-center gap-1.5">
                         <span
                           className={`text-base font-bold tabular-nums ${
-                            isCritical ? "text-red-600" : isLow ? "text-orange-500" : "text-gray-800"
+                            isCritical ? "text-red-600" : isLow ? "text-orange-500" : "text-[var(--foreground)]"
                           }`}
                         >
                           {product.stock}
@@ -266,7 +266,7 @@ export function ProductInventoryPanel({
                           Bajo
                         </span>
                       ) : product.status === "DRAFT" ? (
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--surface-strong)] px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-[var(--muted-foreground)]">
                           Borrador
                         </span>
                       ) : product.status === "ARCHIVED" ? (
@@ -318,14 +318,14 @@ export function ProductInventoryPanel({
         {/* Footer stats */}
         <div className="flex flex-wrap items-center gap-5 border-t border-[var(--border)] px-5 py-3 text-xs text-[var(--muted-foreground)]">
           <span>
-            Publicados: <strong className="text-gray-700">{publishedCount}</strong>
+            Publicados: <strong className="text-[var(--foreground)]">{publishedCount}</strong>
           </span>
           <span>
-            Borradores: <strong className="text-gray-700">{draftCount}</strong>
+            Borradores: <strong className="text-[var(--foreground)]">{draftCount}</strong>
           </span>
           <span>
             Stock bajo:{" "}
-            <strong className={lowStockCount > 0 ? "text-orange-600" : "text-gray-700"}>{lowStockCount}</strong>
+            <strong className={lowStockCount > 0 ? "text-orange-600" : "text-[var(--foreground)]"}>{lowStockCount}</strong>
           </span>
         </div>
       </div>
@@ -352,24 +352,24 @@ export function ProductInventoryPanel({
           role="dialog"
         >
           <div
-            className="w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-2xl"
+            className="w-full max-w-sm overflow-hidden rounded-2xl bg-[var(--surface-strong)] shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex flex-col items-center gap-3 px-6 pt-6 text-center">
               <div className="flex size-12 items-center justify-center rounded-full bg-red-100 text-red-600">
                 <Trash2 className="size-5" />
               </div>
-              <h3 className="text-base font-semibold text-gray-900">Eliminar producto</h3>
+              <h3 className="text-base font-semibold text-[var(--foreground)]">Eliminar producto</h3>
               <p className="text-sm text-[var(--muted-foreground)]">
-                ¿Seguro que quieres eliminar <strong className="font-semibold text-gray-800">{productToDelete.name}</strong>? Esta acción no se puede deshacer.
+                ¿Seguro que quieres eliminar <strong className="font-semibold text-[var(--foreground)]">{productToDelete.name}</strong>? Esta acción no se puede deshacer.
               </p>
               {deleteError ? (
                 <p className="text-xs text-red-600">{deleteError}</p>
               ) : null}
             </div>
-            <div className="mt-5 flex gap-2 border-t border-[var(--border)] bg-gray-50 px-4 py-3">
+            <div className="mt-5 flex gap-2 border-t border-[var(--border)] bg-[var(--surface)] px-4 py-3">
               <button
-                className="flex-1 rounded-xl border border-[var(--border)] bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:opacity-50"
+                className="flex-1 rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-2.5 text-sm font-medium text-[var(--foreground)] transition hover:bg-[var(--surface)] disabled:opacity-50"
                 disabled={isDeleting}
                 onClick={() => setProductToDelete(null)}
                 type="button"

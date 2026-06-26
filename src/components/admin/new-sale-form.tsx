@@ -178,8 +178,8 @@ export function NewSaleForm({ action, products, onSuccess, compact = false }: Ne
 
       <div className={compact ? "space-y-5" : "space-y-6 lg:col-span-2"}>
         {/* Producto picker */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h3 className="mb-3 font-[family-name:var(--font-display)] text-base font-semibold text-slate-800">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] p-5 shadow-sm">
+          <h3 className="mb-3 font-[family-name:var(--font-display)] text-base font-semibold text-[var(--foreground)]">
             Productos del catálogo
           </h3>
 
@@ -188,7 +188,7 @@ export function NewSaleForm({ action, products, onSuccess, compact = false }: Ne
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
                 <Input
-                  className="pl-9 pr-8 bg-slate-50 border-slate-200"
+                  className="pl-9 pr-8 bg-[var(--surface)] border-[var(--border)]"
                   placeholder="Buscar por nombre o variante..."
                   value={productSearch}
                   onFocus={() => setIsProductDropdownOpen(true)}
@@ -200,7 +200,7 @@ export function NewSaleForm({ action, products, onSuccess, compact = false }: Ne
                 {(productSearch || selectedProductId) && (
                   <button
                     type="button"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[var(--muted-foreground)]"
                     onClick={() => {
                       setProductSearch("");
                       setSelectedProductId("");
@@ -218,15 +218,15 @@ export function NewSaleForm({ action, products, onSuccess, compact = false }: Ne
                     className="fixed inset-0 z-40"
                     onClick={() => setIsProductDropdownOpen(false)}
                   />
-                  <div className="absolute left-0 mt-2 z-50 w-full rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl shadow-slate-900/10 max-h-60 overflow-y-auto">
+                  <div className="absolute left-0 mt-2 z-50 w-full rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-1.5 shadow-xl shadow-slate-900/10 max-h-60 overflow-y-auto">
                     {filteredProducts.length === 0 ? (
-                      <p className="px-3 py-3 text-sm text-slate-500 text-center">No se encontraron productos.</p>
+                      <p className="px-3 py-3 text-sm text-[var(--muted-foreground)] text-center">No se encontraron productos.</p>
                     ) : (
                       filteredProducts.map((product) => (
                         <button
                           key={product.id}
                           type="button"
-                          className={`w-full flex flex-col justify-start rounded-lg px-3 py-2 text-left text-sm transition-colors ${selectedProductId === product.id ? "bg-blue-50 text-blue-700 font-semibold" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"}`}
+                          className={`w-full flex flex-col justify-start rounded-lg px-3 py-2 text-left text-sm transition-colors ${selectedProductId === product.id ? "bg-blue-50 text-blue-700 font-semibold" : "text-[var(--muted-foreground)] hover:bg-[var(--surface)] hover:text-[var(--foreground)]"}`}
                           onClick={() => {
                             setSelectedProductId(product.id);
                             setProductSearch(product.name);
@@ -258,10 +258,10 @@ export function NewSaleForm({ action, products, onSuccess, compact = false }: Ne
           </div>
 
           <div className="mt-4 border-t border-slate-100 pt-4">
-            <h4 className="mb-2 text-sm font-semibold text-slate-700">Producto manual (fuera de catálogo)</h4>
+            <h4 className="mb-2 text-sm font-semibold text-[var(--foreground)]">Producto manual (fuera de catálogo)</h4>
             <div className="flex flex-col gap-2 sm:flex-row items-end">
               <label className="flex-1 space-y-1">
-                <span className="text-xs text-slate-500">Nombre</span>
+                <span className="text-xs text-[var(--muted-foreground)]">Nombre</span>
                 <Input
                   placeholder="Ej. Accesorio custom"
                   value={manualName}
@@ -269,7 +269,7 @@ export function NewSaleForm({ action, products, onSuccess, compact = false }: Ne
                 />
               </label>
               <label className="w-24 space-y-1 shrink-0">
-                <span className="text-xs text-slate-500">Precio ($)</span>
+                <span className="text-xs text-[var(--muted-foreground)]">Precio ($)</span>
                 <Input
                   type="number"
                   min="0"
@@ -280,7 +280,7 @@ export function NewSaleForm({ action, products, onSuccess, compact = false }: Ne
                 />
               </label>
               <label className="w-20 space-y-1 shrink-0">
-                <span className="text-xs text-slate-500">Cant.</span>
+                <span className="text-xs text-[var(--muted-foreground)]">Cant.</span>
                 <Input
                   type="number"
                   min="1"
@@ -300,12 +300,12 @@ export function NewSaleForm({ action, products, onSuccess, compact = false }: Ne
             </div>
           </div>
 
-          <h3 className="mt-6 mb-3 font-[family-name:var(--font-display)] text-base font-semibold text-slate-800 border-b border-slate-100 pb-2">
+          <h3 className="mt-6 mb-3 font-[family-name:var(--font-display)] text-base font-semibold text-[var(--foreground)] border-b border-slate-100 pb-2">
             Detalle de la venta
           </h3>
 
           {items.length === 0 ? (
-            <p className="mt-4 rounded-xl border border-dashed border-slate-200 bg-slate-50 p-4 text-center text-sm text-slate-400">
+            <p className="mt-4 rounded-xl border border-dashed border-[var(--border)] bg-[var(--surface)] p-4 text-center text-sm text-slate-400">
               Agrega productos a la venta.
             </p>
           ) : (
@@ -313,11 +313,11 @@ export function NewSaleForm({ action, products, onSuccess, compact = false }: Ne
               {items.map((item, index) => (
                 <li key={`${item.productId ?? "manual"}-${index}`} className="flex flex-wrap items-center gap-3 py-3">
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-semibold text-slate-800">{item.name}</p>
+                    <p className="truncate text-sm font-semibold text-[var(--foreground)]">{item.name}</p>
                     <div className="mt-1 flex items-center gap-2">
                       <label className="text-[11px] uppercase tracking-wider text-slate-400">Precio</label>
                       <input
-                        className="w-24 rounded-lg border border-slate-200 px-2 py-1 text-xs"
+                        className="w-24 rounded-lg border border-[var(--border)] px-2 py-1 text-xs"
                         min={0}
                         onChange={(e) => updatePrice(index, e.target.value)}
                         step="0.01"
@@ -327,19 +327,19 @@ export function NewSaleForm({ action, products, onSuccess, compact = false }: Ne
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white">
+                  <div className="flex items-center gap-1.5 rounded-lg border border-[var(--border)] bg-[var(--surface-strong)]">
                     <button
                       aria-label="Restar"
-                      className="flex size-8 items-center justify-center text-slate-500 hover:text-slate-800"
+                      className="flex size-8 items-center justify-center text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
                       onClick={() => updateQuantity(index, -1)}
                       type="button"
                     >
                       <Minus className="size-3.5" />
                     </button>
-                    <span className="min-w-6 text-center text-sm font-semibold text-slate-800">{item.quantity}</span>
+                    <span className="min-w-6 text-center text-sm font-semibold text-[var(--foreground)]">{item.quantity}</span>
                     <button
                       aria-label="Sumar"
-                      className="flex size-8 items-center justify-center text-slate-500 hover:text-slate-800"
+                      className="flex size-8 items-center justify-center text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
                       onClick={() => updateQuantity(index, 1)}
                       type="button"
                     >
@@ -347,7 +347,7 @@ export function NewSaleForm({ action, products, onSuccess, compact = false }: Ne
                     </button>
                   </div>
 
-                  <p className="w-24 text-right text-sm font-bold text-slate-800">
+                  <p className="w-24 text-right text-sm font-bold text-[var(--foreground)]">
                     {formatCurrencyFromCents(item.priceCents * item.quantity)}
                   </p>
 
@@ -366,28 +366,28 @@ export function NewSaleForm({ action, products, onSuccess, compact = false }: Ne
         </div>
 
         {/* Métodos de Pago */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h3 className="mb-4 font-[family-name:var(--font-display)] text-base font-semibold text-slate-800">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] p-5 shadow-sm">
+          <h3 className="mb-4 font-[family-name:var(--font-display)] text-base font-semibold text-[var(--foreground)]">
             Método de Pago
           </h3>
 
           <div className="grid grid-cols-3 gap-2">
             <button
-              className={`rounded-xl border p-3 font-medium transition text-sm ${paymentMethod === "CASH" ? "border-emerald-500 bg-emerald-50 text-emerald-800" : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"}`}
+              className={`rounded-xl border p-3 font-medium transition text-sm ${paymentMethod === "CASH" ? "border-emerald-500 bg-emerald-50 text-emerald-800" : "border-[var(--border)] bg-[var(--surface-strong)] text-[var(--muted-foreground)] hover:bg-[var(--surface)]"}`}
               onClick={() => setPaymentMethod("CASH")}
               type="button"
             >
               Efectivo
             </button>
             <button
-              className={`rounded-xl border p-3 font-medium transition text-sm ${paymentMethod === "TRANSFER" ? "border-blue-500 bg-blue-50 text-blue-800" : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"}`}
+              className={`rounded-xl border p-3 font-medium transition text-sm ${paymentMethod === "TRANSFER" ? "border-blue-500 bg-blue-50 text-blue-800" : "border-[var(--border)] bg-[var(--surface-strong)] text-[var(--muted-foreground)] hover:bg-[var(--surface)]"}`}
               onClick={() => setPaymentMethod("TRANSFER")}
               type="button"
             >
               Transferencia
             </button>
             <button
-              className={`rounded-xl border p-3 font-medium transition text-sm ${paymentMethod === "MIXED" ? "border-purple-500 bg-purple-50 text-purple-800" : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"}`}
+              className={`rounded-xl border p-3 font-medium transition text-sm ${paymentMethod === "MIXED" ? "border-purple-500 bg-purple-50 text-purple-800" : "border-[var(--border)] bg-[var(--surface-strong)] text-[var(--muted-foreground)] hover:bg-[var(--surface)]"}`}
               onClick={() => setPaymentMethod("MIXED")}
               type="button"
             >
@@ -397,9 +397,9 @@ export function NewSaleForm({ action, products, onSuccess, compact = false }: Ne
 
           <div className="mt-5 space-y-4">
             {paymentMethod === "CASH" && (
-              <div className="flex items-center gap-4 bg-slate-50 rounded-xl p-4">
+              <div className="flex items-center gap-4 bg-[var(--surface)] rounded-xl p-4">
                 <label className="space-y-1">
-                  <span className="text-xs font-semibold text-slate-600">El cliente pagó con... ($)</span>
+                  <span className="text-xs font-semibold text-[var(--muted-foreground)]">El cliente pagó con... ($)</span>
                   <Input 
                     type="number" 
                     min="0"
@@ -411,7 +411,7 @@ export function NewSaleForm({ action, products, onSuccess, compact = false }: Ne
                 </label>
                 {finalChangeToGive > 0 && (
                   <div>
-                    <span className="text-xs font-semibold text-slate-600 block mb-1">Vuelto a entregar</span>
+                    <span className="text-xs font-semibold text-[var(--muted-foreground)] block mb-1">Vuelto a entregar</span>
                     <span className="font-bold text-lg text-emerald-600">{formatCurrencyFromCents(finalChangeToGive)}</span>
                   </div>
                 )}
@@ -429,7 +429,7 @@ export function NewSaleForm({ action, products, onSuccess, compact = false }: Ne
               <div className="bg-purple-50/50 rounded-xl p-4 space-y-4 border border-purple-100">
                 <div className="flex gap-4">
                   <label className="flex-1 space-y-1">
-                    <span className="text-xs font-semibold text-slate-600">Monto en Efectivo ($)</span>
+                    <span className="text-xs font-semibold text-[var(--muted-foreground)]">Monto en Efectivo ($)</span>
                     <Input 
                       type="number" 
                       min="0"
@@ -440,7 +440,7 @@ export function NewSaleForm({ action, products, onSuccess, compact = false }: Ne
                     />
                   </label>
                   <label className="flex-1 space-y-1">
-                    <span className="text-xs font-semibold text-slate-600">Monto en Transferencia ($)</span>
+                    <span className="text-xs font-semibold text-[var(--muted-foreground)]">Monto en Transferencia ($)</span>
                     <Input 
                       type="number" 
                       min="0"
@@ -454,7 +454,7 @@ export function NewSaleForm({ action, products, onSuccess, compact = false }: Ne
 
                 <div className="border-t border-purple-200/60 pt-3">
                   <label className="space-y-1 block max-w-xs">
-                    <span className="text-xs font-semibold text-slate-600">El cliente entregó en Efectivo... ($)</span>
+                    <span className="text-xs font-semibold text-[var(--muted-foreground)]">El cliente entregó en Efectivo... ($)</span>
                     <Input 
                       type="number" 
                       min="0"
@@ -478,21 +478,21 @@ export function NewSaleForm({ action, products, onSuccess, compact = false }: Ne
         </div>
 
         {/* Cliente */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h3 className="mb-3 font-[family-name:var(--font-display)] text-base font-semibold text-slate-800">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] p-5 shadow-sm">
+          <h3 className="mb-3 font-[family-name:var(--font-display)] text-base font-semibold text-[var(--foreground)]">
             Cliente (opcional)
           </h3>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <label className="space-y-1">
-              <span className="text-xs font-medium text-slate-600">Nombre</span>
+              <span className="text-xs font-medium text-[var(--muted-foreground)]">Nombre</span>
               <Input maxLength={120} name="customerName" placeholder="Mostrador" />
             </label>
             <label className="space-y-1">
-              <span className="text-xs font-medium text-slate-600">Teléfono</span>
+              <span className="text-xs font-medium text-[var(--muted-foreground)]">Teléfono</span>
               <Input maxLength={20} name="customerPhone" placeholder="+54 11 ..." />
             </label>
             <label className="space-y-1 sm:col-span-2">
-              <span className="text-xs font-medium text-slate-600">Notas</span>
+              <span className="text-xs font-medium text-[var(--muted-foreground)]">Notas</span>
               <Textarea maxLength={500} name="notes" placeholder="Observaciones internas" rows={2} />
             </label>
           </div>
@@ -501,18 +501,18 @@ export function NewSaleForm({ action, products, onSuccess, compact = false }: Ne
 
       {/* Resumen + acciones */}
       <aside className={compact ? "" : "lg:sticky lg:top-6 lg:h-fit"}>
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h3 className="font-[family-name:var(--font-display)] text-base font-semibold text-slate-800">Resumen</h3>
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] p-5 shadow-sm">
+          <h3 className="font-[family-name:var(--font-display)] text-base font-semibold text-[var(--foreground)]">Resumen</h3>
 
           <div className="mt-4 space-y-3 text-sm">
             <div className="flex items-center justify-between">
-              <span className="text-slate-500">Items</span>
-              <span className="font-semibold text-slate-800">
+              <span className="text-[var(--muted-foreground)]">Items</span>
+              <span className="font-semibold text-[var(--foreground)]">
                 {items.reduce((sum, item) => sum + item.quantity, 0)}
               </span>
             </div>
             <div className="flex items-center justify-between border-t border-slate-100 pt-3">
-              <span className="text-slate-500">Total</span>
+              <span className="text-[var(--muted-foreground)]">Total</span>
               <span className="font-[family-name:var(--font-display)] text-xl font-bold text-emerald-600">
                 {formatCurrencyFromCents(total)}
               </span>
@@ -521,7 +521,7 @@ export function NewSaleForm({ action, products, onSuccess, compact = false }: Ne
 
           <div className="mt-5 space-y-3">
             <label className="block space-y-1">
-              <span className="text-xs font-medium text-slate-600">Entrega</span>
+              <span className="text-xs font-medium text-[var(--muted-foreground)]">Entrega</span>
               <Select defaultValue="pickup" name="deliveryMethod">
                 <option value="pickup">Retira en local</option>
                 <option value="delivery">Delivery</option>
@@ -530,7 +530,7 @@ export function NewSaleForm({ action, products, onSuccess, compact = false }: Ne
               </Select>
             </label>
             <label className="block space-y-1">
-              <span className="text-xs font-medium text-slate-600">Estado</span>
+              <span className="text-xs font-medium text-[var(--muted-foreground)]">Estado</span>
               <Select defaultValue="COMPLETED" name="status">
                 <option value="COMPLETED">Completada</option>
                 <option value="PENDING">Pendiente</option>

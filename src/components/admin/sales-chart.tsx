@@ -33,8 +33,8 @@ function CustomTooltip({ active, payload, label, currency, locale }: CustomToolt
     const raw = payload[0]?.value;
     const value = typeof raw === "number" ? raw : Number(typeof raw === "string" ? raw : 0);
     return (
-      <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-lg">
-        <p className="mb-1 text-sm text-slate-500">{label}</p>
+      <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-3 shadow-lg">
+        <p className="mb-1 text-sm text-[var(--muted-foreground)]">{label}</p>
         <p className="font-[family-name:var(--font-display)] font-bold text-blue-600">
           {new Intl.NumberFormat(locale, {
             style: "currency",
@@ -61,7 +61,7 @@ export default function SalesChart({
   );
 
   if (!mounted) {
-    return <div className="mt-4 h-[300px] w-full rounded-2xl bg-slate-50" />;
+    return <div className="mt-4 h-[300px] w-full rounded-2xl bg-[var(--surface)]" />;
   }
 
   const formatTick = (value: number) => {

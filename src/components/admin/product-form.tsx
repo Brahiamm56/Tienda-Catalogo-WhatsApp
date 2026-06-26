@@ -340,7 +340,7 @@ export function ProductForm({
           ) : null}
         </div>
 
-        <label className="flex items-center gap-3 rounded-[1.5rem] border border-[var(--border)] bg-white/70 px-4 py-3 text-sm font-medium">
+        <label className="flex items-center gap-3 rounded-[1.5rem] border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm font-medium">
           <input defaultChecked={product?.featured ?? false} name="featured" type="checkbox" />
           Marcar como destacado en home y grilla inicial.
         </label>

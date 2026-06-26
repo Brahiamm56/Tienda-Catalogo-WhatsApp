@@ -104,7 +104,7 @@ export function CatalogView({ categories, products, initialQuery = "", showFavor
               <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-[var(--muted-foreground)]" />
               <input
                 ref={searchInputRef}
-                className="h-11 w-full rounded-2xl border border-[var(--border)] bg-white pl-10 pr-10 text-sm outline-none transition-all duration-200 placeholder:text-[var(--muted-foreground)]/60 focus:border-[var(--accent)] focus:shadow-[0_0_0_3px_rgba(211,93,71,0.08)]"
+                className="h-11 w-full rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] pl-10 pr-10 text-sm text-[var(--foreground)] outline-none transition-all duration-200 placeholder:text-[var(--muted-foreground)] focus:border-[var(--accent)]/50"
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Buscar productos..."
                 type="search"
@@ -126,7 +126,7 @@ export function CatalogView({ categories, products, initialQuery = "", showFavor
               className={`flex h-11 items-center gap-1.5 rounded-2xl border px-3.5 text-sm font-medium transition-all duration-200 ${
                 showFilters
                   ? "border-[var(--accent)] bg-[var(--accent)]/10 text-[var(--accent)]"
-                  : "border-[var(--border)] bg-white text-[var(--foreground)] hover:border-[var(--accent)]/30"
+                  : "border-[var(--border)] bg-transparent text-[var(--muted-foreground)] hover:border-[var(--accent)]/30 hover:text-[var(--foreground)]"
               }`}
               onClick={() => setShowFilters(!showFilters)}
               type="button"
@@ -142,7 +142,7 @@ export function CatalogView({ categories, products, initialQuery = "", showFavor
               <span className="text-xs font-medium text-[var(--muted-foreground)]">Ordenar:</span>
               <div className="relative">
                 <select
-                  className="h-9 appearance-none rounded-xl border border-[var(--border)] bg-white pl-3 pr-8 text-xs font-medium outline-none transition focus:border-[var(--accent)]"
+                  className="h-9 appearance-none rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] pl-3 pr-8 text-xs font-medium text-[var(--foreground)] outline-none transition focus:border-[var(--accent)]/50"
                   onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
                   value={sortBy}
                 >
@@ -168,8 +168,8 @@ export function CatalogView({ categories, products, initialQuery = "", showFavor
             <button
               className={`shrink-0 rounded-full border px-4 py-2 text-xs font-semibold shadow-sm transition-all duration-200 hover:shadow-md sm:text-sm ${
                 activeCategory === null
-                  ? "border-[var(--foreground)] bg-[var(--foreground)] text-white shadow-[var(--foreground)]/20"
-                  : "border-[var(--border)] bg-white text-[var(--foreground)] hover:border-[var(--foreground)]/20"
+                  ? "border-[var(--accent)]/40 bg-[var(--accent)]/10 text-[var(--accent)]"
+                  : "border-[var(--border)] bg-transparent text-[var(--muted-foreground)] hover:border-[var(--accent)]/30 hover:text-[var(--foreground)]"
               }`}
               data-active={activeCategory === null}
               onClick={() => setActiveCategory(null)}
@@ -186,8 +186,8 @@ export function CatalogView({ categories, products, initialQuery = "", showFavor
                 <button
                   className={`shrink-0 rounded-full border px-4 py-2 text-xs font-semibold shadow-sm transition-all duration-200 hover:shadow-md sm:text-sm ${
                     activeCategory === category.slug
-                      ? "border-[var(--foreground)] bg-[var(--foreground)] text-white shadow-[var(--foreground)]/20"
-                      : "border-[var(--border)] bg-white text-[var(--foreground)] hover:border-[var(--foreground)]/20"
+                      ? "border-[var(--accent)]/40 bg-[var(--accent)]/10 text-[var(--accent)]"
+                      : "border-[var(--border)] bg-transparent text-[var(--muted-foreground)] hover:border-[var(--accent)]/30 hover:text-[var(--foreground)]"
                   }`}
                   data-active={activeCategory === category.slug}
                   key={category.id}
@@ -242,7 +242,7 @@ export function CatalogView({ categories, products, initialQuery = "", showFavor
       </div>
 
       {/* Products grid */}
-      <div className="mx-auto w-full max-w-7xl px-4 pb-28 pt-4 sm:px-6 sm:pb-12 lg:px-10">
+      <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-4 sm:px-6 lg:px-10">
         {!mounted ? (
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:gap-5">
             {[1, 2, 3, 4].map((i) => (
@@ -252,7 +252,7 @@ export function CatalogView({ categories, products, initialQuery = "", showFavor
         ) : filteredProducts.length > 0 ? (
           <ProductGrid products={filteredProducts} />
         ) : (
-          <div className="flex min-h-[300px] flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-[var(--border)] bg-white/50">
+          <div className="flex min-h-[300px] flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-[var(--border)] bg-transparent">
             <div className="flex size-16 items-center justify-center rounded-full bg-[var(--foreground)]/5">
               <Package className="size-7 text-[var(--muted-foreground)]" />
             </div>
@@ -270,7 +270,7 @@ export function CatalogView({ categories, products, initialQuery = "", showFavor
             </div>
             {(searchQuery || activeCategory) && (
               <button
-                className="rounded-full border border-[var(--border)] bg-white px-4 py-2 text-xs font-semibold text-[var(--foreground)] shadow-sm transition hover:shadow-md"
+                className="rounded-full border border-[var(--border)] bg-transparent px-4 py-2 text-xs font-medium text-[var(--muted-foreground)] transition hover:border-[var(--accent)]/30 hover:text-[var(--accent)]"
                 onClick={() => {
                   setSearchQuery("");
                   setActiveCategory(null);

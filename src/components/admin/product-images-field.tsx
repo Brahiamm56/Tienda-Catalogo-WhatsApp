@@ -188,7 +188,7 @@ export function ProductImagesField({
         type="file"
       />
 
-      <div className="rounded-[1.5rem] border border-[var(--border)] bg-white/70 p-4">
+      <div className="rounded-[1.5rem] border border-[var(--border)] bg-[var(--surface)] p-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-sm font-medium text-[var(--foreground)]">Galeria del producto</p>
@@ -233,8 +233,8 @@ export function ProductImagesField({
         {items.length > 0 ? (
           <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
             {items.map((item, index) => (
-              <div key={item.url} className="overflow-hidden rounded-[1.25rem] border border-[var(--border)] bg-white shadow-sm">
-                <div className="relative aspect-square overflow-hidden bg-gray-100">
+              <div key={item.url} className="overflow-hidden rounded-[1.25rem] border border-[var(--border)] bg-[var(--surface-strong)] shadow-sm">
+                <div className="relative aspect-square overflow-hidden bg-[var(--surface-strong)]">
                   {/* eslint-disable-next-line @next/next/no-img-element -- Admin upload preview may point to arbitrary external URLs entered manually. */}
                   <img alt={`Imagen ${index + 1}`} className="h-full w-full object-cover" src={item.url} />
                   <button
@@ -246,7 +246,7 @@ export function ProductImagesField({
                     <X className="size-3.5" />
                   </button>
                   {index === 0 ? (
-                    <span className="absolute left-2 top-2 rounded-full bg-white/90 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-gray-900">
+                    <span className="absolute left-2 top-2 rounded-full bg-[var(--surface-strong)] px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-[var(--foreground)]">
                       Portada
                     </span>
                   ) : null}
@@ -255,7 +255,7 @@ export function ProductImagesField({
             ))}
           </div>
         ) : (
-          <div className="mt-4 rounded-[1.25rem] border border-dashed border-[var(--border)] bg-gray-50 px-4 py-8 text-center text-sm text-[var(--muted-foreground)]">
+          <div className="mt-4 rounded-[1.25rem] border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-8 text-center text-sm text-[var(--muted-foreground)]">
             Aun no cargaste imagenes para este producto.
           </div>
         )}

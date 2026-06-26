@@ -144,7 +144,7 @@ export function ProfilePage() {
                 className={`flex h-11 items-center justify-center rounded-xl border text-sm font-medium transition ${
                   profile.deliveryMethod === "retiro"
                     ? "border-[var(--foreground)] bg-[var(--foreground)] text-white"
-                    : "border-[var(--border)] bg-white text-[var(--muted-foreground)] hover:border-[var(--foreground)]/30"
+                    : "border-[var(--border)] bg-[var(--surface)] text-[var(--muted-foreground)] hover:border-[var(--foreground)]/30"
                 }`}
               >
                 Retiro en local
@@ -155,7 +155,7 @@ export function ProfilePage() {
                 className={`flex h-11 items-center justify-center rounded-xl border text-sm font-medium transition ${
                   profile.deliveryMethod === "envio"
                     ? "border-[var(--foreground)] bg-[var(--foreground)] text-white"
-                    : "border-[var(--border)] bg-white text-[var(--muted-foreground)] hover:border-[var(--foreground)]/30"
+                    : "border-[var(--border)] bg-[var(--surface)] text-[var(--muted-foreground)] hover:border-[var(--foreground)]/30"
                 }`}
               >
                 Envío a domicilio

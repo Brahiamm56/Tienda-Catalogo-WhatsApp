@@ -15,7 +15,7 @@ export default async function AdminProductsPage() {
       </h2>
 
       {!databaseReady ? (
-        <section className="rounded-[2rem] border border-[var(--border)] bg-white/70 px-6 py-5 shadow-[0_16px_40px_rgba(28,19,13,0.07)]">
+        <section className="rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] px-6 py-5 shadow-[0_16px_40px_rgba(28,19,13,0.07)]">
           <p className="text-sm font-medium">Completa `DATABASE_URL` para habilitar las mutaciones reales del admin.</p>
           <p className="mt-2 text-sm text-[var(--muted-foreground)]">
             Mientras tanto puedes revisar la estructura del panel, pero crear, editar y borrar seguiran deshabilitados.
@@ -24,7 +24,7 @@ export default async function AdminProductsPage() {
       ) : null}
 
       {categories.length === 0 ? (
-        <section className="rounded-[2rem] border border-[var(--border)] bg-white/70 px-6 py-5 shadow-[0_16px_40px_rgba(28,19,13,0.07)]">
+        <section className="rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] px-6 py-5 shadow-[0_16px_40px_rgba(28,19,13,0.07)]">
           <p className="text-sm font-medium">Crea al menos una categoria antes de cargar productos.</p>
           <p className="mt-2 text-sm text-[var(--muted-foreground)]">
             El formulario queda bloqueado hasta tener una categoria persistida a la que asociar el inventario.

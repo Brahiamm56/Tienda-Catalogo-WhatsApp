@@ -80,7 +80,7 @@ export function SettingsPageClient({
       <input name="freeShippingThreshold" type="hidden" value={freeShippingThreshold} />
 
       {/* Sticky top bar with save button */}
-      <div className="sticky top-0 z-20 -mx-5 -mt-6 mb-6 flex items-center justify-between border-b border-[var(--border)] bg-white/80 px-5 py-3 backdrop-blur-xl sm:-mx-8 sm:px-8 lg:-mx-10 lg:px-10 xl:-mx-12 xl:px-12">
+      <div className="sticky top-0 z-20 -mx-5 -mt-6 mb-6 flex items-center justify-between border-b border-[var(--border)] bg-[var(--surface)] px-5 py-3 backdrop-blur-xl sm:-mx-8 sm:px-8 lg:-mx-10 lg:px-10 xl:-mx-12 xl:px-12">
         <div>
           <h1 className="font-[family-name:var(--font-display)] text-xl font-semibold sm:text-2xl">Ajustes</h1>
           {state.status !== "idle" && state.message ? (
@@ -166,7 +166,7 @@ export function SettingsPageClient({
               <p className="mt-1 text-xs text-[var(--muted-foreground)]">Se mostrarán en el footer de la tienda.</p>
               <div className="mt-3 space-y-2">
                 {businessHours.map((hour, index) => (
-                  <div className="flex items-center gap-2 rounded-xl border border-[var(--border)] bg-white/70 px-3 py-2" key={hour.day}>
+                  <div className="flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2" key={hour.day}>
                     <span className="w-20 text-xs font-medium shrink-0 sm:w-24 sm:text-sm">{hour.day}</span>
                     <label className="flex items-center gap-1 text-[10px] text-[var(--muted-foreground)] shrink-0 sm:text-xs">
                       <input checked={hour.closed ?? false} className="size-3 accent-[var(--accent)]" onChange={(e) => updateHour(index, "closed", e.target.checked)} type="checkbox" />
@@ -174,9 +174,9 @@ export function SettingsPageClient({
                     </label>
                     {!hour.closed ? (
                       <>
-                        <input className="h-7 w-[4.5rem] rounded-lg border border-[var(--border)] bg-white px-1.5 text-xs outline-none focus:border-[var(--accent)]" onChange={(e) => updateHour(index, "open", e.target.value)} type="time" value={hour.open} />
+                        <input className="h-7 w-[4.5rem] rounded-lg border border-[var(--border)] bg-[var(--surface-strong)] px-1.5 text-xs outline-none focus:border-[var(--accent)]" onChange={(e) => updateHour(index, "open", e.target.value)} type="time" value={hour.open} />
                         <span className="text-[10px] text-[var(--muted-foreground)]">a</span>
-                        <input className="h-7 w-[4.5rem] rounded-lg border border-[var(--border)] bg-white px-1.5 text-xs outline-none focus:border-[var(--accent)]" onChange={(e) => updateHour(index, "close", e.target.value)} type="time" value={hour.close} />
+                        <input className="h-7 w-[4.5rem] rounded-lg border border-[var(--border)] bg-[var(--surface-strong)] px-1.5 text-xs outline-none focus:border-[var(--accent)]" onChange={(e) => updateHour(index, "close", e.target.value)} type="time" value={hour.close} />
                       </>
                     ) : (
                       <span className="text-[10px] italic text-[var(--muted-foreground)]">Sin atención</span>
@@ -292,7 +292,7 @@ function ColorField({ id, label, name, value, onChange }: {
   return (
     <div className="space-y-1.5">
       <label className="text-xs font-medium" htmlFor={id}>{label}</label>
-      <div className="flex items-center gap-2 rounded-xl border border-[var(--border)] bg-white px-2.5 py-1.5">
+      <div className="flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] px-2.5 py-1.5">
         <input aria-label={label} className="size-7 cursor-pointer rounded-md border border-[var(--border)] bg-transparent" id={id} onChange={(e) => onChange(e.target.value)} type="color" value={value} />
         <input className="flex-1 bg-transparent font-mono text-xs uppercase outline-none" maxLength={7} name={name} onChange={(e) => onChange(e.target.value)} pattern="#[0-9a-fA-F]{6}" type="text" value={value} />
       </div>

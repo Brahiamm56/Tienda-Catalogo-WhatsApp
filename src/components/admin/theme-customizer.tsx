@@ -179,7 +179,7 @@ export function ThemeCustomizer({ settings }: ThemeCustomizerProps) {
               className={`rounded-lg border px-3 py-1.5 text-[11px] font-medium transition ${
                 cardRadius === opt.value
                   ? "border-[var(--accent)] bg-[var(--accent)] text-white"
-                  : "border-[var(--border)] bg-white text-[var(--foreground)] hover:border-[var(--accent)]"
+                  : "border-[var(--border)] bg-[var(--surface-strong)] text-[var(--foreground)] hover:border-[var(--accent)]"
               }`}
               key={opt.value}
               onClick={() => setCardRadius(opt.value)}
@@ -205,7 +205,7 @@ export function ThemeCustomizer({ settings }: ThemeCustomizerProps) {
               className={`rounded-lg border px-3 py-1.5 text-[11px] font-medium transition ${
                 buttonRadius === opt.value
                   ? "border-[var(--accent)] bg-[var(--accent)] text-white"
-                  : "border-[var(--border)] bg-white text-[var(--foreground)] hover:border-[var(--accent)]"
+                  : "border-[var(--border)] bg-[var(--surface-strong)] text-[var(--foreground)] hover:border-[var(--accent)]"
               }`}
               key={opt.value}
               onClick={() => setButtonRadius(opt.value)}

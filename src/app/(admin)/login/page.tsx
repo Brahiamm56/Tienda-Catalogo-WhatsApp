@@ -18,7 +18,7 @@ export default async function LoginPage() {
         <div className="grid-pattern relative hidden overflow-hidden bg-[#16120f] p-10 text-[#f8f2eb] lg:block">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(211,93,71,0.35),_transparent_38%),radial-gradient(circle_at_70%_20%,_rgba(86,168,181,0.22),_transparent_28%)]" />
           <div className="relative z-10 space-y-5">
-            <Badge className="border-white/10 bg-white/10 text-white/80">Acceso admin</Badge>
+            <Badge className="border-white/10 bg-[var(--surface-strong)]/10 text-white/80">Acceso admin</Badge>
             <h1 className="font-[family-name:var(--font-display)] text-5xl font-semibold leading-tight">
               Administra productos, categorias, stock e imagenes desde un solo panel.
             </h1>

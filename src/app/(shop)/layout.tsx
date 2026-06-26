@@ -53,7 +53,7 @@ function buildThemeStyle(rawSettings: unknown): CSSProperties {
     style["--accent-fg"] = getContrastColor(s.themeAccent);
   }
   if (s.themeAccentStrong) style["--accent-strong"] = s.themeAccentStrong;
-  if (s.themeBackground) style["--background"] = s.themeBackground;
+  // if (s.themeBackground) style["--background"] = s.themeBackground;
   if (s.themeCardBg) style["--card-bg"] = s.themeCardBg;
   if (s.themeCardBorder) style["--card-border"] = s.themeCardBorder;
   if (s.themeCardRadius) style["--card-radius"] = CARD_RADIUS_MAP[s.themeCardRadius] ?? "1rem";

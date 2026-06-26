@@ -38,30 +38,30 @@ export function StickyAddToCart({ product }: StickyAddToCartProps) {
     <div
       className={`fixed inset-x-0 z-20 flex justify-center px-3 transition-all duration-300 ease-in-out sm:hidden ${
         isVisible
-          ? "bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] translate-y-0 opacity-100"
-          : "bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] translate-y-8 opacity-0 pointer-events-none"
+          ? "bottom-[calc(env(safe-area-inset-bottom)+1rem)] translate-y-0 opacity-100"
+          : "bottom-[calc(env(safe-area-inset-bottom)+1rem)] translate-y-8 opacity-0 pointer-events-none"
       }`}
     >
-      <div className="flex w-full max-w-[26rem] items-center justify-between gap-3 rounded-2xl border border-black/5 bg-white/95 p-2 shadow-[0_8px_30px_rgba(0,0,0,0.12)] backdrop-blur-xl">
+      <div className="flex w-full max-w-[26rem] items-center justify-between gap-3 rounded-2xl border border-[var(--border)] bg-[rgba(12,12,14,0.92)] p-2 shadow-[0_8px_40px_rgba(0,0,0,0.6)] backdrop-blur-xl">
         <div className="flex items-center gap-2.5 overflow-hidden">
           <div className="relative size-10 shrink-0 overflow-hidden rounded-lg bg-[var(--background)]">
             <Image alt={product.name} className="object-cover" fill sizes="40px" src={product.image} />
           </div>
           <div className="flex flex-col truncate">
             <span className="truncate text-xs font-semibold leading-tight">{product.name}</span>
-            <span className="text-[11px] font-medium text-[var(--foreground)]">
+            <span className="text-[11px] font-medium text-[var(--accent)]">
               {formatCurrencyFromCents(product.priceCents)}
             </span>
           </div>
         </div>
         
         <button
-          className="flex h-9 shrink-0 items-center justify-center gap-1.5 whitespace-nowrap px-4 text-xs font-semibold text-white transition hover:opacity-85"
+          className="flex h-9 shrink-0 items-center justify-center gap-1.5 whitespace-nowrap border border-[var(--accent)]/30 bg-[var(--accent)]/10 px-4 text-xs font-medium text-[var(--accent)] transition hover:bg-[var(--accent)]/18 hover:border-[var(--accent)]/50"
           onClick={() => {
             addItem(product);
             openCart();
           }}
-          style={{ backgroundColor: "#000", borderRadius: "var(--btn-radius, 9999px)" }}
+          style={{ borderRadius: "var(--btn-radius, 9999px)" }}
           type="button"
         >
           <ShoppingBag className="size-3.5" />

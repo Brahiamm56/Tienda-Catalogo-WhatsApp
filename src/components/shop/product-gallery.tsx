@@ -63,7 +63,7 @@ export function ProductGallery({ images, accent, autoplayMs = 4500 }: ProductGal
                 type="button"
                 aria-label="Imagen anterior"
                 onClick={() => goTo(index - 1)}
-                className="absolute left-3 top-1/2 z-10 -translate-y-1/2 rounded-full border border-white/40 bg-white/70 p-2 text-[var(--foreground)] shadow-md backdrop-blur transition hover:bg-white sm:left-4"
+                className="absolute left-3 top-1/2 z-10 -translate-y-1/2 rounded-full border border-white/20 bg-black/50 p-2 text-white backdrop-blur transition hover:bg-black/70 hover:text-[var(--accent)] sm:left-4"
               >
                 <ChevronLeft className="size-5" />
               </button>
@@ -71,7 +71,7 @@ export function ProductGallery({ images, accent, autoplayMs = 4500 }: ProductGal
                 type="button"
                 aria-label="Siguiente imagen"
                 onClick={() => goTo(index + 1)}
-                className="absolute right-3 top-1/2 z-10 -translate-y-1/2 rounded-full border border-white/40 bg-white/70 p-2 text-[var(--foreground)] shadow-md backdrop-blur transition hover:bg-white sm:right-4"
+                className="absolute right-3 top-1/2 z-10 -translate-y-1/2 rounded-full border border-white/20 bg-black/50 p-2 text-white backdrop-blur transition hover:bg-black/70 hover:text-[var(--accent)] sm:right-4"
               >
                 <ChevronRight className="size-5" />
               </button>
@@ -85,7 +85,7 @@ export function ProductGallery({ images, accent, autoplayMs = 4500 }: ProductGal
                     onClick={() => goTo(i)}
                     className={cn(
                       "h-1.5 rounded-full transition-all",
-                      i === index ? "w-5 bg-white" : "w-1.5 bg-white/50 hover:bg-white/80",
+                      i === index ? "w-5 bg-[var(--accent)]" : "w-1.5 bg-white/30 hover:bg-white/60",
                     )}
                   />
                 ))}

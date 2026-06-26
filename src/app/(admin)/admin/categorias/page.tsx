@@ -58,7 +58,7 @@ export default async function AdminCategoriesPage() {
 
           <div className="mt-6 space-y-4">
             {categories.map((category) => (
-              <details key={category.id} className="rounded-[1.75rem] border border-[var(--border)] bg-white/70 p-5">
+              <details key={category.id} className="rounded-[1.75rem] border border-[var(--border)] bg-[var(--surface)] p-5">
                 <summary className="flex cursor-pointer list-none flex-wrap items-center justify-between gap-3">
                   <div>
                     <p className="font-medium">{category.name}</p>

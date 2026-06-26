@@ -7,13 +7,13 @@ const quickActions = [
     href: "/admin/ventas?new=1",
     label: "Nueva venta",
     icon: ShoppingBag,
-    iconClass: "bg-slate-100 text-slate-700",
+    iconClass: "bg-[var(--surface-strong)] text-[var(--foreground)]",
   },
   {
     href: "/admin/productos",
     label: "Nuevo producto",
     icon: PackagePlus,
-    iconClass: "bg-slate-100 text-slate-700",
+    iconClass: "bg-[var(--surface-strong)] text-[var(--foreground)]",
   },
 ];
 
@@ -24,7 +24,7 @@ export function FloatingQuickActions() {
         {/* Popover hover visible al hacer hover (se abre hacia arriba y a la izquierda) */}
         <div
           className={cn(
-            "pointer-events-none absolute bottom-full right-0 z-50 mb-3 w-48 rounded-2xl border border-slate-200 bg-white p-1.5 opacity-0 shadow-[0_10px_40px_-15px_rgba(15,23,42,0.2)] transition-all duration-200",
+            "pointer-events-none absolute bottom-full right-0 z-50 mb-3 w-48 rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] p-1.5 opacity-0 shadow-[0_10px_40px_-15px_rgba(15,23,42,0.2)] transition-all duration-200",
             "group-hover/qa:pointer-events-auto group-hover/qa:opacity-100 group-hover/qa:translate-y-0",
             "translate-y-2",
             // Un puente invisible en la parte inferior para que no se cierre el hover al mover el ratón hacia abajo
@@ -37,11 +37,11 @@ export function FloatingQuickActions() {
               <Link
                 key={action.href}
                 href={action.href}
-                className="flex items-center gap-3 rounded-xl px-2.5 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900"
+                className="flex items-center gap-3 rounded-xl px-2.5 py-2 text-sm font-medium text-[var(--muted-foreground)] transition-colors hover:bg-[var(--surface)] hover:text-[var(--foreground)]"
               >
                 <span
                   className={cn(
-                    "flex size-8 shrink-0 items-center justify-center rounded-lg bg-slate-100/50 text-slate-500",
+                    "flex size-8 shrink-0 items-center justify-center rounded-lg bg-[var(--surface-strong)]/50 text-[var(--muted-foreground)]",
                   )}
                 >
                   <Icon className="size-4" strokeWidth={2.5} />
@@ -54,7 +54,7 @@ export function FloatingQuickActions() {
 
         {/* Botón flotante */}
         <button
-          className="group flex size-14 items-center justify-center rounded-full bg-slate-900 text-white shadow-xl shadow-slate-900/20 transition-all hover:scale-105 hover:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-slate-900/10 active:scale-95"
+          className="group flex size-14 items-center justify-center rounded-full bg-[var(--accent)] text-[var(--accent-ink)] shadow-xl shadow-slate-900/20 transition-all hover:scale-105 hover:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-slate-900/10 active:scale-95"
           type="button"
           title="Acciones rápidas"
         >

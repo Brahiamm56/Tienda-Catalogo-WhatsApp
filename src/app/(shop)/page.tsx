@@ -1,13 +1,15 @@
+import fs from "fs";
+import path from "path";
+
 import { ProductCard } from "@/components/shop/product-card";
-import { BannerCarousel } from "@/components/shop/banner-carousel";
 import { ProductCarousel } from "@/components/shop/product-carousel";
+import { PerfumeShowcase } from "@/components/shop/perfume-showcase";
 import { ShopHeader } from "@/components/shop/shop-header";
 import { WhatsappFloatingButton } from "@/components/shop/whatsapp-button";
 import { StoreFooter } from "@/components/shop/store-footer";
 import { CategoryFilter } from "@/components/shop/category-filter";
 import { sanitizeWhatsappNumber } from "@/lib/utils";
 import {
-  getActiveBanners,
   getCatalogProducts,
   getCategories,
   getFeaturedProducts,
@@ -15,9 +17,36 @@ import {
   getStoreSettings,
 } from "@/lib/catalog";
 
+type PerfumeMeta = { name: string; brand: string; href?: string };
+
+function getPerfumeShowcaseData() {
+  const dir = path.join(process.cwd(), "public", "perfumes");
+  let meta: Record<string, PerfumeMeta> = {};
+  try {
+    const mp = path.join(dir, "metadata.json");
+    if (fs.existsSync(mp)) {
+      const raw = JSON.parse(fs.readFileSync(mp, "utf-8")) as Record<string, PerfumeMeta>;
+      Object.entries(raw).forEach(([k, v]) => {
+        if (v && typeof v === "object" && "name" in v) meta[k] = v;
+      });
+    }
+  } catch {}
+  let files: string[] = [];
+  try {
+    files = fs.readdirSync(dir)
+      .filter((f) => /\.(png|jpg|jpeg|webp)$/i.test(f))
+      .sort();
+  } catch {}
+  return {
+    images: files.map((f) => `/perfumes/${f}`),
+    names: files.map((f) => meta[f]?.name ?? f.replace(/\.[^.]+$/, "").replace(/[-_]/g, " ").toUpperCase()),
+    brands: files.map((f) => meta[f]?.brand ?? ""),
+    hrefs: files.map((f) => meta[f]?.href ?? "/productos"),
+  };
+}
+
 export default async function Home() {
-  const [banners, featured, recent, allProducts, categories, settings] = await Promise.all([
-    getActiveBanners(),
+  const [featured, recent, allProducts, categories, settings] = await Promise.all([
     getFeaturedProducts(),
     getRecentProducts(8),
     getCatalogProducts(),
@@ -37,10 +66,16 @@ export default async function Home() {
         freeShippingThresholdCents={settings.freeShippingThresholdCents}
       />
 
-      <main className="space-y-10 pb-28 sm:space-y-14 sm:pb-12">
-        {/* Hero banner carousel */}
-        <BannerCarousel banners={banners} />
+      <main className="pb-16 sm:pb-12">
+        {/* 3D Perfume hero showcase */}
+        {/* Auto-loaded from public/perfumes/ — edit metadata.json to set names & brands */}
+        <PerfumeShowcase {...getPerfumeShowcaseData()} />
 
+        {/* Gold divider */}
+        <div className="gold-scan-line mx-auto w-full max-w-3xl" />
+
+        {/* Products section */}
+        <div className="space-y-10 pt-8 sm:space-y-14">
         {/* Category chips — filters products in-page */}
         {categories.length > 0 ? (
           <CategoryFilter
@@ -74,12 +109,12 @@ export default async function Home() {
             {/* All products grid */}
             <section className="mx-auto w-full max-w-7xl space-y-5 px-4 sm:px-6 lg:px-10">
               <div className="flex items-end justify-between gap-3">
-                <div className="space-y-1">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[var(--muted-foreground)]">
+                <div className="space-y-0.5">
+                  <p className="text-[9px] font-medium uppercase tracking-[0.28em] text-[var(--accent)] animate-gold-shimmer">
                     Catálogo completo
                   </p>
-                  <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold tracking-tight sm:text-2xl">
-                    Todos los productos
+                  <h2 className="font-[family-name:var(--font-display)] text-xl font-light italic tracking-wide text-[var(--foreground)] sm:text-2xl md:text-3xl">
+                    Todas las fragancias
                   </h2>
                 </div>
               </div>
@@ -91,6 +126,7 @@ export default async function Home() {
             </section>
           </>
         )}
+        </div>
       </main>
 
       {/* Floating WhatsApp button */}

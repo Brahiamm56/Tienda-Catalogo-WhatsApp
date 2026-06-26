@@ -68,7 +68,7 @@ export function StoreFooter({
         {/* Store name + WhatsApp */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h3 className="font-[family-name:var(--font-display)] text-xl font-semibold">
+            <h3 className="font-[family-name:var(--font-display)] text-xl font-light italic tracking-wide text-[var(--foreground)]">
               {storeName}
             </h3>
             {description ? (
@@ -78,7 +78,7 @@ export function StoreFooter({
             ) : null}
           </div>
           <a
-            className="inline-flex w-fit items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+            className="inline-flex w-fit items-center gap-2 rounded-full border border-[#25D366]/30 bg-[#25D366]/10 px-5 py-2.5 text-sm font-medium text-[#25D366] transition hover:-translate-y-0.5 hover:bg-[#25D366]/15"
             href={whatsappHref}
             rel="noreferrer"
             target="_blank"
@@ -96,8 +96,8 @@ export function StoreFooter({
           {/* Business hours */}
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <Clock className="size-4 text-[var(--muted-foreground)]" />
-              <h4 className="text-sm font-semibold uppercase tracking-wider text-[var(--muted-foreground)]">
+              <Clock className="size-4 text-[var(--accent)]" />
+              <h4 className="text-[9px] font-medium uppercase tracking-[0.24em] text-[var(--accent)]">
                 Horarios
               </h4>
             </div>
@@ -123,8 +123,8 @@ export function StoreFooter({
           {/* Location / Map */}
           <div className="md:col-span-1 lg:col-span-2">
             <div className="flex items-center gap-2 mb-3">
-              <MapPin className="size-4 text-[var(--muted-foreground)]" />
-              <h4 className="text-sm font-semibold uppercase tracking-wider text-[var(--muted-foreground)]">
+              <MapPin className="size-4 text-[var(--accent)]" />
+              <h4 className="text-[9px] font-medium uppercase tracking-[0.24em] text-[var(--accent)]">
                 Ubicación
               </h4>
             </div>
@@ -171,7 +171,7 @@ export function StoreFooter({
             <div className="flex flex-wrap items-center gap-3">
               {socialInstagram && (
                 <a
-                  className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-white/60 px-3 py-1.5 text-xs font-medium text-[var(--foreground)] transition hover:-translate-y-0.5 hover:border-[#E4405F] hover:text-[#E4405F] hover:shadow-sm"
+                  className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-transparent px-3 py-1.5 text-xs font-medium text-[var(--muted-foreground)] transition hover:-translate-y-0.5 hover:border-[#E4405F]/40 hover:text-[#E4405F]"
                   href={socialInstagram}
                   rel="noreferrer"
                   target="_blank"
@@ -187,7 +187,7 @@ export function StoreFooter({
               )}
               {socialFacebook && (
                 <a
-                  className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-white/60 px-3 py-1.5 text-xs font-medium text-[var(--foreground)] transition hover:-translate-y-0.5 hover:border-[#1877F2] hover:text-[#1877F2] hover:shadow-sm"
+                  className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-transparent px-3 py-1.5 text-xs font-medium text-[var(--muted-foreground)] transition hover:-translate-y-0.5 hover:border-[#1877F2]/40 hover:text-[#1877F2]"
                   href={socialFacebook}
                   rel="noreferrer"
                   target="_blank"

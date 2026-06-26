@@ -54,7 +54,7 @@ export function NewSaleDrawer({ products, open, onOpenChange }: NewSaleDrawerPro
       <aside
         aria-hidden={!open}
         aria-label="Nueva venta"
-        className={`fixed inset-y-0 left-0 z-50 flex w-full max-w-xl flex-col bg-white shadow-2xl transition-transform duration-300 ease-out sm:max-w-2xl ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-full max-w-xl flex-col bg-[var(--surface-strong)] shadow-2xl transition-transform duration-300 ease-out sm:max-w-2xl ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
         role="dialog"
@@ -66,17 +66,17 @@ export function NewSaleDrawer({ products, open, onOpenChange }: NewSaleDrawerPro
               <span className="flex size-8 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700">
                 <Plus className="size-4" />
               </span>
-              <h2 className="font-[family-name:var(--font-display)] text-lg font-bold text-slate-800">
+              <h2 className="font-[family-name:var(--font-display)] text-lg font-bold text-[var(--foreground)]">
                 Nueva venta
               </h2>
             </div>
-            <p className="mt-1 text-xs text-slate-500">
+            <p className="mt-1 text-xs text-[var(--muted-foreground)]">
               Registra una venta manual. El stock se descontará automáticamente.
             </p>
           </div>
           <button
             aria-label="Cerrar"
-            className="rounded-lg p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+            className="rounded-lg p-1.5 text-slate-400 transition hover:bg-[var(--surface-strong)] hover:text-[var(--foreground)]"
             onClick={() => onOpenChange(false)}
             type="button"
           >
