@@ -26,7 +26,7 @@ const csp = [
   "form-action 'self'",
   "frame-ancestors 'none'",
   "object-src 'none'",
-  "img-src 'self' data: blob: https://res.cloudinary.com https://images.unsplash.com",
+  "img-src 'self' data: blob: https://res.cloudinary.com https://images.unsplash.com https://*.basemaps.cartocdn.com",
   "font-src 'self' https://fonts.gstatic.com data:",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "script-src 'self' 'unsafe-inline'" + (process.env.NODE_ENV !== "production" ? " 'unsafe-eval'" : ""),
