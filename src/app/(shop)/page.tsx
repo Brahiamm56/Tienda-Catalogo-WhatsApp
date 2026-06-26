@@ -3,6 +3,7 @@ import path from "path";
 
 import { ProductCard } from "@/components/shop/product-card";
 import { ProductCarousel } from "@/components/shop/product-carousel";
+import { StackCarousel } from "@/components/shop/stack-carousel";
 import { PerfumeShowcase } from "@/components/shop/perfume-showcase";
 import { ShopHeader } from "@/components/shop/shop-header";
 import { WhatsappFloatingButton } from "@/components/shop/whatsapp-button";
@@ -34,7 +35,7 @@ function getPerfumeShowcaseData() {
   let files: string[] = [];
   try {
     files = fs.readdirSync(dir)
-      .filter((f) => /\.(png|jpg|jpeg|webp)$/i.test(f))
+      .filter((f) => /\.(png|jpg|jpeg|webp)$/i.test(f) && f !== "9pmeleixir.png")
       .sort();
   } catch {}
   return {
@@ -126,6 +127,17 @@ export default async function Home() {
             </section>
           </>
         )}
+
+        {/* Scroll-driven stack carousel */}
+        {allProducts.length > 0 ? (
+          <div className="border-t border-[var(--border)] pt-10 sm:pt-14">
+            <StackCarousel
+              badge="Desliza para explorar"
+              products={allProducts}
+              title="Galería interactiva"
+            />
+          </div>
+        ) : null}
         </div>
       </main>
 

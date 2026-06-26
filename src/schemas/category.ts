@@ -5,8 +5,16 @@ export const categorySchema = z.object({
   slug: z
     .string()
     .min(2)
-    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Usa minusculas, numeros y guiones."),
-  description: z.string().min(10),
+    .transform((val) =>
+      val
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "") // remove accents/diacritics
+        .replace(/[^a-z0-9-]/g, "-")      // replace non-alphanumeric with hyphen
+        .replace(/-+/g, "-")             // collapse multiple hyphens
+        .replace(/^-|-$/g, "")           // trim leading/trailing hyphens
+    ),
+  description: z.string().optional().or(z.literal("")),
   order: z.coerce.number().int().min(0).max(999),
 });
 

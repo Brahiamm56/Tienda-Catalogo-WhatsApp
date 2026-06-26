@@ -334,6 +334,157 @@ main > section:nth-child(5) {
 
 .gold-scan-line { animation: scanGlow 4s ease-in-out infinite; }
 
+/* Premium Floating Active Perfume */
+@keyframes floatActive {
+	0%, 100% { transform: translateY(0); }
+	50%      { transform: translateY(-7px); }
+}
+
+.floating-active {
+	animation: floatActive 5.5s ease-in-out infinite;
+}
+
+/* Premium Metallic Sheen Glare */
+@keyframes sheen {
+	0%   { transform: translateX(-160%) skewX(-25deg); }
+	100% { transform: translateX(160%) skewX(-25deg); }
+}
+
+.premium-sheen {
+	overflow: hidden;
+}
+
+.premium-sheen::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(
+		90deg,
+		transparent 10%,
+		rgba(255, 255, 255, 0.0) 25%,
+		rgba(255, 255, 255, 0.15) 50%,
+		rgba(255, 255, 255, 0.0) 75%,
+		transparent 90%
+	);
+	transform: translateX(-160%) skewX(-25deg);
+	pointer-events: none;
+	z-index: 2;
+}
+
+.premium-sheen-active::after {
+	animation: sheen 4.5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+/* === Scroll-driven product carousel === */
+.carousel-wrapper {
+	overflow: hidden;
+	position: relative;
+	padding: 1.5rem 0;
+}
+
+.carousel {
+	--card-width: 12rem;
+	display: flex;
+	gap: 1rem;
+	padding: 2.5rem 1rem;
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+	-webkit-overflow-scrolling: touch;
+}
+
+.carousel::-webkit-scrollbar {
+	display: none;
+}
+
+.slide {
+	flex-shrink: 0;
+	width: var(--card-width);
+	scroll-snap-align: center;
+	transform-origin: center 60%;
+	will-change: transform;
+	position: relative;
+
+	view-timeline: --cards inline;
+	animation: stack-cards linear both;
+	animation-timeline: --cards;
+	animation-range: contain 0% contain 100%;
+
+	& .card {
+		animation: rotate-cards linear both;
+		animation-timeline: --cards;
+		animation-range: contain -20% contain 120%;
+	}
+}
+
+@keyframes stack-cards {
+	0% {
+		z-index: calc(100 - var(--index, 0));
+		opacity: 0.55;
+	}
+	45% {
+		z-index: 1000;
+		opacity: 1;
+	}
+	55% {
+		z-index: 1000;
+		opacity: 1;
+	}
+	100% {
+		z-index: var(--index, 0);
+		opacity: 0.55;
+	}
+}
+
+@keyframes rotate-cards {
+	0% {
+		transform: translateX(-25%) rotate(6deg) scale(0.85);
+	}
+	35% {
+		transform: translateX(-12%) rotate(3deg) scale(0.92);
+	}
+	50% {
+		transform: translateX(0%) rotate(0deg) scale(1);
+	}
+	65% {
+		transform: translateX(12%) rotate(-3deg) scale(0.92);
+	}
+	100% {
+		transform: translateX(25%) rotate(-6deg) scale(0.85);
+	}
+}
+
+/* Fallback for browsers without scroll-driven animation support */
+@supports not (animation-timeline: view()) {
+	.slide {
+		animation: none;
+		& .card {
+			animation: none;
+		}
+	}
+}
+
+/* Admin drawer slide-in from the right */
+@keyframes drawerSlideInRight {
+	from { transform: translateX(100%); }
+	to   { transform: translateX(0); }
+}
+
+.animate-slide-in-right {
+	animation: drawerSlideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Admin mobile sidebar slide-in from the left */
+@keyframes drawerSlideInLeft {
+	from { transform: translateX(-100%); }
+	to   { transform: translateX(0); }
+}
+
+.animate-slide-in-left {
+	animation: drawerSlideInLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
 	*, *::before, *::after {

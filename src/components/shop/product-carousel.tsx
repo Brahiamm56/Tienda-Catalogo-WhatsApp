@@ -24,37 +24,49 @@ export function ProductCarousel({ badge, href, products, title }: ProductCarouse
   const [activeIndex, setActiveIndex] = useState(0);
 
   const sectionRef = useGsapContext<HTMLElement>((self) => {
-    const root = self as unknown as { selector?: (s: string) => Element[] };
-    void root;
+    const q = self.selector || gsap.utils.selector(sectionRef);
+
     // Header reveal
-    gsap.from("[data-anim='carousel-head'] > *", {
-      y: 18,
-      opacity: 0,
-      duration: 0.6,
-      ease: "power3.out",
-      stagger: 0.08,
-      scrollTrigger: {
-        trigger: "[data-anim='carousel-head']",
-        start: "top 90%",
-        once: true,
-      },
-    });
+    const headEl = q("[data-anim='carousel-head']")[0];
+    if (headEl) {
+      gsap.fromTo(
+        q("[data-anim='carousel-head'] > *"),
+        { y: 18, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          ease: "power3.out",
+          stagger: 0.08,
+          scrollTrigger: {
+            trigger: headEl,
+            start: "top 90%",
+            once: true,
+          },
+        }
+      );
+    }
+
     // Cards stagger
-    gsap.from("[data-anim='carousel-track'] > article", {
-      y: 32,
-      opacity: 0,
-      duration: 0.55,
-      ease: "power3.out",
-      stagger: 0.07,
-      scrollTrigger: {
-        trigger: "[data-anim='carousel-track']",
-        start: "top 88%",
-        once: true,
-      },
-    });
-    return () => {
-      ScrollTrigger.getAll().forEach((st) => st.kill());
-    };
+    const trackEl = q("[data-anim='carousel-track']")[0];
+    if (trackEl) {
+      gsap.fromTo(
+        q("[data-anim='carousel-track'] > article"),
+        { y: 32, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.55,
+          ease: "power3.out",
+          stagger: 0.07,
+          scrollTrigger: {
+            trigger: trackEl,
+            start: "top 88%",
+            once: true,
+          },
+        }
+      );
+    }
   }, [products.length]);
 
   if (products.length === 0) return null;
@@ -174,7 +186,7 @@ export function ProductCarousel({ badge, href, products, title }: ProductCarouse
 function CarouselCard({ product }: { product: CatalogProduct }) {
   return (
     <article
-      className="group flex w-[44vw] max-w-[200px] shrink-0 snap-start flex-col overflow-hidden border transition-all duration-300 hover:-translate-y-1 sm:w-[calc(50%-8px)] sm:max-w-none md:w-[calc(33.333%-11px)] lg:w-[calc(25%-12px)]"
+      className="group flex w-[46vw] max-w-[220px] shrink-0 snap-start flex-col overflow-hidden border transition-all duration-300 hover:-translate-y-1 sm:w-[calc(50%-8px)] sm:max-w-none md:w-[calc(33.333%-11px)] lg:w-[calc(25%-12px)]"
       style={{
         backgroundColor: "var(--card-bg)",
         borderColor: "var(--card-border)",
@@ -184,9 +196,9 @@ function CarouselCard({ product }: { product: CatalogProduct }) {
       <Link className="relative block aspect-[3/4] w-full overflow-hidden bg-[#0d0d0f]" href={`/productos/${product.slug}`}>
         <Image
           alt={product.name}
-          className="object-cover transition duration-700 group-hover:scale-[1.06]"
+          className="object-contain p-2 transition duration-700 group-hover:scale-[1.08]"
           fill
-          sizes="(max-width: 640px) 44vw, (max-width: 768px) 210px, 260px"
+          sizes="(max-width: 640px) 46vw, (max-width: 768px) 220px, 280px"
           src={product.image}
         />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent" />

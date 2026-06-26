@@ -176,7 +176,7 @@ export function ProductForm({
           ) : null}
         </div>
 
-        <div className="grid gap-4 md:grid-cols-[1fr_0.8fr_0.8fr]">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-[1fr_0.8fr_0.8fr]">
           <div className="space-y-2">
             <label className="text-sm font-medium" htmlFor={product ? `${product.id}-sku` : "create-product-sku"}>
               SKU <span className="font-normal text-[var(--muted-foreground)]">(Opcional)</span>
@@ -229,7 +229,7 @@ export function ProductForm({
           </div>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-sm font-medium" htmlFor={product ? `${product.id}-category` : "create-product-category"}>

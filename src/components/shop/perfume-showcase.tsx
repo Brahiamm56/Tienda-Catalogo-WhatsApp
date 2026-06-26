@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 
-import { gsap } from "@/lib/gsap";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 type PerfumeShowcaseProps = {
   images?: string[];
@@ -14,18 +14,33 @@ type PerfumeShowcaseProps = {
   hrefs?: string[];
 };
 
-// 3D slot configs — widened offsets xPercent to prevent overlapping
+// 3D slot configs — rotationX tilts side bottles backward in z-space for true depth
 const SLOT = {
-  active:   { xPercent: 0,    scale: 1,    opacity: 1,   rotationY: 0,   z: 0    },
-  right:    { xPercent: 110,  scale: 0.56, opacity: 0.45, rotationY: -28, z: -120 },
-  left:     { xPercent: -110, scale: 0.56, opacity: 0.45, rotationY: 28,  z: -120 },
-  offRight: { xPercent: 235,  scale: 0.28, opacity: 0,   rotationY: -55, z: -280 },
-  offLeft:  { xPercent: -235, scale: 0.28, opacity: 0,   rotationY: 55,  z: -280 },
+  active:   { xPercent: 0,    scale: 1.18, opacity: 1,    rotationY: 0,   rotationX: 0,   z: 80   },
+  right:    { xPercent: 118,  scale: 0.46, opacity: 0.38, rotationY: -40, rotationX: -6,  z: -220 },
+  left:     { xPercent: -118, scale: 0.46, opacity: 0.38, rotationY: 40,  rotationX: -6,  z: -220 },
+  offRight: { xPercent: 252,  scale: 0.20, opacity: 0,    rotationY: -68, rotationX: -12, z: -420 },
+  offLeft:  { xPercent: -252, scale: 0.20, opacity: 0,    rotationY: 68,  rotationX: -12, z: -420 },
 };
 
-const EASE = "power3.inOut";
-const DUR = 0.85;
+const TILT_X = 8;   // max rotationX degrees
+const TILT_Y = 11;  // max rotationY degrees
+
+const EASE = "power4.inOut";
+const DUR = 0.72;
 const AUTO_DELAY = 5000;
+
+const GLOW_COLORS: Record<string, string> = {
+  "3parfams": "rgba(201, 169, 110, 0.12)",      // warm gold/amber
+  "9pm": "rgba(163, 191, 250, 0.12)",           // cool steel blue/silver
+  "kamra": "rgba(251, 146, 60, 0.13)",           // rich amber orange
+  "club-de-nuit": "rgba(224, 242, 254, 0.10)"    // soft diamond white
+};
+
+const getGlowColor = (src: string) => {
+  const key = src.split('/').pop()?.replace(/\.[^.]+$/, '') || '';
+  return GLOW_COLORS[key] || "rgba(201, 169, 110, 0.09)";
+};
 
 // Circular slot resolver helper
 function getSlotForIndex(i: number, activeId: number, total: number) {
@@ -59,6 +74,11 @@ export function PerfumeShowcase({
   
   const autoAdvanceTween = useRef<gsap.core.Tween | null>(null);
   const touchStartX = useRef<number | null>(null);
+  const sectionRef  = useRef<HTMLElement | null>(null);
+  const headerRef   = useRef<HTMLDivElement | null>(null);
+  const stageRef    = useRef<HTMLDivElement | null>(null);
+  const atmosphereRef = useRef<HTMLDivElement | null>(null);
+  const stRef       = useRef<ScrollTrigger | null>(null);
 
   const count = images.length;
 
@@ -75,46 +95,55 @@ export function PerfumeShowcase({
       gsap.set(el, { x: 0, ...targetSlot, immediateRender: true });
     });
 
-    // Entrance animation for visible bottles
+    // Entrance animation — spring-like bounce for hero bottle
     const activeEl = els[active];
     if (activeEl) {
-      gsap.from(activeEl, { y: 60, opacity: 0, duration: 1.1, ease: "power4.out", delay: 0.2 });
+      gsap.from(activeEl, {
+        y: 80,
+        opacity: 0,
+        scale: 0.6,
+        duration: 1.3,
+        ease: "elastic.out(1, 0.55)",
+        delay: 0.15,
+      });
     }
     if (count >= 2) {
       const rightEl = els[(active + 1) % count];
       if (rightEl) {
-        gsap.from(rightEl, { y: 40, opacity: 0, duration: 0.9, ease: "power3.out", delay: 0.38 });
+        gsap.from(rightEl, { y: 50, opacity: 0, duration: 1, ease: "power4.out", delay: 0.35 });
       }
     }
     if (count >= 3) {
       const leftEl = els[(active - 1 + count) % count];
       if (leftEl) {
-        gsap.from(leftEl, { y: 40, opacity: 0, duration: 0.9, ease: "power3.out", delay: 0.46 });
+        gsap.from(leftEl, { y: 50, opacity: 0, duration: 1, ease: "power4.out", delay: 0.42 });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count]);
 
-  // Slide transition function
+  // Slide transition function — staggered with overshoot for fluidity
   const goTo = useCallback((next: number) => {
     if (transitioning || count < 2) return;
     const normalized = ((next % count) + count) % count;
     setTransitioning(true);
-    setActive(normalized); // Set active immediately to sync name and CSS transitions
+    setActive(normalized);
 
     const els = bottleRefs.current;
     
-    // Animate every bottle to its slot relative to the new active index
+    // Animate every bottle to its slot with staggered timing for fluid feel
     const anims = images.map((_, i) => {
       const el = els[i];
       if (!el) return Promise.resolve();
       const targetSlot = getSlotForIndex(i, normalized, count);
+      const isNewActive = i === normalized;
 
       return new Promise<void>((resolve) => {
         gsap.to(el, {
           ...targetSlot,
-          duration: DUR,
-          ease: EASE,
+          duration: isNewActive ? DUR * 1.05 : DUR,
+          ease: isNewActive ? "back.out(1.2)" : EASE,
+          overwrite: "auto",
           onComplete: resolve,
         });
       });
@@ -193,6 +222,25 @@ export function PerfumeShowcase({
     });
   }, [active]);
 
+  // Scroll parallax — each layer moves at a different rate as the section exits the viewport
+  useEffect(() => {
+    if (!sectionRef.current) return;
+    stRef.current = ScrollTrigger.create({
+      trigger: sectionRef.current,
+      start: "top top",
+      end: "bottom top",
+      scrub: 1.6,
+      onUpdate: (self) => {
+        const p = self.progress;
+        if (atmosphereRef.current) gsap.set(atmosphereRef.current, { y: p * -55 });
+        if (headerRef.current)     gsap.set(headerRef.current,     { y: p * -95 });
+        if (stageRef.current)      gsap.set(stageRef.current,      { y: p * -30 });
+      },
+    });
+    return () => { stRef.current?.kill(); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Swipe handlers for touch devices
   const handleTouchStart = (e: React.TouchEvent) => {
     setIsHovered(true); // Pause progress bar
@@ -215,18 +263,52 @@ export function PerfumeShowcase({
     touchStartX.current = null;
   };
 
+  // Mouse-driven 3D tilt — active bottle follows cursor in real-time
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    if (transitioning || !sectionRef.current) return;
+    const rect = sectionRef.current.getBoundingClientRect();
+    const nx = ((e.clientX - rect.left) / rect.width  - 0.5) * 2; // -1 → +1
+    const ny = ((e.clientY - rect.top)  / rect.height - 0.5) * 2;
+    const activeEl = bottleRefs.current[active];
+    if (!activeEl) return;
+    gsap.to(activeEl, {
+      rotationX: ny * -TILT_X,
+      rotationY: nx * TILT_Y,
+      duration: 0.8,
+      ease: "power2.out",
+      overwrite: "auto",
+    });
+  }, [active, transitioning]);
+
+  const handleSectionMouseLeave = useCallback(() => {
+    setIsHovered(false);
+    if (transitioning) return;
+    const activeEl = bottleRefs.current[active];
+    if (!activeEl) return;
+    // Elastic spring-back to neutral on mouse leave
+    gsap.to(activeEl, {
+      rotationX: 0,
+      rotationY: 0,
+      duration: 1.4,
+      ease: "elastic.out(1, 0.45)",
+      overwrite: "auto",
+    });
+  }, [active, transitioning]);
+
   if (count === 0) return null;
 
   // Bottle sizes — bigger on mobile for impact
-  const W = "clamp(220px, 32vw, 300px)";
-  const H = "clamp(310px, 44vw, 420px)";
+  const W = "clamp(280px, 65vw, 420px)";
+  const H = "clamp(320px, 60vw, 420px)";
 
   return (
     <section
+      ref={sectionRef}
       className="relative flex min-h-[92svh] w-full flex-col overflow-hidden bg-black pb-10 sm:pb-14"
       aria-label="Colección de fragancias"
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseLeave={handleSectionMouseLeave}
+      onMouseMove={handleMouseMove}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
@@ -239,11 +321,11 @@ export function PerfumeShowcase({
       />
 
       {/* ── Atmospheric background ── */}
-      <div className="pointer-events-none absolute inset-0">
+      <div ref={atmosphereRef} className="pointer-events-none absolute inset-0">
         {/* Central warm bloom */}
         <div
-          className="absolute left-1/2 top-[44%] h-[680px] w-[680px] -translate-x-1/2 -translate-y-1/2 rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(201,169,110,0.09) 0%, transparent 62%)" }}
+          className="absolute left-1/2 top-[44%] h-[680px] w-[680px] -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-1000 ease-in-out"
+          style={{ background: `radial-gradient(circle, ${getGlowColor(images[active])} 0%, transparent 62%)` }}
         />
         {/* Subtle gold grid */}
         <div
@@ -258,7 +340,7 @@ export function PerfumeShowcase({
       </div>
 
       {/* ── Header block ── */}
-      <div className="relative z-10 flex flex-col items-center gap-2.5 pt-10 text-center sm:gap-3 sm:pt-14">
+      <div ref={headerRef} className="relative z-10 flex flex-col items-center gap-2.5 pt-10 text-center sm:gap-3 sm:pt-14">
         {/* Eyebrow with decorative lines */}
         <div className="flex items-center gap-4">
           <div className="h-px w-10 bg-gradient-to-r from-transparent to-[var(--accent)]/45" />
@@ -283,8 +365,9 @@ export function PerfumeShowcase({
 
       {/* ── 3D Bottle stage ── */}
       <div
-        className="relative z-10 mx-auto mt-6 flex min-h-[390px] w-full flex-1 items-center justify-center overflow-hidden sm:mt-8 sm:min-h-[500px] lg:min-h-[560px]"
-        style={{ perspective: "1100px", perspectiveOrigin: "50% 55%" }}
+        ref={stageRef}
+        className="relative z-10 mx-auto mt-12 flex min-h-[460px] w-full flex-1 items-center justify-center sm:mt-16 sm:min-h-[540px] lg:min-h-[600px]"
+        style={{ perspective: "1200px", perspectiveOrigin: "50% 52%" }}
       >
         {images.map((src, i) => (
           <div
@@ -296,29 +379,34 @@ export function PerfumeShowcase({
           >
             {/* ── Bottle image — clean, no overlay ── */}
             <div
-              className={`group relative rounded-2xl border border-transparent transition-all duration-300 ${
-                i !== active ? "hover:border-white/10 hover:bg-white/[0.02]" : ""
+              className={`group relative rounded-2xl border border-transparent transition-all duration-300 premium-sheen ${
+                i !== active ? "hover:border-white/10 hover:bg-white/[0.02]" : "premium-sheen-active"
               }`}
               style={{
                 position: "relative",
                 width: W,
                 height: H,
                 zIndex: 1,
-                cursor: i === active ? "default" : "ew-resize",
+                cursor: i === active ? "grab" : "ew-resize",
                 filter: i === active
-                  ? "drop-shadow(0 8px 24px rgba(0,0,0,0.5))"
-                  : "brightness(0.55) drop-shadow(0 6px 12px rgba(0,0,0,0.6))",
-                transition: "filter 0.6s ease",
+                  ? "drop-shadow(0 12px 36px rgba(0,0,0,0.55)) drop-shadow(0 0 60px rgba(201,169,110,0.12))"
+                  : "brightness(0.45) saturate(0.7) drop-shadow(0 6px 12px rgba(0,0,0,0.6))",
+                transition: "filter 0.7s cubic-bezier(0.22, 1, 0.36, 1)",
               }}
             >
-              <Image
-                src={src}
-                alt={names[i] ?? `Fragancia ${i + 1}`}
-                fill
-                className="object-contain"
-                sizes="(max-width: 640px) 55vw, (max-width: 1024px) 32vw, 300px"
-                priority={i <= 1}
-              />
+              <div className={`absolute inset-3 sm:inset-5 flex items-center justify-center ${i === active ? "floating-active" : ""}`}>
+                <div className="relative h-full w-full">
+                  <Image
+                    src={src}
+                    alt={names[i] ?? `Fragancia ${i + 1}`}
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 640px) 80vw, (max-width: 1024px) 50vw, 420px"
+                    quality={90}
+                    priority={i <= 1}
+                  />
+                </div>
+              </div>
             </div>
 
             {/* ── Floor glow pod ── */}
@@ -374,7 +462,7 @@ export function PerfumeShowcase({
       {/* ── Active perfume name ── */}
       <div 
         ref={nameRef}
-        className="relative z-10 mt-5 flex flex-col items-center gap-0.5 text-center sm:mt-7"
+        className="relative z-10 mt-20 flex flex-col items-center gap-0.5 text-center sm:mt-12"
       >
         <p className="text-[8px] font-medium uppercase tracking-[0.42em] text-[var(--muted-foreground)]">
           {brands[displayNameIndex] ?? "\u00a0"}

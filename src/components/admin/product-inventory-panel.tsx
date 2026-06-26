@@ -138,43 +138,45 @@ export function ProductInventoryPanel({
       </div>
 
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] px-5 py-4 shadow-sm">
+      <div className="flex flex-col gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4 shadow-sm sm:flex-row sm:flex-wrap sm:items-center sm:px-5">
         <Input
-          className="min-w-[200px] flex-1"
+          className="w-full sm:min-w-[200px] sm:flex-1"
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Buscar por nombre, código o categoría..."
           value={search}
         />
 
-        <Select className="w-48" onChange={(e) => setCategoryFilter(e.target.value)} value={categoryFilter}>
-          <option value="all">Todas las categorías</option>
-          {categories.map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.name}
-            </option>
-          ))}
-        </Select>
+        <div className="grid grid-cols-2 gap-2 w-full md:w-auto md:flex md:flex-wrap">
+          <Select className="w-full md:w-48" onChange={(e) => setCategoryFilter(e.target.value)} value={categoryFilter}>
+            <option value="all">Todas las categorías</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+          </Select>
 
-        <Select className="w-36" onChange={(e) => setStatusFilter(e.target.value)} value={statusFilter}>
-          <option value="all">Todos</option>
-          <option value="PUBLISHED">Publicados</option>
-          <option value="DRAFT">Borradores</option>
-          <option value="ARCHIVED">Archivados</option>
-        </Select>
+          <Select className="w-full md:w-36" onChange={(e) => setStatusFilter(e.target.value)} value={statusFilter}>
+            <option value="all">Todos</option>
+            <option value="PUBLISHED">Publicados</option>
+            <option value="DRAFT">Borradores</option>
+            <option value="ARCHIVED">Archivados</option>
+          </Select>
+        </div>
 
-        <div className="ml-auto flex items-center gap-3">
+        <div className="flex w-full items-center gap-3 sm:ml-auto sm:w-auto">
           <span className="hidden text-sm text-[var(--muted-foreground)] sm:block">
             {filteredProducts.length} de {products.length}
           </span>
-          <Button onClick={openCreateDrawer} type="button" variant="accent">
+          <Button className="w-full sm:w-auto" onClick={openCreateDrawer} type="button" variant="accent">
             <Plus className="mr-2 size-4" />
             Nuevo Producto
           </Button>
         </div>
       </div>
 
-      {/* Table */}
-      <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] shadow-sm">
+      {/* Desktop table */}
+      <div className="hidden overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] shadow-sm md:block">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
@@ -317,6 +319,138 @@ export function ProductInventoryPanel({
 
         {/* Footer stats */}
         <div className="flex flex-wrap items-center gap-5 border-t border-[var(--border)] px-5 py-3 text-xs text-[var(--muted-foreground)]">
+          <span>
+            Publicados: <strong className="text-[var(--foreground)]">{publishedCount}</strong>
+          </span>
+          <span>
+            Borradores: <strong className="text-[var(--foreground)]">{draftCount}</strong>
+          </span>
+          <span>
+            Stock bajo:{" "}
+            <strong className={lowStockCount > 0 ? "text-orange-600" : "text-[var(--foreground)]"}>{lowStockCount}</strong>
+          </span>
+        </div>
+      </div>
+
+      {/* Mobile product cards */}
+      <div className="block space-y-3 md:hidden">
+        {filteredProducts.length === 0 ? (
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] px-5 py-14 text-center text-[var(--muted-foreground)] shadow-sm">
+            No hay productos que coincidan con los filtros.
+          </div>
+        ) : null}
+
+        {filteredProducts.map((product) => {
+          const isCritical = product.stock === 0;
+          const isLow = product.stock > 0 && product.stock <= lowStockThreshold;
+          return (
+            <div
+              key={product.id}
+              className="rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] p-4 shadow-sm"
+            >
+              {/* Header: image + name + status */}
+              <div className="flex items-start gap-3">
+                <div className="relative size-16 shrink-0 overflow-hidden rounded-2xl bg-[var(--surface)]">
+                  <Image
+                    alt={product.imageAlt || product.name}
+                    className="object-cover"
+                    fill
+                    sizes="64px"
+                    src={product.image}
+                  />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-medium text-[var(--foreground)]">{product.name}</p>
+                  <p className="truncate text-xs text-[var(--muted-foreground)]">/{product.slug}</p>
+                </div>
+                {/* Status badge */}
+                {isCritical ? (
+                  <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-red-700">
+                    <XCircle className="size-2.5" />
+                    Crítico
+                  </span>
+                ) : isLow ? (
+                  <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-orange-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-orange-700">
+                    <AlertTriangle className="size-2.5" />
+                    Bajo
+                  </span>
+                ) : product.status === "DRAFT" ? (
+                  <span className="inline-flex shrink-0 items-center rounded-full bg-[var(--surface-strong)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--muted-foreground)]">
+                    Borrador
+                  </span>
+                ) : product.status === "ARCHIVED" ? (
+                  <span className="inline-flex shrink-0 items-center rounded-full bg-gray-200 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-gray-400">
+                    Archivado
+                  </span>
+                ) : (
+                  <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-green-700">
+                    <CheckCircle2 className="size-2.5" />
+                    OK
+                  </span>
+                )}
+              </div>
+
+              {/* Body details */}
+              <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[var(--muted-foreground)]">
+                <span>
+                  SKU: <span className="font-mono text-[var(--foreground)]">{product.sku ?? "—"}</span>
+                </span>
+                <span>
+                  Categoría: <span className="text-[var(--foreground)]">{product.category.name}</span>
+                </span>
+                <span className="font-medium tabular-nums text-[var(--foreground)]">
+                  {formatCurrencyFromCents(product.priceCents)}
+                </span>
+              </div>
+
+              {/* Actions & stock */}
+              <div className="mt-3 flex items-center justify-between gap-3 border-t border-[var(--border)] pt-3">
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`text-base font-bold tabular-nums ${
+                      isCritical ? "text-red-600" : isLow ? "text-orange-500" : "text-[var(--foreground)]"
+                    }`}
+                  >
+                    {product.stock}
+                  </span>
+                  <StockAdjuster
+                    action={adjustStockAction}
+                    currentStock={product.stock}
+                    disabled={!databaseReady}
+                    productId={product.id}
+                  />
+                </div>
+                <div className="flex items-center gap-1">
+                  <button
+                    aria-label={`Editar ${product.name}`}
+                    className="flex size-9 items-center justify-center rounded-lg text-[var(--muted-foreground)] transition hover:bg-blue-50 hover:text-blue-600"
+                    onClick={() => openEditDrawer(product.id)}
+                    title="Editar"
+                    type="button"
+                  >
+                    <Pencil className="size-4" />
+                  </button>
+                  <button
+                    aria-label={`Eliminar ${product.name}`}
+                    className="flex size-9 items-center justify-center rounded-lg text-[var(--muted-foreground)] transition hover:bg-red-50 hover:text-red-600"
+                    disabled={!databaseReady}
+                    onClick={() => {
+                      setDeleteError(null);
+                      setProductToDelete(product);
+                    }}
+                    title="Eliminar"
+                    type="button"
+                  >
+                    <Trash2 className="size-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+
+        {/* Mobile footer stats */}
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 px-1 py-2 text-xs text-[var(--muted-foreground)]">
           <span>
             Publicados: <strong className="text-[var(--foreground)]">{publishedCount}</strong>
           </span>

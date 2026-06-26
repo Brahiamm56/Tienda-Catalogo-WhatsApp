@@ -9,12 +9,13 @@ import { Button } from "@/components/ui/button";
 type ActionButtonProps = {
   action: (state: AdminFormState, payload: FormData) => Promise<AdminFormState>;
   confirmMessage?: string;
+  disabled?: boolean;
   fields: Array<{ name: string; value: string }>;
   idleLabel: string;
   pendingLabel: string;
 };
 
-export function ActionButton({ action, confirmMessage, fields, idleLabel, pendingLabel }: ActionButtonProps) {
+export function ActionButton({ action, confirmMessage, disabled = false, fields, idleLabel, pendingLabel }: ActionButtonProps) {
   const [state, formAction, pending] = useActionState(action, initialAdminFormState);
 
   return (
@@ -31,7 +32,7 @@ export function ActionButton({ action, confirmMessage, fields, idleLabel, pendin
         <input key={field.name} name={field.name} type="hidden" value={field.value} />
       ))}
 
-      <Button disabled={pending} size="sm" type="submit" variant="outline">
+      <Button disabled={pending || disabled} size="sm" type="submit" variant="outline">
         {pending ? pendingLabel : idleLabel}
       </Button>
 

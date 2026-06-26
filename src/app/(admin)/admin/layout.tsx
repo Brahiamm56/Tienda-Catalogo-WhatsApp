@@ -16,13 +16,13 @@ export default async function AdminLayout({
   const userLabel = session.user.name ?? session.user.email ?? "Administrador";
 
   return (
-    <div className="flex min-h-screen w-full relative">
+    <div className="flex min-h-screen w-full flex-col relative md:flex-row">
       <AdminSidebar
         logoUrl={settings.logoUrl}
         storeName={settings.name}
         userLabel={userLabel}
       />
-      <div className="relative flex-1 px-5 py-6 sm:px-8 lg:px-10 lg:py-8 xl:px-12">
+      <div className="relative flex-1 px-4 py-5 sm:px-6 md:px-8 lg:px-10 lg:py-8 xl:px-12">
         <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden opacity-70">
           <div className="absolute -left-24 top-8 h-72 w-72 rounded-full bg-[rgba(222,120,95,0.15)] blur-3xl" />
           <div className="absolute right-0 top-0 h-80 w-80 rounded-full bg-[rgba(76,152,164,0.12)] blur-3xl" />

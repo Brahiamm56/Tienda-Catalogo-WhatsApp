@@ -38,10 +38,10 @@ export function ProductGallery({ images, accent, autoplayMs = 4500 }: ProductGal
     <div className="flex flex-col gap-4">
       <div
         className={cn(
-          "surface-panel relative overflow-hidden rounded-[2rem] sm:rounded-[2.5rem]",
+          "relative overflow-hidden rounded-2xl",
         )}
       >
-        <div className={cn("relative aspect-square w-full bg-gradient-to-br lg:aspect-[4/5]", accent)}>
+        <div className="relative aspect-[3/4] w-full bg-[#0a0a0c]">
           {images.map((img, i) => (
             <Image
               key={img.url + i}
@@ -51,7 +51,7 @@ export function ProductGallery({ images, accent, autoplayMs = 4500 }: ProductGal
               sizes="(min-width: 1024px) 60vw, 100vw"
               src={img.url}
               className={cn(
-                "object-cover transition-opacity duration-700 ease-out",
+                "object-contain p-2 transition-opacity duration-700 ease-out",
                 i === index ? "opacity-100" : "opacity-0",
               )}
             />
@@ -115,7 +115,7 @@ export function ProductGallery({ images, accent, autoplayMs = 4500 }: ProductGal
                 src={img.url}
                 fill
                 sizes="80px"
-                className="object-cover"
+                className="object-cover p-2"
               />
             </button>
           ))}

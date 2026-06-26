@@ -412,10 +412,10 @@ export async function createCategoryAction(_: AdminFormState, formData: FormData
   }
 
   const parsed = categorySchema.safeParse({
-    description: getString(formData, "description"),
-    name: getString(formData, "name"),
+    description: getString(formData, "description").trim(),
+    name: getString(formData, "name").trim(),
     order: Number(getString(formData, "order")),
-    slug: getString(formData, "slug"),
+    slug: getString(formData, "slug").trim(),
   });
 
   if (!parsed.success) {
@@ -453,10 +453,10 @@ export async function updateCategoryAction(_: AdminFormState, formData: FormData
   }
 
   const parsed = categorySchema.safeParse({
-    description: getString(formData, "description"),
-    name: getString(formData, "name"),
+    description: getString(formData, "description").trim(),
+    name: getString(formData, "name").trim(),
     order: Number(getString(formData, "order")),
-    slug: getString(formData, "slug"),
+    slug: getString(formData, "slug").trim(),
   });
 
   if (!parsed.success) {
@@ -495,12 +495,42 @@ export async function deleteCategoryAction(_: AdminFormState, formData: FormData
   }
 
   try {
-    const productCount = await prisma.product.count({
-      where: { categoryId },
+    const category = await prisma.category.findUnique({
+      where: { id: categoryId },
+      include: { products: true }
     });
 
-    if (productCount > 0) {
-      return buildErrorState("No puedes eliminar una categoria con productos asociados.");
+    if (!category) {
+      return buildErrorState("La categoria no existe.");
+    }
+
+    // Reassign products to a default category if they exist
+    if (category.products.length > 0) {
+      let defaultCategory = await prisma.category.findFirst({
+        where: {
+          OR: [
+            { slug: "sin-categoria" },
+            { id: { not: categoryId } }
+          ]
+        },
+        orderBy: { order: "asc" }
+      });
+
+      if (!defaultCategory) {
+        defaultCategory = await prisma.category.create({
+          data: {
+            name: "Sin Categoría",
+            slug: "sin-categoria",
+            description: "Productos sin categoria asignada",
+            order: 99
+          }
+        });
+      }
+
+      await prisma.product.updateMany({
+        where: { categoryId },
+        data: { categoryId: defaultCategory.id }
+      });
     }
 
     await prisma.category.delete({

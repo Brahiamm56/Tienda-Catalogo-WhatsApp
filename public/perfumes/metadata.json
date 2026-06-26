@@ -1,5 +1,6 @@
 {
   "_instructions": "Add an entry for every PNG/JPG in this folder. 'name' = perfume display name, 'brand' = brand/house. Files without an entry will use the filename as the name.",
+  "3parfams.png":    { "name": "Set Exclusivo", "brand": "Lattafa & Afnan", "href": "/productos" },
   "9pm.png":          { "name": "9PM",          "brand": "Afnan",   "href": "/productos/9pm" },
   "kamra.png":        { "name": "Khamrah",       "brand": "Lattafa", "href": "/productos/khamrah-lataffa" },
   "club-de-nuit.png": { "name": "Club de Nuit",  "brand": "Armaf",   "href": "/productos/club-de-nuit" }

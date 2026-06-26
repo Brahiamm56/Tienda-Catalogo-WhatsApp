@@ -54,8 +54,8 @@ function buildThemeStyle(rawSettings: unknown): CSSProperties {
   }
   if (s.themeAccentStrong) style["--accent-strong"] = s.themeAccentStrong;
   // if (s.themeBackground) style["--background"] = s.themeBackground;
-  if (s.themeCardBg) style["--card-bg"] = s.themeCardBg;
-  if (s.themeCardBorder) style["--card-border"] = s.themeCardBorder;
+  // if (s.themeCardBg) style["--card-bg"] = s.themeCardBg;
+  // if (s.themeCardBorder) style["--card-border"] = s.themeCardBorder;
   if (s.themeCardRadius) style["--card-radius"] = CARD_RADIUS_MAP[s.themeCardRadius] ?? "1rem";
   if (s.themeButtonRadius) style["--btn-radius"] = BUTTON_RADIUS_MAP[s.themeButtonRadius] ?? "9999px";
   return style as CSSProperties;
@@ -74,6 +74,27 @@ export default async function ShopLayout({
       className="min-h-screen bg-[var(--background)] text-[var(--foreground)]"
       style={themeStyle}
     >
+      {/* Ambient perfume background — fixed, fills entire viewport on all devices */}
+      <div
+        className="pointer-events-none fixed inset-0 -z-10"
+        style={{
+          backgroundImage: "url('/perfumes/9pmeleixir.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundAttachment: "fixed",
+          opacity: 0.12,
+          filter: "blur(14px) saturate(1.3)",
+        }}
+      />
+      {/* Dark gradient overlay to ensure content readability */}
+      <div
+        className="pointer-events-none fixed inset-0 -z-10"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(2,2,2,0.45) 0%, rgba(2,2,2,0.65) 40%, rgba(2,2,2,0.85) 100%)",
+        }}
+      />
       {children}
     </div>
   );

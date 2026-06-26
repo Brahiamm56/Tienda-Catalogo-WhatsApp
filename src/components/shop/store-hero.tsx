@@ -29,6 +29,18 @@ export function StoreHero({ settings }: { settings: StoreSettings }) {
       className="relative overflow-hidden px-6 pb-10 pt-6 lg:px-10 lg:pt-10"
     >
       <div className="surface-panel relative mx-auto grid max-w-7xl gap-10 overflow-hidden rounded-[2.5rem] px-6 py-8 md:px-8 lg:grid-cols-[1.25fr_0.75fr] lg:px-10 lg:py-12">
+        {/* Ambient perfume background image */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.12]"
+          style={{
+            backgroundImage: "url('/perfumes/9pmeleixir.png')",
+            backgroundSize: "cover",
+            backgroundPosition: "right center",
+            backgroundRepeat: "no-repeat",
+          }}
+        />
+        {/* Dark gradient overlay for readability */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[var(--background)]/85 via-[var(--background)]/55 to-[var(--background)]/30" />
         <div className="grid-pattern absolute inset-0 opacity-60" />
         <Spotlight />
 

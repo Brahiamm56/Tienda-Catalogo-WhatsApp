@@ -73,7 +73,7 @@ export function ProductDrawer({
         type="button"
       />
 
-      <aside className="fixed inset-y-0 right-0 z-50 w-full max-w-[620px] border-l border-[var(--border)] bg-[var(--surface-strong)] shadow-[0_8px_40px_rgba(0,0,0,0.12)]">
+      <aside className="animate-slide-in-right fixed inset-y-0 right-0 z-50 flex w-full flex-col border-l border-[var(--border)] bg-[var(--surface-strong)] shadow-[0_8px_40px_rgba(0,0,0,0.12)] sm:max-w-[620px]">
         <div className="flex h-full flex-col">
           <div className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-[var(--border)] bg-[var(--surface-strong)] px-5 py-3 sm:px-6">
             <div className="flex items-center gap-3">
@@ -88,7 +88,7 @@ export function ProductDrawer({
             </Button>
           </div>
 
-          <div className="flex-1 overflow-y-auto px-5 py-5 sm:px-6 sm:py-5">
+          <div className="flex-1 overflow-y-auto px-4 py-4 sm:px-6 sm:py-5">
             <ProductForm
               action={isCreate ? createProductAction : updateProductAction}
               categories={categories}

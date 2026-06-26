@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { createCategoryAction, deleteCategoryAction, updateCategoryAction } from "@/actions/admin";
 import { ActionButton } from "@/components/admin/action-button";
+import { CategoryDeleteButton } from "@/components/admin/category-delete-button";
 import { CategoryForm } from "@/components/admin/category-form";
 import { getAdminCategories } from "@/lib/admin-catalog";
 import { isDatabaseConfigured } from "@/lib/env";
@@ -66,7 +67,16 @@ export default async function AdminCategoriesPage() {
                       /{category.slug} · orden {String(category.order).padStart(2, "0")}
                     </p>
                   </div>
-                  <Badge>{category.productCount} productos</Badge>
+                  <div className="flex items-center gap-2">
+                    <Badge>{category.productCount} productos</Badge>
+                    <CategoryDeleteButton
+                      action={deleteCategoryAction}
+                      categoryId={category.id}
+                      categoryName={category.name}
+                      disabled={!databaseReady}
+                      hasProducts={category.productCount > 0}
+                    />
+                  </div>
                 </summary>
 
                 <div className="mt-5 space-y-5 border-t border-[var(--border)] pt-5">
@@ -79,17 +89,18 @@ export default async function AdminCategoriesPage() {
                     submitLabel="Guardar cambios"
                   />
 
-                  <div className="flex items-center justify-between gap-3 rounded-[1.5rem] border border-[var(--border)] bg-[#fff7f2] px-4 py-4">
+                  <div className="flex items-center justify-between gap-3 rounded-[1.5rem] border border-red-900/30 bg-red-500/10 px-4 py-4">
                     <div>
-                      <p className="text-sm font-medium">Eliminar categoria</p>
+                      <p className="text-sm font-medium text-red-500">Zona de peligro</p>
                       <p className="mt-1 text-sm text-[var(--muted-foreground)]">
-                        Solo puedes borrarla cuando no tenga productos asociados.
+                        Eliminar la categoría es irreversible. Los productos asociados serán reasignados automáticamente.
                       </p>
                     </div>
 
                     <ActionButton
                       action={deleteCategoryAction}
                       confirmMessage={`Eliminar ${category.name}?`}
+                      disabled={false}
                       fields={[{ name: "categoryId", value: category.id }]}
                       idleLabel="Eliminar"
                       pendingLabel="Eliminando..."

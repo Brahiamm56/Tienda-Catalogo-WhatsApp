@@ -1,21 +1,29 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 // Inline WhatsApp button for use inside product detail pages, etc.
 type WhatsappButtonProps = {
   href: string;
   children: ReactNode;
+  className?: string;
 };
 
-export function WhatsappButton({ href, children }: WhatsappButtonProps) {
+export function WhatsappButton({ href, children, className }: WhatsappButtonProps) {
   return (
-    <Button asChild variant="outline">
-      <a href={href} rel="noreferrer" target="_blank">
-        {children}
-      </a>
-    </Button>
+    <a
+      href={href}
+      rel="noreferrer"
+      target="_blank"
+      className={cn(
+        "btn-press inline-flex items-center justify-center gap-1.5 whitespace-nowrap bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-green-500 text-white font-medium px-5 py-2.5 text-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(16,185,129,0.3)] active:scale-[0.97]",
+        className
+      )}
+      style={{ borderRadius: "var(--btn-radius, 9999px)" }}
+    >
+      {children}
+    </a>
   );
 }
 
