@@ -54,13 +54,13 @@ export function NewSaleDrawer({ products, open, onOpenChange }: NewSaleDrawerPro
       <aside
         aria-hidden={!open}
         aria-label="Nueva venta"
-        className={`fixed inset-y-0 left-0 z-50 flex w-full max-w-xl flex-col bg-[var(--surface-strong)] shadow-2xl transition-transform duration-300 ease-out sm:max-w-2xl ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-full max-w-xl flex-col bg-[#0c0c0e] shadow-2xl transition-transform duration-300 ease-out sm:max-w-2xl ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
         role="dialog"
       >
         {/* Header */}
-        <header className="flex items-start justify-between gap-3 border-b border-slate-100 px-5 py-4">
+        <header className="flex items-start justify-between gap-3 border-b border-[var(--border)] px-5 py-4">
           <div>
             <div className="flex items-center gap-2">
               <span className="flex size-8 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700">
@@ -76,7 +76,7 @@ export function NewSaleDrawer({ products, open, onOpenChange }: NewSaleDrawerPro
           </div>
           <button
             aria-label="Cerrar"
-            className="rounded-lg p-1.5 text-slate-400 transition hover:bg-[var(--surface-strong)] hover:text-[var(--foreground)]"
+            className="rounded-lg p-1.5 text-slate-400 transition hover:bg-[var(--surface)] hover:text-[var(--foreground)]"
             onClick={() => onOpenChange(false)}
             type="button"
           >
