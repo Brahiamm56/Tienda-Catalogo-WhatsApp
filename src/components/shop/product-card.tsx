@@ -110,9 +110,14 @@ export function ProductCard({ product }: { product: CatalogProduct }) {
           <h3 className="truncate font-[family-name:var(--font-display)] text-sm font-medium italic tracking-wide text-[var(--foreground)] sm:text-base">
             {product.name}
           </h3>
-          <p className="mt-0.5 text-sm font-medium text-[var(--accent)]">
-            {formatCurrencyFromCents(product.priceCents)}
-          </p>
+          <div className="mt-0.5 flex flex-wrap items-baseline gap-1.5">
+            <span className="text-sm font-semibold text-[var(--accent)]">
+              {formatCurrencyFromCents(product.priceCents)}
+            </span>
+            <span className="text-[10px] text-[var(--muted-foreground)] line-through">
+              {formatCurrencyFromCents(Math.round(product.priceCents * 1.18))}
+            </span>
+          </div>
         </div>
         <AddToCartButton product={product} />
       </div>

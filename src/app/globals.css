@@ -211,6 +211,19 @@ main > section:nth-child(5) {
 	animation: badgeBounce 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+/* Cart button bounce/shake */
+@keyframes cartBounce {
+	0% { transform: scale(1); }
+	30% { transform: scale(1.18) rotate(-6deg); }
+	50% { transform: scale(0.95) rotate(4deg); }
+	70% { transform: scale(1.05) rotate(-2deg); }
+	100% { transform: scale(1) rotate(0deg); }
+}
+
+.animate-cart-bounce {
+	animation: cartBounce 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
 /* Active press microinteraction (apply via class) */
 .btn-press {
 	transition: transform 0.12s ease-out, box-shadow 0.18s ease;
@@ -572,4 +585,16 @@ main > section:nth-child(5) {
 	inset: 0;
 	z-index: 9995;
 	pointer-events: none;
+}
+
+/* Infinite sliding marquee ticker */
+@keyframes marquee {
+	0% { transform: translateX(0%); }
+	100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+	display: inline-flex;
+	white-space: nowrap;
+	animation: marquee 25s linear infinite;
 }

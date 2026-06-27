@@ -288,7 +288,7 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
                   <div className="rounded-2xl border border-[var(--border)] bg-[var(--background)]/60 p-3">
                     <div className="flex items-center justify-between gap-2 text-[11px] font-semibold uppercase tracking-wide">
                       <span className={reached ? "text-emerald-600" : "text-[var(--foreground)]"}>
-                        {reached ? "\uD83C\uDF89 \u00a1Tenes envio gratis!" : `Te faltan ${formatCurrencyFromCents(remaining)} para envio gratis`}
+                        {reached ? "\u00a1Tenes envio gratis!" : `Te faltan ${formatCurrencyFromCents(remaining)} para envio gratis`}
                       </span>
                       <span className="text-[var(--muted-foreground)]">{pct}%</span>
                     </div>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ChevronRight, Home, ShieldCheck, Sparkles, Truck } from "lucide-react";
+import { ChevronRight, Home, ShieldCheck, Sparkles, Truck, Wind, Heart, Flame } from "lucide-react";
 
 import { ProductAddToCart } from "@/components/shop/product-add-to-cart";
 import { StickyAddToCart } from "@/components/shop/sticky-add-to-cart";
@@ -92,6 +92,7 @@ export default async function ProductDetailPage({
 
   const inStock = product.stock > 0;
   const lowStock = inStock && product.stock <= 3;
+  const notes = parseOlfactoryNotes(product.description || "");
 
   // Related products: same category, exclude current product
   const relatedProducts = allProducts
@@ -161,12 +162,59 @@ export default async function ProductDetailPage({
                 {product.description}
               </p>
 
-              <div className="mt-6 flex flex-wrap items-baseline gap-3">
-                <p className="font-[family-name:var(--font-display)] text-3xl font-bold sm:text-4xl">
+              {/* Pirámide Olfativa Visual Widget */}
+              {notes && (
+                <div className="mt-6 rounded-2xl border border-[var(--border)] bg-black/40 p-4.5 backdrop-blur-sm space-y-4">
+                  <div className="flex items-center gap-2 border-b border-[var(--border)] pb-2.5">
+                    <Sparkles className="size-4 text-[var(--accent)]" />
+                    <h3 className="font-[family-name:var(--font-display)] text-xs font-semibold uppercase tracking-wider text-[var(--foreground)]">
+                      Pirámide Olfativa
+                    </h3>
+                  </div>
+                  <div className="space-y-3.5">
+                    <div className="flex items-start gap-3">
+                      <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-sky-500/10 text-sky-400">
+                        <Wind className="size-3.5" />
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-sky-400">Salida (Primeros minutos)</p>
+                        <p className="text-xs text-[var(--muted-foreground)] mt-0.5 capitalize">{notes.salida}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-pink-500/10 text-pink-400">
+                        <Heart className="size-3.5" />
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-pink-400">Corazón (Cuerpo del perfume)</p>
+                        <p className="text-xs text-[var(--muted-foreground)] mt-0.5 capitalize">{notes.corazon}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-amber-400">
+                        <Flame className="size-3.5" />
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-amber-400">Fondo (Fijación y estela)</p>
+                        <p className="text-xs text-[var(--muted-foreground)] mt-0.5 capitalize">{notes.fondo}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-6 flex flex-wrap items-baseline gap-3.5">
+                <p className="font-[family-name:var(--font-display)] text-3xl font-bold text-[var(--accent)] sm:text-4xl">
                   {formatCurrencyFromCents(product.priceCents)}
                 </p>
+                <span className="text-lg text-[var(--muted-foreground)] line-through">
+                  {formatCurrencyFromCents(Math.round(product.priceCents * 1.18))}
+                </span>
+                <span className="rounded-full bg-red-500/10 px-2.5 py-0.5 text-xs font-bold text-red-400">
+                  15% OFF
+                </span>
                 {lowStock ? (
-                  <span className="text-xs font-semibold uppercase tracking-wider text-amber-600">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-amber-600 block w-full sm:inline sm:w-auto">
                     ¡Quedan pocas unidades!
                   </span>
                 ) : null}
@@ -237,4 +285,58 @@ export default async function ProductDetailPage({
       <StickyAddToCart product={product} />
     </>
   );
+}
+
+function parseOlfactoryNotes(description: string) {
+  const desc = description.toLowerCase();
+  
+  const salidaRegex = /(?:notas de )?salida:\s*([^\n.]+)/i;
+  const corazonRegex = /(?:notas de )?(?:corazón|corazon|medio):\s*([^\n.]+)/i;
+  const fondoRegex = /(?:notas de )?(?:fondo|base):\s*([^\n.]+)/i;
+  
+  let salida = description.match(salidaRegex)?.[1]?.trim();
+  let corazon = description.match(corazonRegex)?.[1]?.trim();
+  let fondo = description.match(fondoRegex)?.[1]?.trim();
+  
+  if (!salida && !corazon && !fondo) {
+    const commonNotes = {
+      salida: ["limon", "limón", "bergamota", "mandarina", "naranja", "pomelo", "lavanda", "menta", "piña", "pina", "frutal", "cítrico", "citrico", "manzana", "neroli", "pimienta", "cardamomo", "jengibre"],
+      corazon: ["jazmin", "jazmín", "rosa", "orquidea", "orquídea", "canela", "coco", "azafran", "azafrán", "clavo", "nuez moscada", "geranio", "violeta", "iris", "salvia", "miel"],
+      fondo: ["vainilla", "sandalo", "sándalo", "ambar", "ámbar", "almizcle", "musk", "pachuli", "pachulí", "cedro", "cuero", "tabaco", "habas", "tonka", "madera", "musgo", "vetiver"]
+    };
+    
+    const detectedSalida: string[] = [];
+    const detectedCorazon: string[] = [];
+    const detectedFondo: string[] = [];
+    
+    commonNotes.salida.forEach(item => {
+      if (desc.includes(item) && !detectedSalida.includes(item)) {
+        detectedSalida.push(item.charAt(0).toUpperCase() + item.slice(1));
+      }
+    });
+    commonNotes.corazon.forEach(item => {
+      if (desc.includes(item) && !detectedCorazon.includes(item)) {
+        detectedCorazon.push(item.charAt(0).toUpperCase() + item.slice(1));
+      }
+    });
+    commonNotes.fondo.forEach(item => {
+      if (desc.includes(item) && !detectedFondo.includes(item)) {
+        detectedFondo.push(item.charAt(0).toUpperCase() + item.slice(1));
+      }
+    });
+    
+    if (detectedSalida.length > 0) salida = detectedSalida.slice(0, 3).join(", ");
+    if (detectedCorazon.length > 0) corazon = detectedCorazon.slice(0, 3).join(", ");
+    if (detectedFondo.length > 0) fondo = detectedFondo.slice(0, 3).join(", ");
+  }
+  
+  if (salida || corazon || fondo) {
+    return {
+      salida: salida || "Notas cítricas o frescas",
+      corazon: corazon || "Notas florales o especiadas",
+      fondo: fondo || "Maderas preciosas o ámbar"
+    };
+  }
+  
+  return null;
 }

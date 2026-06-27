@@ -277,6 +277,35 @@ export function ShopHeader({ storeName, whatsappHref, whatsappNumber, logoUrl, f
         </div>
       </header>
 
+      {/* Marquee Promotion Ticker */}
+      <div className="w-full bg-white py-0.5 overflow-hidden border-b border-[var(--border)] relative z-20">
+        <style dangerouslySetInnerHTML={{__html: `
+          @keyframes marqueeLoop {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-50%, 0, 0); }
+          }
+          .animate-marquee-loop {
+            display: inline-flex;
+            white-space: nowrap;
+            animation: marqueeLoop 36s linear infinite;
+          }
+        `}} />
+        <div className="flex w-max animate-marquee-loop">
+          <div className="flex gap-16 text-black text-[10px] font-black uppercase tracking-[0.2em]">
+            <span>✦ 15% DE DESCUENTO EN CUALQUIER PERFUME A ELECCIÓN ✦</span>
+            <span>✦ ENVÍOS GRATIS EN COMPRAS MAYORES A $80.000 ✦</span>
+            <span>✦ HASTA 3 CUOTAS SIN INTERÉS ✦</span>
+            <span>✦ IMPORTADOS & DECANT DE CALIDAD PREMIUM ✦</span>
+          </div>
+          <div className="flex gap-16 text-black text-[10px] font-black uppercase tracking-[0.2em] pl-16">
+            <span>✦ 15% DE DESCUENTO EN CUALQUIER PERFUME A ELECCIÓN ✦</span>
+            <span>✦ ENVÍOS GRATIS EN COMPRAS MAYORES A $80.000 ✦</span>
+            <span>✦ HASTA 3 CUOTAS SIN INTERÉS ✦</span>
+            <span>✦ IMPORTADOS & DECANT DE CALIDAD PREMIUM ✦</span>
+          </div>
+        </div>
+      </div>
+
       {/* ========== MENU DRAWER (slides from left) ========== */}
       {/* Backdrop */}
       <div
@@ -434,7 +463,9 @@ export function ShopHeader({ storeName, whatsappHref, whatsappNumber, logoUrl, f
       {/* Floating cart button below the hamburger menu button */}
       <button
         aria-label="Ver carrito"
-        className="fixed right-4 top-[72px] z-20 flex size-10 items-center justify-center rounded-full border border-[var(--border)] bg-black/90 text-[var(--foreground)] shadow-lg backdrop-blur-md transition-all hover:scale-105 active:scale-95 sm:right-6 sm:top-[80px]"
+        className={`fixed right-4 top-[72px] z-20 flex size-10 items-center justify-center rounded-full border border-[var(--border)] bg-black/90 text-[var(--foreground)] shadow-lg backdrop-blur-md transition-all hover:scale-105 active:scale-95 sm:right-6 sm:top-[80px] ${
+          cartBump ? "animate-cart-bounce border-[var(--accent)]/60 shadow-[0_0_15px_rgba(212,175,55,0.3)] bg-[var(--surface-strong)]" : ""
+        }`}
         onClick={openCart}
         type="button"
       >

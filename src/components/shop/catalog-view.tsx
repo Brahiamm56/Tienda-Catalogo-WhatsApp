@@ -19,6 +19,7 @@ export function CatalogView({ categories, products, initialQuery = "", showFavor
   const wishlistItems = useWishlistStore((state) => state.items);
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [activeGender, setActiveGender] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<"default" | "price-asc" | "price-desc" | "name">("default");
   const [showFilters, setShowFilters] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -49,6 +50,11 @@ export function CatalogView({ categories, products, initialQuery = "", showFavor
       result = result.filter((p) => p.category.slug === activeCategory);
     }
 
+    // Filter by gender
+    if (activeGender) {
+      result = result.filter((p) => p.gender === activeGender);
+    }
+
     // Sort
     switch (sortBy) {
       case "price-asc":
@@ -63,7 +69,7 @@ export function CatalogView({ categories, products, initialQuery = "", showFavor
     }
 
     return result;
-  }, [products, wishlistItems, showFavoritesOnly, searchQuery, activeCategory, sortBy]);
+  }, [products, wishlistItems, showFavoritesOnly, searchQuery, activeCategory, activeGender, sortBy]);
 
   const activeCategoryName = activeCategory
     ? categories.find((c) => c.slug === activeCategory)?.name ?? "Productos"
@@ -74,6 +80,17 @@ export function CatalogView({ categories, products, initialQuery = "", showFavor
     const baseProducts = showFavoritesOnly ? wishlistItems : products;
     for (const p of baseProducts) {
       counts[p.category.slug] = (counts[p.category.slug] || 0) + 1;
+    }
+    return counts;
+  }, [products, wishlistItems, showFavoritesOnly]);
+
+  const productCountByGender = useMemo(() => {
+    const counts: Record<string, number> = {};
+    const baseProducts = showFavoritesOnly ? wishlistItems : products;
+    for (const p of baseProducts) {
+      if (p.gender) {
+        counts[p.gender] = (counts[p.gender] || 0) + 1;
+      }
     }
     return counts;
   }, [products, wishlistItems, showFavoritesOnly]);
@@ -146,10 +163,10 @@ export function CatalogView({ categories, products, initialQuery = "", showFavor
                   onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
                   value={sortBy}
                 >
-                  <option value="default">Relevancia</option>
-                  <option value="price-asc">Precio: menor a mayor</option>
-                  <option value="price-desc">Precio: mayor a menor</option>
-                  <option value="name">Nombre A-Z</option>
+                  <option value="default" className="text-black bg-white">Relevancia</option>
+                  <option value="price-asc" className="text-black bg-white">Precio: menor a mayor</option>
+                  <option value="price-desc" className="text-black bg-white">Precio: mayor a menor</option>
+                  <option value="name" className="text-black bg-white">Nombre A-Z</option>
                 </select>
                 <ChevronDown className="pointer-events-none absolute right-2 top-1/2 size-3.5 -translate-y-1/2 text-[var(--muted-foreground)]" />
               </div>
@@ -158,9 +175,63 @@ export function CatalogView({ categories, products, initialQuery = "", showFavor
         </div>
       </div>
 
-      {/* Category chips — horizontally scrollable */}
-      <div className="border-b border-[var(--border)] bg-[var(--background)]">
-        <div className="mx-auto w-full max-w-7xl px-4 py-3 sm:px-6 lg:px-10">
+      {/* Gender & Category chips — horizontally scrollable */}
+      <div className="border-b border-[var(--border)] bg-[var(--background)] py-2.5 space-y-2.5">
+        {/* Gender chips */}
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10">
+          <div className="hide-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1 pb-0.5">
+            <button
+              type="button"
+              onClick={() => setActiveGender(null)}
+              className={`shrink-0 rounded-full border px-4 py-2 text-xs font-semibold tracking-wider uppercase transition-all duration-200 active:scale-95 sm:text-sm ${
+                activeGender === null
+                  ? "border-[var(--accent)]/40 bg-[var(--accent)]/10 text-[var(--accent)]"
+                  : "border-[var(--border)] bg-transparent text-[var(--muted-foreground)] hover:border-[var(--accent)]/30 hover:text-[var(--foreground)]"
+              }`}
+            >
+              Todos
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveGender(activeGender === "hombre" ? null : "hombre")}
+              className={`shrink-0 rounded-full border px-4 py-2 text-xs font-semibold tracking-wider uppercase transition-all duration-200 active:scale-95 sm:text-sm ${
+                activeGender === "hombre"
+                  ? "border-sky-500/40 bg-sky-500/10 text-sky-400 font-semibold"
+                  : "border-[var(--border)] bg-transparent text-[var(--muted-foreground)] hover:border-sky-500/30 hover:text-[var(--foreground)]"
+              }`}
+            >
+              Hombre
+              <span className="ml-1.5 opacity-60">{productCountByGender["hombre"] || 0}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveGender(activeGender === "mujer" ? null : "mujer")}
+              className={`shrink-0 rounded-full border px-4 py-2 text-xs font-semibold tracking-wider uppercase transition-all duration-200 active:scale-95 sm:text-sm ${
+                activeGender === "mujer"
+                  ? "border-pink-500/40 bg-pink-500/10 text-pink-400 font-semibold"
+                  : "border-[var(--border)] bg-transparent text-[var(--muted-foreground)] hover:border-pink-500/30 hover:text-[var(--foreground)]"
+              }`}
+            >
+              Mujer
+              <span className="ml-1.5 opacity-60">{productCountByGender["mujer"] || 0}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveGender(activeGender === "unisex" ? null : "unisex")}
+              className={`shrink-0 rounded-full border px-4 py-2 text-xs font-semibold tracking-wider uppercase transition-all duration-200 active:scale-95 sm:text-sm ${
+                activeGender === "unisex"
+                  ? "border-amber-500/40 bg-amber-500/10 text-amber-400 font-semibold"
+                  : "border-[var(--border)] bg-transparent text-[var(--muted-foreground)] hover:border-amber-500/30 hover:text-[var(--foreground)]"
+              }`}
+            >
+              Unisex
+              <span className="ml-1.5 opacity-60">{productCountByGender["unisex"] || 0}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Category chips */}
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10">
           <div
             ref={chipScrollRef}
             className="hide-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1 pb-0.5"
@@ -210,17 +281,38 @@ export function CatalogView({ categories, products, initialQuery = "", showFavor
       <div className="mx-auto w-full max-w-7xl px-4 pt-5 sm:px-6 lg:px-10">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            {activeCategoryName ? (
-              <div className="flex items-center gap-2">
+            {(activeCategoryName || activeGender) ? (
+              <div className="flex flex-wrap items-center gap-2">
                 <h2 className="font-[family-name:var(--font-display)] text-lg font-semibold tracking-tight sm:text-xl">
-                  {activeCategoryName}
+                  {activeCategoryName ? activeCategoryName : "Productos"}
+                  {activeCategoryName && activeGender ? " • " : ""}
+                  {activeGender ? (activeGender === "hombre" ? "Hombres" : activeGender === "mujer" ? "Mujeres" : "Unisex") : ""}
                 </h2>
+                {activeCategoryName && (
+                  <button
+                    className="flex items-center gap-1 rounded-full bg-[var(--foreground)]/5 px-2 py-0.5 text-[10px] font-medium text-[var(--muted-foreground)] transition hover:bg-[var(--foreground)]/10"
+                    onClick={() => setActiveCategory(null)}
+                  >
+                    Categoría <X className="size-3" />
+                  </button>
+                )}
+                {activeGender && (
+                  <button
+                    className="flex items-center gap-1 rounded-full bg-[var(--foreground)]/5 px-2 py-0.5 text-[10px] font-medium text-[var(--muted-foreground)] transition hover:bg-[var(--foreground)]/10"
+                    onClick={() => setActiveGender(null)}
+                  >
+                    Género <X className="size-3" />
+                  </button>
+                )}
                 <button
-                  className="flex items-center gap-1 rounded-full bg-[var(--foreground)]/5 px-2 py-0.5 text-[10px] font-medium text-[var(--muted-foreground)] transition hover:bg-[var(--foreground)]/10"
-                  onClick={() => setActiveCategory(null)}
+                  className="flex items-center gap-1 rounded-full bg-[var(--foreground)]/5 px-2.5 py-1 text-xs font-semibold text-[var(--accent)] transition hover:bg-[var(--foreground)]/10"
+                  onClick={() => {
+                    setActiveCategory(null);
+                    setActiveGender(null);
+                  }}
                   type="button"
                 >
-                  <X className="size-3" />
+                  <X className="size-3.5" />
                   Limpiar
                 </button>
               </div>

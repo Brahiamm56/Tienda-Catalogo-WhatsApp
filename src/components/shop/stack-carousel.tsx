@@ -259,9 +259,14 @@ function FlipbookCard({
               e.preventDefault();
             }}
           >
-            <p className="text-xs font-medium text-[var(--accent)]">
-              {formatCurrencyFromCents(product.priceCents)}
-            </p>
+            <div className="flex flex-wrap items-baseline gap-1">
+              <span className="text-xs font-semibold text-[var(--accent)]">
+                {formatCurrencyFromCents(product.priceCents)}
+              </span>
+              <span className="text-[9px] text-[var(--muted-foreground)] line-through">
+                {formatCurrencyFromCents(Math.round(product.priceCents * 1.18))}
+              </span>
+            </div>
             <AddToCartButton product={product} />
           </div>
         </div>
