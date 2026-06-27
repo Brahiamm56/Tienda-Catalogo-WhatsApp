@@ -10,6 +10,7 @@ type WhatsappItem = {
 export type CustomerDetails = {
   name: string;
   deliveryMethod: "envio" | "retiro";
+  address?: string;
   notes?: string;
 };
 
@@ -39,6 +40,9 @@ export function buildWhatsappLink(
     messageParts.push("*Mis datos:*");
     messageParts.push(`Nombre: ${customerDetails.name}`);
     messageParts.push(`Entrega: ${customerDetails.deliveryMethod === "envio" ? "Envío a domicilio" : "Retiro en local"}`);
+    if (customerDetails.deliveryMethod === "envio" && customerDetails.address) {
+      messageParts.push(`Dirección: ${customerDetails.address}`);
+    }
     if (customerDetails.notes) {
       messageParts.push(`Notas: ${customerDetails.notes}`);
     }

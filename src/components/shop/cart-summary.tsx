@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
+import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { buildWhatsappLink } from "@/lib/whatsapp";
@@ -33,7 +33,7 @@ export function CartSummary() {
     return (
       <div className="surface-panel flex min-h-[24rem] flex-col items-center justify-center rounded-[2.5rem] px-6 py-12 text-center">
         <div className="flex size-16 items-center justify-center rounded-full bg-[var(--background)]">
-          <ShoppingBag className="size-7 text-[var(--muted-foreground)]" />
+          <ShoppingCart className="size-7 text-[var(--muted-foreground)]" />
         </div>
         <p className="mt-4 font-[family-name:var(--font-display)] text-2xl font-semibold">
           Tu carrito está vacío

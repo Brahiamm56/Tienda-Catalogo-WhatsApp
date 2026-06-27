@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { Plus, ShoppingBag, PackagePlus } from "lucide-react";
+import { Plus, ShoppingCart, PackagePlus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const quickActions = [
   {
     href: "/admin/ventas?new=1",
     label: "Nueva venta",
-    icon: ShoppingBag,
+    icon: ShoppingCart,
     iconClass: "bg-[var(--surface-strong)] text-[var(--foreground)]",
   },
   {

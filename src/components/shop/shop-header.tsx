@@ -10,7 +10,7 @@ import {
   Menu,
   MessageCircleMore,
   Search,
-  ShoppingBag,
+  ShoppingCart,
   Tag,
   X,
 } from "lucide-react";
@@ -438,7 +438,7 @@ export function ShopHeader({ storeName, whatsappHref, whatsappNumber, logoUrl, f
         onClick={openCart}
         type="button"
       >
-        <ShoppingBag className="size-4.5 text-[var(--accent)]" />
+        <ShoppingCart className="size-4.5 text-[var(--accent)]" />
         {itemCount > 0 && (
           <span className={`absolute -right-1 -top-1 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-[var(--accent)] px-1.5 text-[9px] font-bold text-[var(--accent-ink)] ${cartBump ? "animate-badge-bounce" : ""}`}>
             {itemCount}

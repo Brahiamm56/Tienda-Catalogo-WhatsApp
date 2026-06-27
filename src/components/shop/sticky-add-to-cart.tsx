@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 
 import { useCartStore } from "@/store/cart";
 import { useToastStore } from "@/store/toast";
@@ -70,7 +70,7 @@ export function StickyAddToCart({ product }: StickyAddToCartProps) {
           style={{ borderRadius: "var(--btn-radius, 9999px)" }}
           type="button"
         >
-          <ShoppingBag className="size-3.5" />
+          <ShoppingCart className="size-3.5" />
           Comprar
         </button>
       </div>

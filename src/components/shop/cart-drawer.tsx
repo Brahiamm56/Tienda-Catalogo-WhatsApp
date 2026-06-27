@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft, Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react";
+import { ChevronLeft, Minus, Plus, ShoppingCart, Trash2, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -27,6 +27,7 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
   const [showCheckoutForm, setShowCheckoutForm] = useState(false);
   const [customerName, setCustomerName] = useState("");
   const [deliveryMethod, setDeliveryMethod] = useState<"envio" | "retiro">("retiro");
+  const [address, setAddress] = useState("");
   const [notes, setNotes] = useState("");
 
   // Persist checkout form data to localStorage
@@ -37,6 +38,7 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
         const data = JSON.parse(saved);
         if (data.customerName) setCustomerName(data.customerName);
         if (data.deliveryMethod) setDeliveryMethod(data.deliveryMethod);
+        if (data.address) setAddress(data.address);
         if (data.notes) setNotes(data.notes);
       }
     } catch {}
@@ -44,9 +46,9 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
 
   useEffect(() => {
     try {
-      localStorage.setItem("checkout-form", JSON.stringify({ customerName, deliveryMethod, notes }));
+      localStorage.setItem("checkout-form", JSON.stringify({ customerName, deliveryMethod, address, notes }));
     } catch {}
-  }, [customerName, deliveryMethod, notes]);
+  }, [customerName, deliveryMethod, address, notes]);
 
   const total = items.reduce((sum, item) => sum + item.priceCents * item.quantity, 0);
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -58,7 +60,7 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
             quantity: item.quantity,
             priceCents: item.priceCents,
           })),
-          { name: customerName, deliveryMethod, notes },
+          { name: customerName, deliveryMethod, address, notes },
           whatsappNumber
         )
       : "#";
@@ -112,7 +114,7 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
         {/* Header */}
         <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4">
           <div className="flex items-center gap-2.5">
-            <ShoppingBag className="size-5 text-[var(--foreground)]" />
+            <ShoppingCart className="size-5 text-[var(--foreground)]" />
             <h2 className="font-[family-name:var(--font-display)] text-lg font-light italic tracking-wide">
               Carrito
             </h2>
@@ -137,7 +139,7 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
               <div className="flex size-16 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)]">
-                <ShoppingBag className="size-7 text-[var(--muted-foreground)]" />
+                <ShoppingCart className="size-7 text-[var(--muted-foreground)]" />
               </div>
               <p className="mt-4 font-[family-name:var(--font-display)] text-xl font-light italic">
                 Tu carrito está vacío
@@ -187,6 +189,21 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
                   </button>
                 </div>
               </div>
+
+              {deliveryMethod === "envio" && (
+                <div className="animate-[fadeInUp_0.15s_ease-out] flex flex-col space-y-1">
+                  <label htmlFor="address" className="block text-sm font-semibold text-[var(--foreground)]">Dirección de Envío</label>
+                  <input 
+                    id="address" 
+                    type="text" 
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    className="w-full h-11 rounded-lg border border-[var(--border)] bg-[var(--surface-strong)] px-3 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--muted-foreground)] transition focus:border-[var(--accent)]/50" 
+                    placeholder="Ej: Av. Santa Fe 1234, Piso 3 Depto C" 
+                    required 
+                  />
+                </div>
+              )}
 
               <div>
                 <label htmlFor="notes" className="block text-sm font-semibold mb-1.5 text-[var(--foreground)]">Notas adicionales <span className="font-normal text-[var(--muted-foreground)]">(Opcional)</span></label>
@@ -320,18 +337,14 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
                 <Button onClick={() => setShowCheckoutForm(false)} variant="outline" className="w-12 shrink-0 px-0">
                   <ChevronLeft className="size-5" />
                 </Button>
-                <Button 
-                  asChild={customerName.trim() !== ""} 
-                  className="flex-1" 
-                  size="lg" 
-                  variant="accent" 
-                  disabled={!customerName.trim()}
-                >
-                  {customerName.trim() ? (
+                {(() => {
+                  const isFormValid = customerName.trim() !== "" && (deliveryMethod !== "envio" || address.trim() !== "");
+                  return isFormValid ? (
                     <a 
                       href={checkoutUrl} 
                       rel="noreferrer" 
                       target="_blank" 
+                      className="flex-1 flex h-12 items-center justify-center rounded-full bg-[var(--accent)] text-[var(--accent-fg,white)] text-base font-medium shadow-md hover:-translate-y-0.5 hover:bg-[var(--accent-strong)] hover:shadow-lg transition duration-200 text-center"
                       onClick={() => {
                         // Small delay before clearing cart and closing drawer
                         setTimeout(() => {
@@ -341,12 +354,17 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
                         }, 500);
                       }}
                     >
-                      Enviar a WhatsApp
+                      Finalizar pedido por WhatsApp
                     </a>
                   ) : (
-                    <span>Completar datos</span>
-                  )}
-                </Button>
+                    <button 
+                      className="flex-1 flex h-12 items-center justify-center rounded-full bg-[var(--accent)] text-[var(--accent-fg,white)] text-base font-medium opacity-50 cursor-not-allowed"
+                      disabled
+                    >
+                      Completar datos
+                    </button>
+                  );
+                })()}
               </div>
             )}
           </div>
