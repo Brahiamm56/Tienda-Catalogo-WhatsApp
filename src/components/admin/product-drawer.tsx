@@ -95,6 +95,7 @@ export function ProductDrawer({
               cloudinaryEnabled={cloudinaryEnabled}
               disabled={!databaseReady}
               disabledReason={!databaseReady ? "Conecta Neon para guardar cambios persistentes." : undefined}
+              onSuccess={onClose}
               pendingLabel={isCreate ? "Creando producto..." : "Guardando cambios..."}
               product={isCreate ? undefined : product ?? undefined}
               submitLabel={isCreate ? "Crear producto" : "Guardar cambios"}

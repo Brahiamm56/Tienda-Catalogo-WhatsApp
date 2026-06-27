@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useRef, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 
 import type { AdminFormState } from "@/actions/admin-state";
 import { initialAdminFormState } from "@/actions/admin-state";
@@ -18,6 +19,7 @@ type ProductFormProps = {
   cloudinaryEnabled: boolean;
   disabled?: boolean;
   disabledReason?: string;
+  onSuccess?: () => void;
   pendingLabel: string;
   product?: AdminProduct;
   submitLabel: string;
@@ -123,12 +125,15 @@ export function ProductForm({
   cloudinaryEnabled,
   disabled = false,
   disabledReason,
+  onSuccess,
   pendingLabel,
   product,
   submitLabel,
 }: ProductFormProps) {
   const formRef = useRef<HTMLFormElement | null>(null);
+  const router = useRouter();
   const [state, formAction] = useActionState(action, initialAdminFormState);
+  const lastHandledKey = useRef<number | undefined>(undefined);
   const defaultCategoryId = product?.categoryId ?? categories[0]?.id ?? "";
   const [createdCategories, setCreatedCategories] = useState<AdminCategory[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState(defaultCategoryId);
@@ -152,10 +157,15 @@ export function ProductForm({
       : product?.categoryId ?? availableCategories[0]?.id ?? "";
 
   useEffect(() => {
-    if (!product && state.status === "success") {
-      formRef.current?.reset();
+    if (state.status === "success" && state.submissionKey !== lastHandledKey.current) {
+      lastHandledKey.current = state.submissionKey;
+      if (!product) {
+        formRef.current?.reset();
+      }
+      router.refresh();
+      onSuccess?.();
     }
-  }, [product, state.status]);
+  }, [product, state.status, state.submissionKey, router, onSuccess]);
 
   return (
     <form action={formAction} className="space-y-5" ref={formRef}>
