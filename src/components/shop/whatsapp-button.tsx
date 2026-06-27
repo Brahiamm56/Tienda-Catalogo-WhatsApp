@@ -36,7 +36,7 @@ export function WhatsappFloatingButton({ whatsappHref }: WhatsappFloatingButtonP
   return (
     <a
       aria-label="Contactar por WhatsApp"
-      className="fixed bottom-6 right-4 z-20 flex size-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_6px_24px_rgba(37,211,102,0.35)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_32px_rgba(37,211,102,0.5)] sm:right-6 sm:size-[60px]"
+      className="fixed bottom-20 right-4 z-20 flex size-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_6px_24px_rgba(37,211,102,0.35)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_32px_rgba(37,211,102,0.5)] sm:bottom-6 sm:right-6 sm:size-[60px]"
       href={whatsappHref}
       rel="noreferrer"
       target="_blank"
