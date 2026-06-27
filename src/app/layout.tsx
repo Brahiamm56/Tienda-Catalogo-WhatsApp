@@ -20,10 +20,10 @@ const bodyFont = DM_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "Studio Catalog",
-    template: "%s | Studio Catalog",
+    default: "Lion",
+    template: "%s | Lion",
   },
-  description: "Plantilla reutilizable para tiendas catalogo con checkout directo por WhatsApp y panel de administracion.",
+  description: "Tienda catalogo con checkout directo por WhatsApp y panel de administracion.",
 };
 
 // NOTE: Custom theme colors (background, accent, radii) are intentionally NOT

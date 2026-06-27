@@ -10,6 +10,7 @@ import { ShopHeader } from "@/components/shop/shop-header";
 import { WhatsappFloatingButton } from "@/components/shop/whatsapp-button";
 import { StoreFooter } from "@/components/shop/store-footer";
 import { CategoryFilter } from "@/components/shop/category-filter";
+import { ScrollReveal } from "@/components/shop/scroll-reveal";
 import { sanitizeWhatsappNumber } from "@/lib/utils";
 import {
   getCatalogProducts,
@@ -121,6 +122,8 @@ export default async function Home() {
         {/* Gold divider */}
         <div className="gold-scan-line mx-auto w-full max-w-3xl" />
 
+
+
         {/* Products section */}
         <div className="space-y-6 pt-2 sm:space-y-8">
         {/* Category chips — filters products in-page */}
@@ -159,9 +162,9 @@ export default async function Home() {
                   <p className="text-[9px] font-medium uppercase tracking-[0.28em] text-[var(--accent)] animate-gold-shimmer">
                     Catálogo completo
                   </p>
-                  <h2 className="font-[family-name:var(--font-display)] text-xl font-light italic tracking-wide text-[var(--foreground)] sm:text-2xl md:text-3xl">
+                  <ScrollReveal as="h2" variant="word-by-word" className="font-[family-name:var(--font-display)] text-xl font-light italic tracking-wide text-[var(--foreground)] sm:text-2xl md:text-3xl">
                     Todas las fragancias
-                  </h2>
+                  </ScrollReveal>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">

@@ -509,3 +509,67 @@ main > section:nth-child(5) {
 		transition-duration: 0.01ms !important;
 	}
 }
+
+/* === Premium design enhancements === */
+
+/* Marquee infinite scroll */
+@keyframes marqueeScroll {
+	0% { transform: translateX(0); }
+	100% { transform: translateX(-100%); }
+}
+
+/* Hide native cursor on non-touch devices (custom cursor takes over) */
+@media (pointer: fine) {
+	.cursor-none-premium, .cursor-none-premium * {
+		cursor: none !important;
+	}
+}
+
+/* Magnetic button hover effect */
+[data-magnetic] {
+	transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+[data-magnetic]:hover {
+	transform: scale(1.05);
+}
+
+/* 3D tilt card container */
+.tilt-3d-container {
+	transform-style: preserve-3d;
+	perspective: 800px;
+}
+
+.tilt-3d-inner {
+	transform-style: preserve-3d;
+	transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+	will-change: transform;
+}
+
+/* Glare overlay for tilt cards */
+.tilt-glare {
+	pointer-events: none;
+	position: absolute;
+	inset: 0;
+	z-index: 20;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	border-radius: inherit;
+}
+
+/* Scroll reveal initial states */
+[data-reveal] {
+	opacity: 0;
+}
+
+[data-reveal-word] {
+	display: inline-block;
+}
+
+/* Page transition overlay */
+.page-transition-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 9995;
+	pointer-events: none;
+}

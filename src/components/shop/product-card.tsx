@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { AddToCartButton } from "@/components/shop/add-to-cart-button";
+import { Tilt3D } from "@/components/shop/tilt-3d";
 import { WishlistButton } from "@/components/shop/wishlist-button";
 import { type CatalogProduct } from "@/lib/catalog";
 import { formatCurrencyFromCents } from "@/lib/utils";
@@ -14,14 +15,15 @@ export function ProductCard({ product }: { product: CatalogProduct }) {
   const lowStock = product.stock > 0 && product.stock <= 3;
 
   return (
-    <article
-      className="group card-lift relative overflow-hidden border"
-      style={{
-        backgroundColor: "var(--card-bg)",
-        borderColor: "var(--card-border)",
-        borderRadius: "var(--card-radius, 0.75rem)",
-      }}
-    >
+    <Tilt3D maxTilt={10} className="group relative">
+      <article
+        className="card-lift relative overflow-hidden border"
+        style={{
+          backgroundColor: "var(--card-bg)",
+          borderColor: "var(--card-border)",
+          borderRadius: "var(--card-radius, 0.75rem)",
+        }}
+      >
       <Link
         className="relative block aspect-[3/4] overflow-hidden bg-[#0d0d0f]"
         href={`/productos/${product.slug}`}
@@ -93,6 +95,7 @@ export function ProductCard({ product }: { product: CatalogProduct }) {
         </div>
         <AddToCartButton product={product} />
       </div>
-    </article>
+      </article>
+    </Tilt3D>
   );
 }

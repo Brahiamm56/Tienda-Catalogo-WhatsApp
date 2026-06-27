@@ -286,7 +286,7 @@ async function main() {
     create: {
       key: "store",
       value: {
-        name: "Studio Catalog",
+        name: "Lion",
         description: "Tienda catálogo con checkout por WhatsApp.",
         whatsappNumber: "573001234567",
         currency: "COP",

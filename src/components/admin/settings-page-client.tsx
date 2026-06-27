@@ -111,7 +111,7 @@ export function SettingsPageClient({
               <div className="mt-5 space-y-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium" htmlFor="store-name">Nombre de tienda</label>
-                  <Input defaultValue={settings.name} id="store-name" name="name" placeholder="Studio Catalog" />
+                  <Input defaultValue={settings.name} id="store-name" name="name" placeholder="Lion" />
                   {getFieldError(state, "name") ? <p className="text-sm text-red-600">{getFieldError(state, "name")}</p> : null}
                 </div>
 

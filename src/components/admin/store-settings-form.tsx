@@ -75,7 +75,7 @@ export function StoreSettingsForm({
           <label className="text-sm font-medium" htmlFor="store-name">
             Nombre de tienda
           </label>
-          <Input defaultValue={settings.name} id="store-name" name="name" placeholder="Studio Catalog" />
+          <Input defaultValue={settings.name} id="store-name" name="name" placeholder="Lion" />
           {getFieldError(state, "name") ? (
             <p className="text-sm text-[var(--accent-strong)]">{getFieldError(state, "name")}</p>
           ) : null}

@@ -4,6 +4,9 @@ import { getStoreSettings } from "@/lib/catalog";
 import { storeSettingsSchema } from "@/schemas/settings";
 import { ToastContainer } from "@/components/shop/toast-container";
 import { ScrollToTop } from "@/components/shop/scroll-to-top";
+import { MagneticCursor } from "@/components/shop/magnetic-cursor";
+import { FilmGrain } from "@/components/shop/film-grain";
+import { PageTransition } from "@/components/shop/page-transition";
 
 export const dynamic = "force-dynamic";
 
@@ -97,6 +100,9 @@ export default async function ShopLayout({
             "linear-gradient(180deg, rgba(2,2,2,0.45) 0%, rgba(2,2,2,0.65) 40%, rgba(2,2,2,0.85) 100%)",
         }}
       />
+      <MagneticCursor />
+      <FilmGrain />
+      <PageTransition />
       {children}
       <ToastContainer />
       <ScrollToTop />
