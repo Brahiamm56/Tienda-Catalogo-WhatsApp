@@ -73,9 +73,9 @@ export function ProductDrawer({
         type="button"
       />
 
-      <aside className="animate-slide-in-right fixed inset-y-0 right-0 z-50 flex w-full flex-col border-l border-[var(--border)] bg-[var(--surface-strong)] shadow-[0_8px_40px_rgba(0,0,0,0.12)] sm:max-w-[620px]">
+      <aside className="animate-slide-in-right fixed inset-y-0 right-0 z-50 flex w-full flex-col border-l border-[var(--border)] bg-[#0c0c0e] shadow-[0_8px_40px_rgba(0,0,0,0.12)] sm:max-w-[620px]">
         <div className="flex h-full flex-col">
-          <div className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-[var(--border)] bg-[var(--surface-strong)] px-5 py-3 sm:px-6">
+          <div className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-[var(--border)] bg-[#0c0c0e] px-5 py-3 sm:px-6">
             <div className="flex items-center gap-3">
               <span className="rounded-full bg-[var(--accent)]/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--accent)]">
                 {isCreate ? "Crear" : "Editar"}
