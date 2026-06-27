@@ -43,8 +43,29 @@ export function ProductCard({ product }: { product: CatalogProduct }) {
         {/* Subtle bottom gradient for text legibility */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/70 to-transparent" />
 
+        {/* Gender Diagonal Ribbon */}
+        {product.gender === "mujer" && (
+          <div className="absolute left-0 top-0 z-20 h-14 w-14 overflow-hidden pointer-events-none">
+            <div className="absolute top-2 -left-5 w-18 -rotate-45 bg-pink-500 text-center text-[7px] font-bold uppercase tracking-widest text-white py-0.5 shadow-sm">
+              women
+            </div>
+          </div>
+        )}
+        {product.gender === "hombre" && (
+          <div className="absolute left-0 top-0 z-20 h-14 w-14 overflow-hidden pointer-events-none">
+            <div className="absolute top-2 -left-5 w-18 -rotate-45 bg-sky-600 text-center text-[7px] font-bold uppercase tracking-widest text-white py-0.5 shadow-sm">
+              men
+            </div>
+          </div>
+        )}
+
         {/* Status badges — top left */}
-        <div className="absolute left-2.5 top-2.5 z-10 flex flex-col items-start gap-1">
+        <div 
+          className="absolute left-2.5 z-10 flex flex-col items-start gap-1 transition-all"
+          style={{
+            top: product.gender === "mujer" || product.gender === "hombre" ? "1.85rem" : "0.625rem"
+          }}
+        >
           {product.isNew && (
             <span className="rounded-sm bg-[var(--accent)] px-1.5 py-0.5 text-[8px] font-semibold uppercase tracking-[0.12em] text-[var(--accent-ink)]">
               Nuevo

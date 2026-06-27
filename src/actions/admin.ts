@@ -159,6 +159,7 @@ function getProductPayload(formData: FormData) {
     slug: slugFromForm || toSlug(name),
     status: getString(formData, "status") || "PUBLISHED",
     stock: Number(getString(formData, "stock")),
+    gender: getString(formData, "gender") || null,
   };
 }
 
@@ -241,6 +242,7 @@ export async function createProductAction(_: AdminFormState, formData: FormData)
         slug: parsed.data.slug,
         status: parsed.data.status,
         stock: parsed.data.stock,
+        gender: parsed.data.gender || null,
       },
     });
 
@@ -297,6 +299,7 @@ export async function updateProductAction(_: AdminFormState, formData: FormData)
         slug: parsed.data.slug,
         status: parsed.data.status,
         stock: parsed.data.stock,
+        gender: parsed.data.gender || null,
       },
     });
 

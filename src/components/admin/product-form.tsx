@@ -133,6 +133,7 @@ export function ProductForm({
   const [createdCategories, setCreatedCategories] = useState<AdminCategory[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState(defaultCategoryId);
   const [showQuickAdd, setShowQuickAdd] = useState(false);
+  const [gender, setGender] = useState<string | null>(product?.gender ?? null);
   const imageFieldKey = product
     ? `${product.id}-${product.imagePublicId ?? product.image}`
     : `create-${state.submissionKey ?? 0}`;
@@ -295,6 +296,51 @@ export function ProductForm({
               <p className="text-sm text-[var(--accent-strong)]">{getFieldError(state, "status")}</p>
             ) : null}
           </div>
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium">
+            Género / Tipo de fragancia
+          </label>
+          <input type="hidden" name="gender" value={gender ?? ""} />
+          <div className="grid grid-cols-3 gap-2">
+            <button
+              type="button"
+              onClick={() => setGender(gender === "hombre" ? null : "hombre")}
+              className={`flex h-11 items-center justify-center rounded-xl border text-sm font-medium transition ${
+                gender === "hombre"
+                  ? "border-sky-500/40 bg-sky-500/10 text-sky-400 font-semibold"
+                  : "border-[var(--border)] bg-transparent text-[var(--muted-foreground)] hover:border-sky-500/20 hover:text-[var(--foreground)]"
+              }`}
+            >
+              Hombre (Men)
+            </button>
+            <button
+              type="button"
+              onClick={() => setGender(gender === "mujer" ? null : "mujer")}
+              className={`flex h-11 items-center justify-center rounded-xl border text-sm font-medium transition ${
+                gender === "mujer"
+                  ? "border-pink-500/40 bg-pink-500/10 text-pink-400 font-semibold"
+                  : "border-[var(--border)] bg-transparent text-[var(--muted-foreground)] hover:border-pink-500/20 hover:text-[var(--foreground)]"
+              }`}
+            >
+              Mujer (Women)
+            </button>
+            <button
+              type="button"
+              onClick={() => setGender(gender === "unisex" ? null : "unisex")}
+              className={`flex h-11 items-center justify-center rounded-xl border text-sm font-medium transition ${
+                gender === "unisex"
+                  ? "border-amber-500/40 bg-amber-500/10 text-amber-400 font-semibold"
+                  : "border-[var(--border)] bg-transparent text-[var(--muted-foreground)] hover:border-amber-500/20 hover:text-[var(--foreground)]"
+              }`}
+            >
+              Unisex
+            </button>
+          </div>
+          {getFieldError(state, "gender") ? (
+            <p className="text-sm text-[var(--accent-strong)]">{getFieldError(state, "gender")}</p>
+          ) : null}
         </div>
 
         <div className="space-y-2">

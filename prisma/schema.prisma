@@ -49,6 +49,7 @@ model Product {
   sku         String?        @unique
   featured    Boolean        @default(false)
   status      ProductStatus  @default(DRAFT)
+  gender      String?
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
   categoryId  String

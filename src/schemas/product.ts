@@ -31,6 +31,7 @@ export const productSchema = z.object({
   })).optional(),
   sku: z.string().trim().max(64).optional().or(z.literal("")),
   status: productStatusSchema.default("PUBLISHED"),
+  gender: z.string().optional().nullable().or(z.literal("")),
 });
 
 export type ProductInput = z.infer<typeof productSchema>;

@@ -19,6 +19,7 @@ export type CatalogProduct = {
   images?: { url: string; alt: string }[];
   accent: string;
   isNew?: boolean;
+  gender?: string | null;
 };
 
 export type CatalogCategory = {
@@ -123,6 +124,7 @@ function mapProduct(product: {
   category: { name: string; slug: string };
   images: { url: string }[];
   createdAt?: Date;
+  gender?: string | null;
 }): CatalogProduct {
   const NEW_THRESHOLD_MS = 14 * 24 * 60 * 60 * 1000;
   const isNew = product.createdAt
@@ -140,6 +142,7 @@ function mapProduct(product: {
     image: product.images[0]?.url ?? demoProducts[0].image,
     accent: demoProducts.find((item) => item.slug === product.slug)?.accent ?? demoProducts[0].accent,
     isNew,
+    gender: product.gender,
   };
 }
 
@@ -227,6 +230,7 @@ export async function getProductBySlug(slug: string): Promise<CatalogProduct | n
       })),
       accent,
       isNew,
+      gender: product.gender,
     };
   } catch {
     const products = await getCatalogProducts();

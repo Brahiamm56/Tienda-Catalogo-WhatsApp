@@ -84,6 +84,7 @@ export async function getAdminProducts() {
           images: product.images.map((img) => ({ url: img.url, alt: img.alt, publicId: img.publicId })),
           sku: product.sku,
           status: product.status,
+          gender: product.gender,
           createdAt: product.createdAt,
           updatedAt: product.updatedAt,
           accent: fallback.find((item) => item.slug === product.slug)?.accent ?? fallback[0]?.accent ?? "from-[#f6d0c7] via-[#fff8f5] to-[#d9ece8]",
