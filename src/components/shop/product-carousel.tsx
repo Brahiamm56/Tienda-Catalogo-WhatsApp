@@ -15,13 +15,21 @@ type ProductCarouselProps = {
   href?: string;
   products: CatalogProduct[];
   title: string;
+  rows?: 1 | 2;
 };
 
-export function ProductCarousel({ badge, href, products, title }: ProductCarouselProps) {
+export function ProductCarousel({ badge, href, products, title, rows = 1 }: ProductCarouselProps) {
   const scrollerRef = useRef<HTMLDivElement | null>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const pairedProducts: CatalogProduct[][] = [];
+  if (rows === 2) {
+    for (let i = 0; i < products.length; i += 2) {
+      pairedProducts.push(products.slice(i, i + 2));
+    }
+  }
 
   const sectionRef = useGsapContext<HTMLElement>((self) => {
     const q = self.selector || gsap.utils.selector(sectionRef);
@@ -51,7 +59,7 @@ export function ProductCarousel({ badge, href, products, title }: ProductCarouse
     const trackEl = q("[data-anim='carousel-track']")[0];
     if (trackEl) {
       gsap.fromTo(
-        q("[data-anim='carousel-track'] > article"),
+        q("[data-anim='carousel-track'] article"),
         { y: 32, opacity: 0 },
         {
           y: 0,
@@ -81,8 +89,9 @@ export function ProductCarousel({ badge, href, products, title }: ProductCarouse
     const cardWidth = el.querySelector("article")?.offsetWidth ?? 200;
     const gap = 12;
     const idx = Math.round(el.scrollLeft / (cardWidth + gap));
-    setActiveIndex(Math.min(idx, products.length - 1));
-  }, [products.length]);
+    const maxIdx = rows === 2 ? pairedProducts.length - 1 : products.length - 1;
+    setActiveIndex(Math.min(idx, maxIdx));
+  }, [products.length, rows, pairedProducts.length]);
 
   useEffect(() => {
     const el = scrollerRef.current;
@@ -101,12 +110,12 @@ export function ProductCarousel({ badge, href, products, title }: ProductCarouse
     if (!el) return;
     const cardWidth = el.querySelector("article")?.offsetWidth ?? 200;
     const gap = 12;
-    const distance = (cardWidth + gap) * 2 * (direction === "left" ? -1 : 1);
+    const distance = (cardWidth + gap) * (direction === "left" ? -1 : 1);
     el.scrollBy({ left: distance, behavior: "smooth" });
   };
 
   // Number of dots to show (total visible "pages")
-  const totalDots = Math.max(1, products.length - 1);
+  const totalDots = rows === 2 ? Math.max(1, pairedProducts.length - 1) : Math.max(1, products.length - 1);
 
   return (
     <section
@@ -159,13 +168,21 @@ export function ProductCarousel({ badge, href, products, title }: ProductCarouse
         className="carousel-scroll flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth pb-4 sm:gap-4"
         ref={scrollerRef}
       >
-        {products.map((product) => (
-          <CarouselCard key={product.id} product={product} />
-        ))}
+        {rows === 2
+          ? pairedProducts.map((pair, index) => (
+              <div key={index} className="flex flex-col gap-3 sm:gap-4 shrink-0">
+                {pair.map((product) => (
+                  <CarouselCard key={product.id} product={product} />
+                ))}
+              </div>
+            ))
+          : products.map((product) => (
+              <CarouselCard key={product.id} product={product} />
+            ))}
       </div>
 
       {/* Scroll indicator dots — mobile only */}
-      {products.length > 2 ? (
+      {(rows === 2 ? pairedProducts.length > 2 : products.length > 2) ? (
         <div className="flex justify-center gap-1.5 sm:hidden">
           {Array.from({ length: totalDots }).map((_, i) => (
             <span
@@ -202,6 +219,23 @@ function CarouselCard({ product }: { product: CatalogProduct }) {
           src={product.image}
         />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent" />
+        
+        {/* Gender Diagonal Ribbon — top right */}
+        {product.gender === "mujer" && (
+          <div className="absolute right-0 top-0 z-20 h-14 w-14 overflow-hidden pointer-events-none">
+            <div className="absolute top-2 -right-5 w-18 rotate-45 bg-pink-500/20 text-center text-[7px] font-extrabold uppercase tracking-[0.16em] text-pink-300 py-0.5 border-b border-pink-500/30 backdrop-blur-[2px] shadow-sm">
+              women
+            </div>
+          </div>
+        )}
+        {product.gender === "hombre" && (
+          <div className="absolute right-0 top-0 z-20 h-14 w-14 overflow-hidden pointer-events-none">
+            <div className="absolute top-2 -right-5 w-18 rotate-45 bg-sky-500/20 text-center text-[7px] font-extrabold uppercase tracking-[0.16em] text-sky-300 py-0.5 border-b border-sky-500/30 backdrop-blur-[2px] shadow-sm">
+              men
+            </div>
+          </div>
+        )}
+
         {product.featured ? (
           <span className="absolute left-2 top-2 rounded-sm bg-[var(--accent)] px-1.5 py-0.5 text-[8px] font-semibold uppercase tracking-[0.12em] text-[var(--accent-ink)]">
             Destacado
