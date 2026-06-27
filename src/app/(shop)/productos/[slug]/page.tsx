@@ -212,7 +212,6 @@ export default async function ProductDetailPage({
               href="/productos"
               products={relatedProducts}
               title="También te puede gustar"
-              rows={2}
             />
           </div>
         ) : null}

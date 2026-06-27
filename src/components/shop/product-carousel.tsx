@@ -15,21 +15,13 @@ type ProductCarouselProps = {
   href?: string;
   products: CatalogProduct[];
   title: string;
-  rows?: 1 | 2;
 };
 
-export function ProductCarousel({ badge, href, products, title, rows = 1 }: ProductCarouselProps) {
+export function ProductCarousel({ badge, href, products, title }: ProductCarouselProps) {
   const scrollerRef = useRef<HTMLDivElement | null>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
-
-  const pairedProducts: CatalogProduct[][] = [];
-  if (rows === 2) {
-    for (let i = 0; i < products.length; i += 2) {
-      pairedProducts.push(products.slice(i, i + 2));
-    }
-  }
 
   const sectionRef = useGsapContext<HTMLElement>((self) => {
     const q = self.selector || gsap.utils.selector(sectionRef);
@@ -89,9 +81,8 @@ export function ProductCarousel({ badge, href, products, title, rows = 1 }: Prod
     const cardWidth = el.querySelector("article")?.offsetWidth ?? 200;
     const gap = 12;
     const idx = Math.round(el.scrollLeft / (cardWidth + gap));
-    const maxIdx = rows === 2 ? pairedProducts.length - 1 : products.length - 1;
-    setActiveIndex(Math.min(idx, maxIdx));
-  }, [products.length, rows, pairedProducts.length]);
+    setActiveIndex(Math.min(idx, products.length - 1));
+  }, [products.length]);
 
   useEffect(() => {
     const el = scrollerRef.current;
@@ -115,7 +106,7 @@ export function ProductCarousel({ badge, href, products, title, rows = 1 }: Prod
   };
 
   // Number of dots to show (total visible "pages")
-  const totalDots = rows === 2 ? Math.max(1, pairedProducts.length - 1) : Math.max(1, products.length - 1);
+  const totalDots = Math.max(1, products.length - 1);
 
   return (
     <section
@@ -168,21 +159,13 @@ export function ProductCarousel({ badge, href, products, title, rows = 1 }: Prod
         className="carousel-scroll flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth pb-4 sm:gap-4"
         ref={scrollerRef}
       >
-        {rows === 2
-          ? pairedProducts.map((pair, index) => (
-              <div key={index} className="flex flex-col gap-3 sm:gap-4 shrink-0">
-                {pair.map((product) => (
-                  <CarouselCard key={product.id} product={product} />
-                ))}
-              </div>
-            ))
-          : products.map((product) => (
-              <CarouselCard key={product.id} product={product} />
-            ))}
+        {products.map((product) => (
+          <CarouselCard key={product.id} product={product} />
+        ))}
       </div>
 
       {/* Scroll indicator dots — mobile only */}
-      {(rows === 2 ? pairedProducts.length > 2 : products.length > 2) ? (
+      {products.length > 2 ? (
         <div className="flex justify-center gap-1.5 sm:hidden">
           {Array.from({ length: totalDots }).map((_, i) => (
             <span
