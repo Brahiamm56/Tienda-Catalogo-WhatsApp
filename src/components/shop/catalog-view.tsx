@@ -121,6 +121,7 @@ export function CatalogView({ categories, products, initialQuery = "", showFavor
               <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-[var(--muted-foreground)]" />
               <input
                 ref={searchInputRef}
+                aria-label="Buscar productos"
                 className="h-11 w-full rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] pl-10 pr-10 text-sm text-[var(--foreground)] outline-none transition-all duration-200 placeholder:text-[var(--muted-foreground)] focus:border-[var(--accent)]/50"
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Buscar productos..."
@@ -129,6 +130,7 @@ export function CatalogView({ categories, products, initialQuery = "", showFavor
               />
               {searchQuery && (
                 <button
+                  aria-label="Limpiar búsqueda"
                   className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-0.5 text-[var(--muted-foreground)] transition hover:bg-[var(--background)] hover:text-[var(--foreground)]"
                   onClick={() => setSearchQuery("")}
                   type="button"
@@ -140,6 +142,8 @@ export function CatalogView({ categories, products, initialQuery = "", showFavor
 
             {/* Sort / filter toggle */}
             <button
+              aria-label="Mostrar filtros"
+              aria-expanded={showFilters}
               className={`flex h-11 items-center gap-1.5 rounded-2xl border px-3.5 text-sm font-medium transition-all duration-200 ${
                 showFilters
                   ? "border-[var(--accent)] bg-[var(--accent)]/10 text-[var(--accent)]"

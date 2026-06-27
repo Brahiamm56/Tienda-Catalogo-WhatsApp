@@ -30,7 +30,16 @@ function isAllowedOrigin(request: Request): boolean {
   }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  const rl = rateLimit({
+    key: `products:list:${getClientIp(request)}`,
+    limit: 60,
+    windowMs: 60_000,
+  });
+  if (!rl.success) {
+    return rateLimitResponse(rl, "Demasiadas consultas al catálogo. Por favor intentá de nuevo en un minuto.");
+  }
+
   const products = await getCatalogProducts();
   return NextResponse.json({ products });
 }

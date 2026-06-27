@@ -19,8 +19,13 @@ interface ProductGalleryProps {
 
 export function ProductGallery({ images, accent, autoplayMs = 4500 }: ProductGalleryProps) {
   const [index, setIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const total = images.length;
   const hasMultiple = total > 1;
+
+  // Minimum swipe distance to register (in px)
+  const minSwipeDistance = 50;
 
   useEffect(() => {
     if (!hasMultiple) return;
@@ -34,6 +39,28 @@ export function ProductGallery({ images, accent, autoplayMs = 4500 }: ProductGal
 
   const goTo = (next: number) => setIndex(((next % total) + total) % total);
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      goTo(index + 1);
+    } else if (isRightSwipe) {
+      goTo(index - 1);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <div
@@ -41,7 +68,12 @@ export function ProductGallery({ images, accent, autoplayMs = 4500 }: ProductGal
           "relative overflow-hidden rounded-2xl",
         )}
       >
-        <div className="relative aspect-[3/4] w-full bg-[#0a0a0c]">
+        <div
+          className="relative aspect-[3/4] w-full bg-[#0a0a0c]"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           {images.map((img, i) => (
             <Image
               key={img.url + i}

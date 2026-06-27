@@ -9,7 +9,11 @@ export function StickyHomeCTA() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setVisible(window.scrollY > 500);
+      const scrollY = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight;
+      const winHeight = window.innerHeight;
+      const nearBottom = scrollY + winHeight > docHeight - 300;
+      setVisible(scrollY > 500 && !nearBottom);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -17,7 +21,7 @@ export function StickyHomeCTA() {
 
   return (
     <div
-      className={`fixed inset-x-0 z-30 flex justify-center px-4 transition-all duration-300 sm:hidden ${
+      className={`fixed inset-x-0 z-20 flex justify-center px-4 transition-all duration-300 sm:hidden ${
         visible
           ? "bottom-[calc(env(safe-area-inset-bottom)+1rem)] translate-y-0 opacity-100"
           : "pointer-events-none bottom-[calc(env(safe-area-inset-bottom)+1rem)] translate-y-8 opacity-0"

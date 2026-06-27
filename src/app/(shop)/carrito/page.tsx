@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { ChevronRight, Home } from "lucide-react";
 
 import { ShopHeader } from "@/components/shop/shop-header";
@@ -7,6 +8,33 @@ import { StoreFooter } from "@/components/shop/store-footer";
 import { CartSummary } from "@/components/shop/cart-summary";
 import { sanitizeWhatsappNumber } from "@/lib/utils";
 import { getStoreSettings } from "@/lib/catalog";
+import { siteConfig } from "@/lib/site-config";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getStoreSettings();
+  const title = `Carrito de Compras | ${settings.name}`;
+  const description = `Revisa tu pedido y finaliza la compra por WhatsApp en ${settings.name}.`;
+  const url = `${siteConfig.appUrl}/carrito`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      type: "website",
+      locale: "es_CO",
+      url,
+      siteName: settings.name,
+      title,
+      description,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
+}
 
 export default async function CartPage() {
   const settings = await getStoreSettings();
@@ -23,7 +51,7 @@ export default async function CartPage() {
         freeShippingThresholdCents={settings.freeShippingThresholdCents}
       />
 
-      <main className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 pb-28 pt-6 sm:px-6 sm:pb-12 lg:px-10">
+      <main id="main-content" className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 pb-28 pt-6 sm:px-6 sm:pb-12 lg:px-10">
         {/* Breadcrumbs */}
         <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-[var(--muted-foreground)]">
           <Link href="/" className="flex items-center gap-1 transition hover:text-[var(--foreground)]">

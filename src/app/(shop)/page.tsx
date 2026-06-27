@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import type { Metadata } from "next";
 
 import { ProductCard } from "@/components/shop/product-card";
 import { ProductCarousel } from "@/components/shop/product-carousel";
@@ -11,6 +12,7 @@ import { WhatsappFloatingButton } from "@/components/shop/whatsapp-button";
 import { StoreFooter } from "@/components/shop/store-footer";
 import { CategoryFilter } from "@/components/shop/category-filter";
 import { ScrollReveal } from "@/components/shop/scroll-reveal";
+import { JsonLd } from "@/components/shop/json-ld";
 import { sanitizeWhatsappNumber } from "@/lib/utils";
 import {
   getCatalogProducts,
@@ -19,6 +21,13 @@ import {
   getRecentProducts,
   getStoreSettings,
 } from "@/lib/catalog";
+import { siteConfig } from "@/lib/site-config";
+import {
+  buildOrganizationSchema,
+  buildWebsiteSchema,
+  buildItemListSchema,
+  buildFaqSchema,
+} from "@/lib/seo";
 
 type PerfumeMeta = { name: string; brand: string; href?: string };
 
@@ -90,6 +99,32 @@ function getPerfumeShowcaseData(allProducts: any[]) {
   };
 }
 
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getStoreSettings();
+  const title = `${settings.name} — Catálogo de Perfumes por WhatsApp`;
+  const description = settings.description;
+  const url = siteConfig.appUrl;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      type: "website",
+      locale: "es_CO",
+      url,
+      siteName: settings.name,
+      title,
+      description,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
+}
+
 export default async function Home() {
   const [featured, recent, allProducts, categories, settings] = await Promise.all([
     getFeaturedProducts(),
@@ -101,8 +136,14 @@ export default async function Home() {
 
   const whatsappHref = `https://wa.me/${sanitizeWhatsappNumber(settings.whatsappNumber)}`;
 
+  const orgSchema = buildOrganizationSchema(settings);
+  const websiteSchema = buildWebsiteSchema(settings);
+  const itemListSchema = buildItemListSchema(allProducts, settings);
+  const faqSchema = buildFaqSchema();
+
   return (
     <>
+      <JsonLd data={[orgSchema, websiteSchema, itemListSchema, faqSchema]} />
       <ShopHeader
         logoUrl={settings.logoUrl}
         storeName={settings.name}
@@ -111,7 +152,7 @@ export default async function Home() {
         freeShippingThresholdCents={settings.freeShippingThresholdCents}
       />
 
-      <main className="pb-16 sm:pb-12">
+      <main id="main-content" className="pb-16 sm:pb-12">
         {/* 3D Perfume hero showcase */}
         {/* Auto-loaded from public/perfumes/ — edit metadata.json to set names & brands */}
         <PerfumeShowcase {...getPerfumeShowcaseData(allProducts)} />
@@ -168,8 +209,8 @@ export default async function Home() {
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
-                {allProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                {allProducts.map((product, index) => (
+                  <ProductCard key={product.id} product={product} priority={index < 4} />
                 ))}
               </div>
             </section>

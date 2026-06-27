@@ -7,6 +7,7 @@ import { ScrollToTop } from "@/components/shop/scroll-to-top";
 import { MagneticCursor } from "@/components/shop/magnetic-cursor";
 import { FilmGrain } from "@/components/shop/film-grain";
 import { PageTransition } from "@/components/shop/page-transition";
+import { FaqChat } from "@/components/shop/faq-chat";
 
 export const dynamic = "force-dynamic";
 
@@ -106,6 +107,7 @@ export default async function ShopLayout({
       {children}
       <ToastContainer />
       <ScrollToTop />
+      <FaqChat />
     </div>
   );
 }

@@ -165,6 +165,15 @@ export function ShopHeader({ storeName, whatsappHref, whatsappNumber, logoUrl, f
               <span className="font-[family-name:var(--font-display)] text-base font-semibold tracking-[0.12em] text-[var(--foreground)] sm:text-xl">
                 {storeName}
               </span>
+              <span className="inline-flex items-center gap-1 rounded-full border border-[var(--accent)]/25 bg-[var(--accent)]/8 px-1.5 py-0.5">
+                <svg className="size-3.5 rounded-full" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <circle cx="12" cy="12" r="12" fill="#74ACDF" />
+                  <rect x="0" y="8" width="24" height="8" fill="#FFFFFF" />
+                  <circle cx="12" cy="12" r="3.2" fill="#F6B40E" />
+                  <circle cx="12" cy="12" r="1.4" fill="#843C0E" />
+                </svg>
+                <span className="text-[8px] font-bold uppercase tracking-[0.14em] text-[var(--accent)]">AR</span>
+              </span>
             </Link>
           </div>
 
@@ -205,6 +214,7 @@ export function ShopHeader({ storeName, whatsappHref, whatsappNumber, logoUrl, f
               <div className="relative flex-1">
                 <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[var(--muted-foreground)]" />
                 <input
+                  aria-label="Buscar perfume"
                   className="h-10 w-full rounded-lg border border-[var(--border)] bg-[var(--surface-strong)] pl-9 pr-4 text-sm text-[var(--foreground)] outline-none placeholder:text-[var(--muted-foreground)] transition focus:border-[var(--accent)]/50 focus:bg-[rgba(255,255,255,0.05)]"
                   placeholder="Buscar perfume..."
                   ref={searchInputRef}
@@ -322,6 +332,7 @@ export function ShopHeader({ storeName, whatsappHref, whatsappNumber, logoUrl, f
           menuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         role="dialog"
+        aria-modal="true"
       >
         {/* Drawer header */}
         <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4">
@@ -337,6 +348,15 @@ export function ShopHeader({ storeName, whatsappHref, whatsappNumber, logoUrl, f
             )}
             <span className="font-[family-name:var(--font-display)] text-base font-light italic tracking-[0.16em] text-[var(--foreground)]">
               {storeName}
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-full border border-[var(--accent)]/25 bg-[var(--accent)]/8 px-1.5 py-0.5">
+              <svg className="size-3.5 rounded-full" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="12" cy="12" r="12" fill="#74ACDF" />
+                <rect x="0" y="8" width="24" height="8" fill="#FFFFFF" />
+                <circle cx="12" cy="12" r="3.2" fill="#F6B40E" />
+                <circle cx="12" cy="12" r="1.4" fill="#843C0E" />
+              </svg>
+              <span className="text-[8px] font-bold uppercase tracking-[0.14em] text-[var(--accent)]">AR</span>
             </span>
           </div>
           <button
@@ -373,7 +393,9 @@ export function ShopHeader({ storeName, whatsappHref, whatsappNumber, logoUrl, f
                         {link.label}
                       </Link>
                       <button
+                        aria-label="Desplegar categorías"
                         className="p-3 text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-transform duration-200"
+                        aria-expanded={categoriesExpanded}
                         onClick={(e) => {
                           e.stopPropagation();
                           e.preventDefault();

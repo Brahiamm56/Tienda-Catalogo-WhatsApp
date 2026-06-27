@@ -152,3 +152,39 @@ export async function updateSaleStatusAction(saleId: string, nextStatus: "PENDIN
     logAndMaskError("update-sale-status", error, "No fue posible actualizar el estado.");
   }
 }
+
+export async function recordSaleIntentAction(data: {
+  customerName: string;
+  deliveryMethod: string;
+  notes?: string;
+  items: { productId: string | null; name: string; priceCents: number; quantity: number }[];
+  totalCents: number;
+}) {
+  if (!isDatabaseConfigured()) return null;
+
+  try {
+    const sale = await prisma.sale.create({
+      data: {
+        customerName: data.customerName,
+        deliveryMethod: data.deliveryMethod === "envio" ? "Envío a domicilio" : "Retiro en local",
+        notes: data.notes || null,
+        status: "PENDING",
+        paymentMethod: "TRANSFER",
+        totalCents: data.totalCents,
+        items: {
+          create: data.items.map((item) => ({
+            productId: item.productId,
+            name: item.name,
+            priceCents: item.priceCents,
+            quantity: item.quantity,
+          })),
+        },
+      },
+    });
+    return sale.id;
+  } catch (error) {
+    console.error("Error recording sale intent:", error);
+    return null;
+  }
+}
+

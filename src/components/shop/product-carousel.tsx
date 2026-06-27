@@ -132,7 +132,7 @@ export function ProductCarousel({ badge, href, products, title }: ProductCarouse
           <div className="hidden gap-1 sm:flex">
             <button
               aria-label="Desplazar a la izquierda"
-              className={`flex size-8 items-center justify-center rounded-full border border-[var(--border)] text-[var(--muted-foreground)] transition hover:border-[var(--accent)]/30 hover:text-[var(--accent)] ${
+              className={`flex size-9 items-center justify-center rounded-full border border-[var(--border)] text-[var(--muted-foreground)] transition hover:border-[var(--accent)]/30 hover:text-[var(--accent)] ${
                 !canScrollLeft ? "pointer-events-none opacity-20" : ""
               }`}
               onClick={() => scroll("left")}
@@ -142,7 +142,7 @@ export function ProductCarousel({ badge, href, products, title }: ProductCarouse
             </button>
             <button
               aria-label="Desplazar a la derecha"
-              className={`flex size-8 items-center justify-center rounded-full border border-[var(--border)] text-[var(--muted-foreground)] transition hover:border-[var(--accent)]/30 hover:text-[var(--accent)] ${
+              className={`flex size-9 items-center justify-center rounded-full border border-[var(--border)] text-[var(--muted-foreground)] transition hover:border-[var(--accent)]/30 hover:text-[var(--accent)] ${
                 !canScrollRight ? "pointer-events-none opacity-20" : ""
               }`}
               onClick={() => scroll("right")}
@@ -198,6 +198,7 @@ function CarouselCard({ product }: { product: CatalogProduct }) {
           alt={product.name}
           className="object-contain p-2 transition duration-700 group-hover:scale-[1.08]"
           fill
+          loading="lazy"
           sizes="(max-width: 640px) 46vw, (max-width: 768px) 220px, 280px"
           src={product.image}
         />

@@ -26,7 +26,7 @@ export function WishlistButton({
       <button
         aria-label="Agregar a favoritos"
         className={cn(
-          "flex size-8 items-center justify-center rounded-full bg-black/50 text-[var(--muted-foreground)] backdrop-blur-md transition-all hover:scale-110 sm:size-9",
+          "flex size-9 items-center justify-center rounded-full bg-black/50 text-[var(--muted-foreground)] backdrop-blur-md transition-all hover:scale-110 sm:size-10",
           className,
         )}
         type="button"
@@ -40,7 +40,7 @@ export function WishlistButton({
     <button
       aria-label={isInWishlist ? "Quitar de favoritos" : "Agregar a favoritos"}
       className={cn(
-        "flex size-8 items-center justify-center rounded-full bg-black/50 backdrop-blur-md transition-all hover:scale-110 sm:size-9",
+        "flex size-9 items-center justify-center rounded-full bg-black/50 backdrop-blur-md transition-all hover:scale-110 sm:size-10",
         isInWishlist ? "text-red-500" : "text-[var(--muted-foreground)] hover:text-red-500",
         className,
       )}

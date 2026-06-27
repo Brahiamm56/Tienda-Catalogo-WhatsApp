@@ -188,6 +188,7 @@ function FlipbookCard({
           alt={product.name}
           className="object-contain p-2 transition duration-700 group-hover:scale-[1.08]"
           fill
+          loading="lazy"
           sizes="(max-width: 640px) 44vw, 240px"
           src={product.image}
         />

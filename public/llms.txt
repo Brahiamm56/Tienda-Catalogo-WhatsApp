@@ -1,0 +1,38 @@
+# Lion — Catálogo de Perfumes
+
+> Tienda de perfumes con catálogo online y checkout directo por WhatsApp. Fragancias originales, perfumes árabes y unisex a precios accesibles.
+
+## Sobre la tienda
+
+Lion es una tienda online de perfumes que permite explorar el catálogo, comparar fragancias y realizar pedidos directamente por WhatsApp. Ofrecemos perfumes originales, perfumes árabes y fragancias unisex con envío coordinado.
+
+## Cómo comprar
+
+1. Explora el catálogo en /productos
+2. Filtra por categoría o busca por nombre
+3. Agrega productos al carrito o pide directamente por WhatsApp
+4. Coordinamos el envío por WhatsApp
+
+## Páginas principales
+
+- [Inicio](/)
+- [Catálogo de productos](/productos)
+- [Carrito de compras](/carrito)
+
+## Categorías
+
+- Nuevos ingresos
+- Edición limitada
+- Accesorios
+
+## Contacto
+
+- WhatsApp: disponible en todas las páginas
+- Horarios de atención: visibles en el pie de página
+
+## Información técnica
+
+- Plataforma: Next.js
+- Idioma: Español (Colombia)
+- Moneda: COP
+- Método de pago: WhatsApp checkout

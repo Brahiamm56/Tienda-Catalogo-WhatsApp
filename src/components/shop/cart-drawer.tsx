@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { buildWhatsappLink } from "@/lib/whatsapp";
 import { formatCurrencyFromCents } from "@/lib/utils";
 import { useCartStore } from "@/store/cart";
+import { recordSaleIntentAction } from "@/actions/sales";
 
 type CartDrawerProps = {
   open: boolean;
@@ -110,6 +111,7 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
           open ? "translate-x-0" : "translate-x-full"
         }`}
         role="dialog"
+        aria-modal="true"
       >
         {/* Header */}
         <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4">
@@ -242,31 +244,31 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
                       <div className="flex items-center rounded-full border border-[var(--border)]">
                         <button
                           aria-label="Disminuir cantidad"
-                          className="flex size-7 items-center justify-center rounded-full text-[var(--muted-foreground)] transition hover:text-[var(--foreground)]"
+                          className="flex size-9 items-center justify-center rounded-full text-[var(--muted-foreground)] transition hover:text-[var(--foreground)]"
                           onClick={() => decrementItem(item.id)}
                           type="button"
                         >
-                          <Minus className="size-3" />
+                          <Minus className="size-3.5" />
                         </button>
                         <span className="min-w-6 text-center text-xs font-semibold">
                           {item.quantity}
                         </span>
                         <button
                           aria-label="Aumentar cantidad"
-                          className="flex size-7 items-center justify-center rounded-full text-[var(--muted-foreground)] transition hover:text-[var(--foreground)]"
+                          className="flex size-9 items-center justify-center rounded-full text-[var(--muted-foreground)] transition hover:text-[var(--foreground)]"
                           onClick={() => addItem(item)}
                           type="button"
                         >
-                          <Plus className="size-3" />
+                          <Plus className="size-3.5" />
                         </button>
                       </div>
                       <button
                         aria-label={`Quitar ${item.name}`}
-                        className="ml-auto flex size-7 items-center justify-center rounded-full text-[var(--muted-foreground)] transition hover:text-red-400"
+                        className="ml-auto flex size-9 items-center justify-center rounded-full text-[var(--muted-foreground)] transition hover:text-red-400"
                         onClick={() => removeItem(item.id)}
                         type="button"
                       >
-                        <Trash2 className="size-3.5" />
+                        <Trash2 className="size-4" />
                       </button>
                     </div>
                   </div>
@@ -334,7 +336,7 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
               </>
             ) : (
               <div className="flex gap-2">
-                <Button onClick={() => setShowCheckoutForm(false)} variant="outline" className="w-12 shrink-0 px-0">
+                <Button onClick={() => setShowCheckoutForm(false)} variant="outline" className="w-12 shrink-0 px-0" aria-label="Volver">
                   <ChevronLeft className="size-5" />
                 </Button>
                 {(() => {
@@ -346,6 +348,20 @@ export function CartDrawer({ open, whatsappNumber, freeShippingThresholdCents, o
                       target="_blank" 
                       className="flex-1 flex h-12 items-center justify-center rounded-full bg-[var(--accent)] text-[var(--accent-fg,white)] text-base font-medium shadow-md hover:-translate-y-0.5 hover:bg-[var(--accent-strong)] hover:shadow-lg transition duration-200 text-center"
                       onClick={() => {
+                        // Record checkout intent in the background
+                        recordSaleIntentAction({
+                          customerName,
+                          deliveryMethod,
+                          notes: notes || undefined,
+                          items: items.map((item) => ({
+                            productId: item.id.startsWith("demo-") ? null : item.id,
+                            name: item.name,
+                            priceCents: item.priceCents,
+                            quantity: item.quantity,
+                          })),
+                          totalCents: total,
+                        }).catch((err) => console.error("Error recording sale intent:", err));
+
                         // Small delay before clearing cart and closing drawer
                         setTimeout(() => {
                           setShowCheckoutForm(false);

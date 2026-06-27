@@ -12,11 +12,13 @@ import { WhatsappFloatingButton } from "@/components/shop/whatsapp-button";
 import { StoreFooter } from "@/components/shop/store-footer";
 import { WhatsappButton } from "@/components/shop/whatsapp-button";
 import { BackInStockNotify } from "@/components/shop/back-in-stock-notify";
+import { JsonLd } from "@/components/shop/json-ld";
 import { Badge } from "@/components/ui/badge";
 import { getCatalogProducts, getProductBySlug, getStoreSettings } from "@/lib/catalog";
 import { siteConfig } from "@/lib/site-config";
 import { buildWhatsappLink } from "@/lib/whatsapp";
 import { formatCurrencyFromCents, sanitizeWhatsappNumber } from "@/lib/utils";
+import { buildProductSchema, buildBreadcrumbSchema } from "@/lib/seo";
 
 export async function generateMetadata({
   params,
@@ -38,6 +40,16 @@ export async function generateMetadata({
   return {
     title,
     description,
+    keywords: [
+      product.name,
+      `perfume ${product.name}`,
+      `comprar ${product.name}`,
+      product.category.name,
+      "perfumes por WhatsApp",
+      "perfumes online",
+      "fragancias",
+      settings.name,
+    ],
     openGraph: {
       title,
       description,
@@ -94,6 +106,14 @@ export default async function ProductDetailPage({
   const lowStock = inStock && product.stock <= 3;
   const notes = parseOlfactoryNotes(product.description || "");
 
+  const productSchema = buildProductSchema(product, settings);
+  const breadcrumbSchema = buildBreadcrumbSchema([
+    { name: "Inicio", url: siteConfig.appUrl },
+    { name: "Productos", url: `${siteConfig.appUrl}/productos` },
+    { name: product.category.name, url: `${siteConfig.appUrl}/productos?cat=${product.category.slug}` },
+    { name: product.name, url: `${siteConfig.appUrl}/productos/${product.slug}` },
+  ]);
+
   // Related products: same category, exclude current product
   const relatedProducts = allProducts
     .filter((p) => p.category.slug === product.category.slug && p.id !== product.id)
@@ -101,6 +121,7 @@ export default async function ProductDetailPage({
 
   return (
     <>
+      <JsonLd data={[productSchema, breadcrumbSchema]} />
       <ShopHeader
         logoUrl={settings.logoUrl}
         storeName={settings.name}
@@ -109,7 +130,7 @@ export default async function ProductDetailPage({
         freeShippingThresholdCents={settings.freeShippingThresholdCents}
       />
 
-      <main className="pb-28 sm:pb-12">
+      <main id="main-content" className="pb-28 sm:pb-12">
         {/* Breadcrumbs */}
         <nav className="mx-auto w-full max-w-7xl px-4 pt-4 sm:px-6 sm:pt-6 lg:px-10" aria-label="Breadcrumb">
           <ol className="flex items-center gap-1.5 text-xs text-[var(--muted-foreground)]">

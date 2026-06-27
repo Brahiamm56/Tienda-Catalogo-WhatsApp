@@ -10,7 +10,7 @@ import { formatCurrencyFromCents } from "@/lib/utils";
 const BLUR_PLACEHOLDER =
   "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjEwIiB2aWV3Qm94PSIwIDAgOCAxMCI+PHJlY3Qgd2lkdGg9IjgiIGhlaWdodD0iMTAiIGZpbGw9IiMwYzBjMGUiLz48L3N2Zz4=";
 
-export function ProductCard({ product }: { product: CatalogProduct }) {
+export function ProductCard({ product, priority = false }: { product: CatalogProduct; priority?: boolean }) {
   const outOfStock = product.stock === 0;
   const lowStock = product.stock > 0 && product.stock <= 3;
 
@@ -33,7 +33,8 @@ export function ProductCard({ product }: { product: CatalogProduct }) {
           blurDataURL={BLUR_PLACEHOLDER}
           className="h-full w-full object-contain p-3 transition duration-700 group-hover:scale-[1.08]"
           height={900}
-          loading="lazy"
+          loading={priority ? undefined : "lazy"}
+          priority={priority}
           placeholder="blur"
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
           src={product.image}

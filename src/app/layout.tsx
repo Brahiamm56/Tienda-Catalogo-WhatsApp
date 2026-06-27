@@ -18,12 +18,73 @@ const bodyFont = DM_Sans({
   weight: ["300", "400", "500", "600"],
 });
 
+const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+const storeName = process.env.NEXT_PUBLIC_STORE_NAME ?? "Lion";
+const storeDescription =
+  process.env.NEXT_PUBLIC_STORE_DESCRIPTION ??
+  "Catálogo de perfumes con checkout directo por WhatsApp. Compra fácil, rápido y seguro.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(appUrl),
   title: {
-    default: "Lion",
-    template: "%s | Lion",
+    default: `${storeName} — Catálogo de Perfumes por WhatsApp`,
+    template: `%s | ${storeName}`,
   },
-  description: "Tienda catalogo con checkout directo por WhatsApp y panel de administracion.",
+  description: storeDescription,
+  keywords: [
+    "perfumes",
+    "catálogo de perfumes",
+    "comprar perfumes online",
+    "perfumes por WhatsApp",
+    "tienda de perfumes",
+    "fragancias",
+    "perfumes originales",
+    "perfumes árabes",
+    "perfumes unisex",
+    "checkout por WhatsApp",
+    "catálogo online",
+    storeName,
+  ],
+  authors: [{ name: storeName }],
+  creator: storeName,
+  publisher: storeName,
+  category: "Ecommerce",
+  applicationName: storeName,
+  generator: "Next.js",
+  referrer: "origin-when-cross-origin",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  alternates: {
+    canonical: appUrl,
+  },
+  openGraph: {
+    type: "website",
+    locale: "es_CO",
+    url: appUrl,
+    siteName: storeName,
+    title: `${storeName} — Catálogo de Perfumes por WhatsApp`,
+    description: storeDescription,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${storeName} — Catálogo de Perfumes por WhatsApp`,
+    description: storeDescription,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
 };
 
 // NOTE: Custom theme colors (background, accent, radii) are intentionally NOT
@@ -44,6 +105,12 @@ export default function RootLayout({
           "min-h-screen bg-[var(--background)] font-[family-name:var(--font-sans)] text-[var(--foreground)] antialiased",
         )}
       >
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-[var(--accent)] focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[var(--accent-ink)]"
+        >
+          Saltar al contenido
+        </a>
         {children}
       </body>
     </html>
