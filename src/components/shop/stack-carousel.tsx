@@ -195,6 +195,22 @@ function FlipbookCard({
         {/* Bottom gradient */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 
+        {/* Gender Diagonal Ribbon — top right */}
+        {product.gender === "mujer" && (
+          <div className="absolute right-0 top-0 z-20 h-14 w-14 overflow-hidden pointer-events-none">
+            <div className="absolute top-2 -right-5 w-18 rotate-45 bg-pink-500/20 text-center text-[7px] font-extrabold uppercase tracking-[0.16em] text-pink-300 py-0.5 border-b border-pink-500/30 backdrop-blur-[2px] shadow-sm">
+              women
+            </div>
+          </div>
+        )}
+        {product.gender === "hombre" && (
+          <div className="absolute right-0 top-0 z-20 h-14 w-14 overflow-hidden pointer-events-none">
+            <div className="absolute top-2 -right-5 w-18 rotate-45 bg-sky-500/20 text-center text-[7px] font-extrabold uppercase tracking-[0.16em] text-sky-300 py-0.5 border-b border-sky-500/30 backdrop-blur-[2px] shadow-sm">
+              men
+            </div>
+          </div>
+        )}
+
         {/* Status badges */}
         <div className="absolute left-2 top-2 z-10 flex flex-col items-start gap-1">
           {product.isNew && (
@@ -216,7 +232,10 @@ function FlipbookCard({
 
         {/* Wishlist */}
         <div 
-          className="absolute right-2 top-2 z-10" 
+          className="absolute right-2 z-10 transition-all" 
+          style={{
+            top: product.gender === "mujer" || product.gender === "hombre" ? "1.85rem" : "0.5rem"
+          }}
           onClick={(e) => {
             e.stopPropagation();
             e.preventDefault();
