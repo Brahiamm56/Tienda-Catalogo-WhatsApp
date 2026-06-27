@@ -21,7 +21,7 @@ import {
 
 type PerfumeMeta = { name: string; brand: string; href?: string };
 
-function getPerfumeShowcaseData() {
+function getPerfumeShowcaseData(allProducts: any[]) {
   const dir = path.join(process.cwd(), "public", "perfumes");
   let meta: Record<string, PerfumeMeta> = {};
   try {
@@ -36,14 +36,56 @@ function getPerfumeShowcaseData() {
   let files: string[] = [];
   try {
     files = fs.readdirSync(dir)
-      .filter((f) => /\.(png|jpg|jpeg|webp)$/i.test(f) && f !== "9pmeleixir.png")
+      .filter((f) => /\.(png|jpg|jpeg|webp)$/i.test(f))
       .sort();
   } catch {}
   return {
     images: files.map((f) => `/perfumes/${f}`),
     names: files.map((f) => meta[f]?.name ?? f.replace(/\.[^.]+$/, "").replace(/[-_]/g, " ").toUpperCase()),
     brands: files.map((f) => meta[f]?.brand ?? ""),
-    hrefs: files.map((f) => meta[f]?.href ?? "/productos"),
+    hrefs: files.map((f) => {
+      // 1. Prioritize metadata href if defined explicitly
+      if (meta[f]?.href && meta[f].href !== "/productos") {
+        return meta[f].href;
+      }
+
+      // 2. Check if the image represents multiple perfumes
+      const isMultiple =
+        f.toLowerCase().includes("juntos") ||
+        f.toLowerCase().includes("parfams") ||
+        f.toLowerCase().includes("set") ||
+        f.toLowerCase().includes("combo") ||
+        (meta[f]?.name && meta[f].name.toLowerCase().includes("set")) ||
+        (meta[f]?.name && meta[f].name.toLowerCase().includes("combo")) ||
+        (meta[f]?.name && meta[f].name.toLowerCase().includes("exclusivo"));
+
+      if (isMultiple) {
+        return "/productos";
+      }
+
+      // 3. Find matching product slug in Catalog
+      const name = (meta[f]?.name ?? f.replace(/\.[^.]+$/, "").replace(/[-_]/g, " ")).toLowerCase().trim();
+      const filenamePrefix = f.replace(/\.[^.]+$/, "").toLowerCase().trim();
+
+      const matchedProduct = allProducts.find((p) => {
+        const pSlug = p.slug.toLowerCase();
+        const pName = p.name.toLowerCase();
+        return (
+          pSlug === filenamePrefix ||
+          pSlug.includes(filenamePrefix) ||
+          filenamePrefix.includes(pSlug) ||
+          pName.includes(name) ||
+          name.includes(pName)
+        );
+      });
+
+      if (matchedProduct) {
+        return `/productos/${matchedProduct.slug}`;
+      }
+
+      // Fallback
+      return `/productos?q=${encodeURIComponent(meta[f]?.name ?? f.replace(/\.[^.]+$/, "").replace(/[-_]/g, " "))}`;
+    }),
   };
 }
 
@@ -71,7 +113,7 @@ export default async function Home() {
       <main className="pb-16 sm:pb-12">
         {/* 3D Perfume hero showcase */}
         {/* Auto-loaded from public/perfumes/ — edit metadata.json to set names & brands */}
-        <PerfumeShowcase {...getPerfumeShowcaseData()} />
+        <PerfumeShowcase {...getPerfumeShowcaseData(allProducts)} />
 
         {/* Smooth gradient transition from black hero to ambient background */}
         <div className="pointer-events-none h-8 bg-gradient-to-b from-black via-[#050505] to-transparent sm:h-10" />
