@@ -462,7 +462,7 @@ export function PerfumeShowcase({
       {/* ── Active perfume name ── */}
       <div 
         ref={nameRef}
-        className="relative z-10 mt-20 flex flex-col items-center gap-0.5 text-center sm:mt-12"
+        className="relative z-10 mt-8 flex flex-col items-center gap-0.5 text-center sm:mt-6"
       >
         <p className="text-[8px] font-medium uppercase tracking-[0.42em] text-[var(--muted-foreground)]">
           {brands[displayNameIndex] ?? "\u00a0"}

@@ -23,16 +23,16 @@ export default async function LoginPage() {
               Administra productos, categorias, stock e imagenes desde un solo panel.
             </h1>
             <p className="max-w-lg text-sm leading-7 text-[#d8c9bc]">
-              El login queda conectado a credenciales con NextAuth y Prisma. Cuando ejecutes el seed, podras entrar con el usuario base del `.env`.
+              Autenticación con NextAuth y Prisma. Solo administradores autorizados pueden acceder al panel de gestión.
             </p>
           </div>
         </div>
 
         <div className="p-8 md:p-10">
-          <Badge>Credenciales</Badge>
+          <Badge>Acceso restringido</Badge>
           <h2 className="mt-4 font-[family-name:var(--font-display)] text-4xl font-semibold">Entrar al panel</h2>
           <p className="mt-3 text-sm leading-7 text-[var(--muted-foreground)]">
-            Usa el usuario inicial para revisar el admin y luego reemplaza los datos demo por el catalogo del cliente.
+            Ingresa con tus credenciales de administrador para gestionar el catálogo.
           </p>
           <div className="mt-8">
             <Suspense fallback={null}>

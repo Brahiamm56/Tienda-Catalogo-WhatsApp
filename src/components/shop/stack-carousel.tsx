@@ -91,7 +91,7 @@ export function StackCarousel({ badge, products, title }: StackCarouselProps) {
   if (products.length === 0) return null;
 
   return (
-    <section className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-16 lg:px-10 overflow-hidden">
+    <section className="mx-auto w-full max-w-7xl px-4 py-2 sm:px-6 sm:py-4 lg:px-10 overflow-hidden">
       <p className="mb-1 text-[10px] font-medium text-[var(--muted-foreground)]">Deslizá para explorar</p>
       {/* Header */}
       <div className="flex flex-col gap-1.5 pb-2">

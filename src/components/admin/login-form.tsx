@@ -21,8 +21,8 @@ export function LoginForm() {
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "admin@demo.com",
-      password: "Admin123*",
+      email: "",
+      password: "",
     },
   });
 
@@ -37,7 +37,7 @@ export function LoginForm() {
       });
 
       if (!result?.ok) {
-        setSubmitError("No fue posible iniciar sesion. Verifica seed, credenciales o conexion de base de datos.");
+        setSubmitError("Email o contraseña incorrectos.");
         return;
       }
 
@@ -52,7 +52,7 @@ export function LoginForm() {
         <label className="text-sm font-medium" htmlFor="email">
           Email
         </label>
-        <Input id="email" placeholder="admin@demo.com" type="email" {...form.register("email")} />
+        <Input id="email" placeholder="tu@email.com" type="email" {...form.register("email")} />
         {form.formState.errors.email ? (
           <p className="text-sm text-[var(--accent-strong)]">{form.formState.errors.email.message}</p>
         ) : null}

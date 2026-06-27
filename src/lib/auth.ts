@@ -12,6 +12,7 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET ?? process.env.AUTH_SECRET,
   session: {
     strategy: "jwt",
+    maxAge: 12 * 60 * 60, // 12 hours — sessions expire faster
   },
   pages: {
     signIn: "/login",
@@ -23,35 +24,50 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Contrasena", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(credentials, req) {
         const parsed = loginSchema.safeParse(credentials);
 
         if (!parsed.success) {
           return null;
         }
 
-        // Brute-force throttle: 5 attempts per minute per email.
-        // Note: in-memory limiter; in multi-instance deployments switch to Redis.
-        const rl = rateLimit({
-          key: `login:${parsed.data.email.toLowerCase()}`,
-          limit: 5,
+        const email = parsed.data.email.toLowerCase();
+
+        // Brute-force throttle: 3 attempts per minute per email.
+        const emailLimit = rateLimit({
+          key: `login:email:${email}`,
+          limit: 3,
           windowMs: 60_000,
         });
-        if (!rl.success) {
+        if (!emailLimit.success) {
+          return null;
+        }
+
+        // IP-based throttle: 10 attempts per minute per IP.
+        // Prevents trying many different emails from the same source.
+        const ip = req?.headers?.get?.("x-forwarded-for")?.split(",")[0]?.trim()
+          ?? req?.headers?.get?.("x-real-ip")?.trim()
+          ?? "unknown";
+        const ipLimit = rateLimit({
+          key: `login:ip:${ip}`,
+          limit: 10,
+          windowMs: 60_000,
+        });
+        if (!ipLimit.success) {
           return null;
         }
 
         const user = await prisma.user.findUnique({
-          where: { email: parsed.data.email },
+          where: { email },
         });
 
-        if (!user) {
-          return null;
-        }
+        // Always run compare to avoid timing attacks that reveal whether email exists
+        const dummyHash = "$2a$10$N9qo8uLOickgx2ZMRZoMy.MrqJ3YqD0KZ4F7gqXkDcKmJQ8DqDqDq";
+        const isValid = user
+          ? await compare(parsed.data.password, user.passwordHash)
+          : await compare(parsed.data.password, dummyHash);
 
-        const isValid = await compare(parsed.data.password, user.passwordHash);
-
-        if (!isValid) {
+        if (!user || !isValid) {
           return null;
         }
 

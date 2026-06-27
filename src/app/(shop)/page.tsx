@@ -74,13 +74,13 @@ export default async function Home() {
         <PerfumeShowcase {...getPerfumeShowcaseData()} />
 
         {/* Smooth gradient transition from black hero to ambient background */}
-        <div className="pointer-events-none h-24 bg-gradient-to-b from-black via-[#050505] to-transparent sm:h-32" />
+        <div className="pointer-events-none h-8 bg-gradient-to-b from-black via-[#050505] to-transparent sm:h-10" />
 
         {/* Gold divider */}
         <div className="gold-scan-line mx-auto w-full max-w-3xl" />
 
         {/* Products section */}
-        <div className="space-y-10 pt-8 sm:space-y-14">
+        <div className="space-y-6 pt-2 sm:space-y-8">
         {/* Category chips — filters products in-page */}
         {categories.length > 0 ? (
           <CategoryFilter

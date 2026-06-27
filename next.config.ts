@@ -86,6 +86,10 @@ const nextConfig: NextConfig = {
         source: "/login",
         headers: adminNoIndexHeaders,
       },
+      {
+        source: "/api/:path*",
+        headers: adminNoIndexHeaders,
+      },
     ];
   },
 };

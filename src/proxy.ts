@@ -19,6 +19,10 @@ export default async function proxy(request: NextRequest) {
   // Not signed in → bounce to /login with a callbackUrl so we return here
   // after a successful sign-in.
   if (!token) {
+    // For API routes, return 401 JSON instead of redirect
+    if (request.nextUrl.pathname.startsWith("/api/")) {
+      return NextResponse.json({ error: "No autorizado." }, { status: 401 });
+    }
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.search = `?callbackUrl=${encodeURIComponent(request.nextUrl.pathname + request.nextUrl.search)}`;
@@ -27,6 +31,10 @@ export default async function proxy(request: NextRequest) {
 
   // Signed in but not admin → send back to the public store.
   if (!role || !ADMIN_ROLES.has(role)) {
+    // For API routes, return 403 JSON instead of redirect
+    if (request.nextUrl.pathname.startsWith("/api/")) {
+      return NextResponse.json({ error: "Acceso denegado." }, { status: 403 });
+    }
     const url = request.nextUrl.clone();
     url.pathname = "/";
     url.search = "";
@@ -37,6 +45,13 @@ export default async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin", "/admin/:path*"],
+  matcher: [
+    "/admin",
+    "/admin/:path*",
+    "/api/upload",
+    "/api/upload/:path*",
+    "/api/products",
+    "/api/products/:path*",
+  ],
 };
 

@@ -9,8 +9,21 @@ const adapter = new PrismaNeon({ connectionString });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  const adminEmail = process.env.ADMIN_EMAIL ?? "admin@demo.com";
-  const adminPassword = process.env.ADMIN_PASSWORD ?? "Admin123*";
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+
+  if (!adminEmail || !adminPassword) {
+    console.error("Falta ADMIN_EMAIL o ADMIN_PASSWORD en el .env. No se puede crear el usuario admin.");
+    console.error("Definí estas variables antes de ejecutar el seed:");
+    console.error("  ADMIN_EMAIL=tu@email.com");
+    console.error("  ADMIN_PASSWORD=una-contraseña-segura");
+    process.exit(1);
+  }
+
+  if (adminPassword.length < 8) {
+    console.error("ADMIN_PASSWORD debe tener al menos 8 caracteres.");
+    process.exit(1);
+  }
 
   await prisma.user.upsert({
     where: { email: adminEmail },
@@ -18,7 +31,7 @@ async function main() {
     create: {
       email: adminEmail,
       name: "Administrador",
-      passwordHash: await hash(adminPassword, 10),
+      passwordHash: await hash(adminPassword, 12),
       role: "owner",
     },
   });
